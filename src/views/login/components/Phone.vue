@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, reactive, onMounted } from "vue";
+  import { ref, reactive } from "vue";
   import type { ElForm, FormRules } from 'element-plus'
 
   const formData = reactive({
@@ -8,8 +8,8 @@
   });
 
   const rules = reactive<FormRules>({
-    account: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
-    password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+    phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+    code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
   });
   
   const formRef = ref<InstanceType<typeof ElForm>>();
@@ -17,6 +17,12 @@
   // 获取验证码
   const obtainCode = () => {
 
+  };
+
+  // 重置表单
+  const resetForm = () => {
+    if (!formRef.value) return;
+    formRef.value.resetFields();
   };
 
   // 手机登录
@@ -41,9 +47,9 @@
       <el-input v-model="formData.code" placeholder="请输入验证码"/>
       <el-button type="primary" @click="obtainCode">获取验证码</el-button>
     </el-form-item>
-    <el-form-item prop="check" class="form-item-button">
-      <!-- <el-button @click="resetForm">取消</el-button> -->
+    <el-form-item class="form-item-button" prop="check">
       <el-button type="primary" @click="loginPhone">确定</el-button>
+      <el-button @click="resetForm">重置</el-button>
     </el-form-item>
     <el-form-item>
     </el-form-item>
@@ -55,14 +61,17 @@
     padding: 5px;
   }
 
-  /* .form-item-code {
-    :deep(.el-input) {
-      width: 40%;
-    }
+  .form-item-code :deep(.el-input) {
+    width: 40%;
+  }
 
-    :deep(.el-button) {
-      margin-left: 20px;
-    }
-  } */
+  .form-item-code :deep(.el-button) {
+    margin-left: 20px;
+  }
+
+  .form-item-button :deep(.el-form-item__content) {
+    display: flex;
+    flex-direction: row-reverse;
+  }
 
 </style>
