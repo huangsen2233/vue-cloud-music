@@ -1,34 +1,69 @@
 <script setup lang="ts">
   import { ref, reactive } from "vue";
   import type { ElForm, FormRules } from 'element-plus'
+  import { sentCaptchaApi, verifyCaptchaApi } from '@/api/login'
 
   const formData = reactive({
     phone: '',
-    code: ''
+    captcha: ''
   });
 
   const rules = reactive<FormRules>({
     phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
-    code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+    captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
   });
   
   const formRef = ref<InstanceType<typeof ElForm>>();
   
   // 获取验证码
-  const obtainCode = () => {
+  const obtainCode = async () => {
+    const reg = /^1[3,4,5,6,7,8,9][0-9]{9}$/;
+    if (!reg.test(formData.phone)) {
+      ElMessage({
+        showClose: true,
+        message: '手机号格式输入有误, 请重新输入!',
+        type: 'warning',
+      });
+      resetForm();
+    } else {
+      await sentCaptchaApi(formData.phone);
+    }
+    
+    /* formRef.value?.validateField('phone', async (isValid: boolean) => {
+      if (isValid) {
+        console.log('手机号', formData.phone);
 
-  };
-
-  // 重置表单
-  const resetForm = () => {
-    if (!formRef.value) return;
-    formRef.value.resetFields();
+      } else {
+        ElMessage({
+          showClose: true,
+          message: '手机号输入有误, 请重新输入!',
+          type: 'error',
+        });
+      }
+    }) */
   };
 
   // 手机登录
   const loginPhone = () => {
-
+    formRef.value?.validate(async (isValid: boolean) => {
+      if (isValid) {
+        const res = await verifyCaptchaApi(formData);
+        console.log('手机登录接口', res);
+      } else {
+        ElMessage({
+          showClose: true,
+          message: '手机、验证码为必填项, 请重新输入!',
+          type: 'error',
+        });
+      }
+    })
   };
+
+  // 重置表单
+  const resetForm = () => {
+    formRef.value?.resetFields();
+  };
+
 </script>
 
 <template>
@@ -43,8 +78,8 @@
     <el-form-item label="手机号" prop="phone">
       <el-input v-model="formData.phone" placeholder="请输入手机号"/>
     </el-form-item>
-    <el-form-item class="form-item-code" label="验证码" prop="code">
-      <el-input v-model="formData.code" placeholder="请输入验证码"/>
+    <el-form-item class="form-item-code" label="验证码" prop="captcha">
+      <el-input v-model="formData.captcha" placeholder="请输入验证码"/>
       <el-button type="primary" @click="obtainCode">获取验证码</el-button>
     </el-form-item>
     <el-form-item class="form-item-button" prop="check">
@@ -56,7 +91,7 @@
   </el-form>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
   :deep(.el-form-item)  {
     padding: 5px;
   }
@@ -72,6 +107,10 @@
   .form-item-button :deep(.el-form-item__content) {
     display: flex;
     flex-direction: row-reverse;
+
+    .el-button {
+      margin-left: 12px;
+    }
   }
 
 </style>

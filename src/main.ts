@@ -8,7 +8,7 @@ import pinia from './stores'
 
 const app = createApp(App)
 
-import registerIcons from './global/register-icon'
-registerIcons(app)
+import registerElement from './global'
+registerElement(app)
 
 app.use(router).use(pinia).mount('#app')

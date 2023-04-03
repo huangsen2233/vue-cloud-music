@@ -61,7 +61,7 @@
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 35%;
+    width: 30%;
     height: 40%;
     font-size: 18px;
 

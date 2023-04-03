@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { ref, reactive, onMounted } from "vue";
-  import type { ElForm, FormRules } from 'element-plus'
-
+  import { ref, reactive, onMounted, inject, nextTick } from "vue";
+  import type { ElForm, FormRules } from 'element-plus';
+  import { sentCaptchaApi } from '@/api/login'
+  
   onMounted(() => {
-
   });
 
   const formData = reactive({
@@ -20,8 +20,22 @@
   const formRef = ref<InstanceType<typeof ElForm>>();
 
   // 登录账号
-  const loginAccount = () => {
-
+  const loginAccount = async () => {
+    await formRef.value?.validate((isValid: boolean) => {
+      if (isValid) {
+        console.log('登录!');
+        // sentCaptchaApi(formData.account);
+      } else {
+        ElMessage({
+          showClose: true,
+          message: '请重新输入账号, 密码',
+          type: 'error',
+        });
+        // console.log('xxx', inject('$message'));
+        
+        // (inject('$message') as any).success("xxxxx");
+      }
+    })
   };
 
   // 重置表单
