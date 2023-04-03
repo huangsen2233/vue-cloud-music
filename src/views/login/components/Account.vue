@@ -1,47 +1,46 @@
 <script setup lang="ts">
-  import { ref, reactive, onMounted, inject, nextTick } from "vue";
+  import { ref, reactive, onMounted } from "vue";
   import type { ElForm, FormRules } from 'element-plus';
-  import { sentCaptchaApi } from '@/api/login'
+  import { loginPhoneApi } from '@/api/login';
   
   onMounted(() => {
+
   });
 
   const formData = reactive({
-    account: '',
-    password: '',
+    phone: '19162633497',
+    password: 'hs19981027',
     check: false
   });
 
   const rules = reactive<FormRules>({
-    account: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+    phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
   });
   
   const formRef = ref<InstanceType<typeof ElForm>>();
 
-  // 登录账号
-  const loginAccount = async () => {
-    await formRef.value?.validate((isValid: boolean) => {
+  // 手机登录
+  const loginPhone = async () => {
+    await formRef.value?.validate(async (isValid: boolean) => {
       if (isValid) {
-        console.log('登录!');
-        // sentCaptchaApi(formData.account);
+        const res = await loginPhoneApi(formData);
+        console.log('手机登录接口', res);
+        
       } else {
         ElMessage({
           showClose: true,
-          message: '请重新输入账号, 密码',
+          message: '手机号,密码为必填项,请重新输入!',
           type: 'error',
         });
-        // console.log('xxx', inject('$message'));
-        
-        // (inject('$message') as any).success("xxxxx");
+        resetForm();
       }
     })
   };
 
   // 重置表单
   const resetForm = () => {
-    if (!formRef.value) return;
-    formRef.value.resetFields();
+    formRef.value?.resetFields();
   };
 
 </script>
@@ -55,17 +54,17 @@
     label-position="right"
     status-icon
   >
-    <el-form-item label="账号" prop="account">
-      <el-input v-model="formData.account" placeholder="请输入手机号"/>
+    <el-form-item label="账号" prop="phone">
+      <el-input v-model="formData.phone" placeholder="请输入手机号"/>
     </el-form-item>
     <el-form-item label="密码" prop="password">
-      <el-input v-model="formData.password" placeholder="请输入密码"/>
+      <el-input v-model="formData.password" type="password" showPassword placeholder="请输入密码"/>
     </el-form-item>
     <el-form-item prop="check" class="form-item-button">
       <el-checkbox size="large" v-model="formData.check" label="记住密码"/>
       <div>
         <el-button @click="resetForm">重置</el-button>
-        <el-button type="primary" @click="loginAccount">确定</el-button>
+        <el-button type="primary" @click="loginPhone">确定</el-button>
       </div>
       <!-- <el-link type="primary">忘记密码</el-link> -->
     </el-form-item>

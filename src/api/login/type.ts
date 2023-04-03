@@ -1,6 +1,7 @@
 export type PhoneType = {
   phone: string
-  password: string
+  password?: string
+  captcha?: string
 }
 
 export type verifyType = {

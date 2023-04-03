@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, reactive } from "vue";
   import type { ElForm, FormRules } from 'element-plus'
-  import { sentCaptchaApi, verifyCaptchaApi } from '@/api/login'
+  import { sentCaptchaApi, verifyCaptchaApi, loginPhoneApi } from '@/api/login'
 
   const formData = reactive({
     phone: '',
@@ -47,8 +47,12 @@
   const loginPhone = () => {
     formRef.value?.validate(async (isValid: boolean) => {
       if (isValid) {
-        const res = await verifyCaptchaApi(formData);
-        console.log('手机登录接口', res);
+        const { data } = await verifyCaptchaApi(formData);
+        console.log('验证验证码接口', data);
+        if (data) {
+          const res = await loginPhoneApi(formData);
+          console.log('手机登陆接口', res);
+        }
       } else {
         ElMessage({
           showClose: true,

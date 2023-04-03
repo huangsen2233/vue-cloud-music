@@ -7,12 +7,11 @@ import type { verifyType, PhoneType } from './type'
  * @param { String } password 密码
  * @returns Promise
  */
-export const loginPhoneApi = ({ phone, password }: PhoneType) => {
+export const loginPhoneApi = ({ phone, password, captcha }: PhoneType) => {
   return request.get('/login/cellphone', { 
-    params: { phone, password }
+    params: { phone, password, captcha }
   })
 }
-
 
 /**
  * 获取验证码
@@ -34,5 +33,24 @@ export const sentCaptchaApi = (phone: string) => {
 export const verifyCaptchaApi = ({ phone, captcha }: verifyType) => {
   return request.get('/captcha/verify', { 
     params: { phone, captcha } 
+  })
+}
+
+/**
+ * 生成一个二维码的key
+ * @returns Promise
+ */
+export const loginQrKeyApi = () => {
+  return request.get('/login/qr/key')
+}
+
+/**
+ * 通过key生成二维码
+ * @param { String } key key
+ * @returns Promise
+ */
+export const createQrApi = (key: string, qrimg: boolean = true) => {
+  return request.get('/login/qr/create', {
+    params: { key, qrimg }
   })
 }

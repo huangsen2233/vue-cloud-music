@@ -3,10 +3,12 @@
   import Account from "./components/Account.vue";
   import Phone from "./components/Phone.vue";
   import QrCode from "./components/QrCode.vue";
+  import type { TabsPaneContext } from 'element-plus';
 
   const activeTabName = ref('account');
 
-  const handleTabClick = () => {
+  const handleTabClick = (pane: TabsPaneContext, ev: Event) => {
+    // console.log('tabs点击事件', pane, ev);
     
   }
 </script>

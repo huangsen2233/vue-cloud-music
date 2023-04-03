@@ -49,9 +49,9 @@ request.interceptors.response.use(
     return response.data;
   },
   error => {
-    // console.log('响应报错', );
+    console.log('响应拦截器报错', error);
     loadingInstance.close();
-    return Promise.reject(error.response.data.message);
+    return Promise.reject(error);
   }
 );
 
