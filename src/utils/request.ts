@@ -1,20 +1,18 @@
-import axios, { type AxiosRequestConfig }  from 'axios'
+import axios from 'axios'
+import type { AxiosRequestConfig } from 'axios';
+import { startLoading, endLoading } from '@/global/loading';
 
-interface IRequest {
-  get<T>(url: string, params?: unknown): Promise<T>;
-
-/*   post<T>(url: string, params?: unknown): Promise<T>;
-
-  upload<T>(url: string, params: unknown): Promise<T>;
-
-  put<T>(url: string, params: unknown): Promise<T>;
-
-  delete<T>(url: string, params: unknown): Promise<T>;
-
-  download(url: string): void; */
+// 解决 类型AxiosResponse<any, any>上不存在某属性的问题
+declare module "axios" {
+  interface AxiosResponse<T = any> {
+    code: number
+    cookie: string
+    message: string
+    profile: any
+    account: any
+  }
+  export function create(config?: AxiosRequestConfig): AxiosInstance;
 }
-
-let loadingInstance: any;
 
 const request = axios.create({
   baseURL: 'http://127.0.0.1:3000/',
@@ -24,13 +22,10 @@ const request = axios.create({
 
 request.interceptors.request.use(
   (config: AxiosRequestConfig | any) => {
-    loadingInstance = ElLoading.service({
-      lock: true,
-      text: 'Loading',
-      // spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.7)'
-    });
-    config.params = { ...config.params, timestamp: Date.now() };
+    if (config.url !== '/login/qr/check' && config.url !== '/user/account') {
+      startLoading({});
+    }
+    config.params = { ...config.params, timestamp: Date.now() }; // 添加一个时间戳的参数
     return config;
   },
   error => {
@@ -40,8 +35,8 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
   response => {
-    console.log('响应拦截器数据', response);
-    loadingInstance.close();
+    // console.log('响应拦截器response', response);
+    endLoading();
     if (response.data.code === 503) {
       // console.log('验证码错误');
       return Promise.reject(response.data.message);
@@ -49,24 +44,10 @@ request.interceptors.response.use(
     return response.data;
   },
   error => {
-    console.log('响应拦截器报错', error);
-    loadingInstance.close();
+    // console.log('响应拦截器error', error);
+    endLoading();
     return Promise.reject(error);
   }
 );
-
-/* const request: IRequest = {
-  get(url, params) {
-    return new Promise((resolve, reject) => {
-      axios.get(url, { params })
-        .then((res) => { 
-          resolve(res.data);
-        })
-        .catch((err) => {
-            reject(err.data);
-        });
-    });
-  },
-} */
 
 export default request

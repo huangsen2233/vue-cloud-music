@@ -4,7 +4,7 @@
   import { sentCaptchaApi, verifyCaptchaApi, loginPhoneApi } from '@/api/login'
 
   const formData = reactive({
-    phone: '',
+    phone: '19162633497',
     captcha: ''
   });
 
@@ -28,19 +28,6 @@
     } else {
       await sentCaptchaApi(formData.phone);
     }
-    
-    /* formRef.value?.validateField('phone', async (isValid: boolean) => {
-      if (isValid) {
-        console.log('手机号', formData.phone);
-
-      } else {
-        ElMessage({
-          showClose: true,
-          message: '手机号输入有误, 请重新输入!',
-          type: 'error',
-        });
-      }
-    }) */
   };
 
   // 手机登录
@@ -48,10 +35,10 @@
     formRef.value?.validate(async (isValid: boolean) => {
       if (isValid) {
         const { data } = await verifyCaptchaApi(formData);
-        console.log('验证验证码接口', data);
+        console.log('验证验证码api', data);
         if (data) {
           const res = await loginPhoneApi(formData);
-          console.log('手机登陆接口', res);
+          console.log('手机登陆api', res);
         }
       } else {
         ElMessage({
@@ -67,7 +54,6 @@
   const resetForm = () => {
     formRef.value?.resetFields();
   };
-
 </script>
 
 <template>

@@ -8,7 +8,7 @@ import pinia from './stores'
 
 const app = createApp(App)
 
-import registerElement from './global'
-registerElement(app)
+import { registerFuns } from './global'
+registerFuns(app)
 
 app.use(router).use(pinia).mount('#app')

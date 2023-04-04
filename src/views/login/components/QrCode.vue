@@ -1,24 +1,73 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
-  import { loginQrKeyApi, createQrApi } from '@/api/login'
+  import { ref, defineExpose } from 'vue';
+  import { loginQrKeyApi, createQrApi, checkQrApi } from '@/api/login';
+  import { getUserAccountApi } from '@/api/user';
+  import { useUserStore } from '@/stores/user';
+  import { useRouter } from "vue-router";
+  import localCache from '@/utils/cache';
 
-  onMounted(async () => {
+  let qrUrl = ref();
+  let timer = ref();
+  const useUser = useUserStore();
+  const router = useRouter();
+
+  // 生成一个二维码的key
+  const createQr = async () => {
     const { data: { unikey } } = await loginQrKeyApi();
     // console.log('二维码的key', unikey);
     const { data: { qrimg } } = await createQrApi(unikey);
-    console.log('二维码base64图片地址', qrimg);
+    // console.log('二维码base64图片地址', qrimg);
     qrUrl.value = qrimg;
-  });
 
-  let qrUrl = ref();
+    timer.value = setInterval(() => {
+      checkQr(unikey);
+    }, 5000)
+  }
 
+  // 检查二维码的扫描状态
+  const checkQr = async (unikey: string) => {
+    const { code, cookie, message } = await checkQrApi(unikey);
+    if (code === 803) {
+      // console.log('二维码状态成功', code);
+      localCache.setCache('user_cookie', cookie);
+      // 获取账号信息
+      const { code: accountCode, account, profile } = await getUserAccountApi();
+      if (accountCode === 200) {
+        clearInterval(timer.value);
+        // console.log('获取账号信息', accountCode, profile);
+        useUser.account = account;
+        useUser.profile = profile;
+        ElMessage({
+          message,
+          showClose: true,
+          type: 'success',
+        });
+        router.push('/home');
+      }
+    }
+  }
+
+  defineExpose({ createQr });
 </script>
 
 <template>
-  <div>qr</div>
-  <el-image style="width:100px; height:100px" :src="qrUrl" fit="contain" />
+  <div class="qr">
+    <el-image style="width:150px; height:150px" fit="contain" :src="qrUrl"></el-image>
+    <h3>请使用 <i class="font">网易云App</i> 扫码登录</h3>
+  </div>
 </template>
 
-<style scoped>
-
+<style lang="less" scoped>
+  .qr {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    .font {
+      color: var(--el-color-primary);
+    }
+  }
 </style>

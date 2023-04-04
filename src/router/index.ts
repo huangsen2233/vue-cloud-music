@@ -4,7 +4,7 @@ import type { RouteRecordRaw } from 'vue-router'
 const routes: Array<RouteRecordRaw> = [
   { 
     path: '/', 
-    redirect: '/login' 
+    redirect: '/home' 
   }, 
   {
     name: 'login',

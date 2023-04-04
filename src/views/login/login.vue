@@ -3,14 +3,19 @@
   import Account from "./components/Account.vue";
   import Phone from "./components/Phone.vue";
   import QrCode from "./components/QrCode.vue";
-  import type { TabsPaneContext } from 'element-plus';
+  import type { TabPaneName } from 'element-plus';
 
   const activeTabName = ref('account');
 
-  const handleTabClick = (pane: TabsPaneContext, ev: Event) => {
-    // console.log('tabs点击事件', pane, ev);
-    
+  const qrCodeRef = ref<InstanceType<typeof QrCode>>();
+
+  const handleTabChange = (tabName: TabPaneName) => {
+    if (tabName === 'qr_code') {
+      qrCodeRef.value?.createQr();
+    }
   }
+
+
 </script>
 
 <template>
@@ -19,7 +24,7 @@
       欢迎登录 music!
       <el-icon class="close" ><CircleClose /></el-icon>
     </header>
-    <el-tabs v-model="activeTabName" stretch @tab-click="handleTabClick">
+    <el-tabs v-model="activeTabName" stretch @tab-change="handleTabChange">
       <el-tab-pane name="account">
         <template #label>
           <span class="custom-tabs-label">
@@ -50,7 +55,7 @@
           </span>
         </template>
         <template #default>
-          <QrCode />
+          <QrCode ref="qrCodeRef" />
         </template>
       </el-tab-pane>
     </el-tabs>
@@ -72,7 +77,8 @@
       line-height: 1;
       text-align: center;
       padding-bottom: 30px;
-      background: linear-gradient(to right, rgba(240,216,6,0.8), rgba(186,255,124), rgba(109,255,176));
+      // background: linear-gradient(to right, rgba(240,216,6,0.8), rgba(186,255,124), rgba(109,255,176));
+      background: linear-gradient(to right, #fe214f, #e90378, #fcab01);
       background-size: 200% 100%;
       background-clip: text;
       -webkit-background-clip: text;
@@ -84,8 +90,11 @@
         top: 5px;
         right: 5px;
         color: rgba(0,0,0,0.6);
-        font-size: 20px;
+        font-size: 22px;
         cursor: pointer;
+      }
+      .close:hover {
+        color: #e90378;
       }
     }
     @keyframes move {
