@@ -1,11 +1,18 @@
 <script lang="ts" setup>
-  import { ref, inject, reactive } from 'vue';
+  import { ref, inject, reactive, onMounted } from 'vue';
   // import { useRouter } from "vue-router";
   import { useUserStore } from "@/stores/user";
   import { storeToRefs } from "pinia";
   import { loginStatusApi } from "@/api/login";
   import { searchHotApi } from "@/api/search";
-  import type { IHotDetail } from "./type"
+  import type { IHotDetail } from "./type";
+
+  onMounted(async () => {
+    const { data } = await searchHotApi();
+    // console.log("🚀 ~ file: HeaderProfile.vue:30 ~ handleFocus ~ res 热搜列表:", data)
+    hotDetailList = [...data];
+    console.log("🚀 ~ file: HeaderProfile.vue:32 ~ onMounted ~ hotDetailList 列表数据:", hotDetailList)
+  });
 
   const useUser = useUserStore();
   // storeToRefs解构数据时不会失去响应式
@@ -17,35 +24,33 @@
 
   // 检查登录状态
   const checkUserStatus = async () => {
-  const { data: { code, account, profile } } = await loginStatusApi();
+    const { data: { code, account, profile } } = await loginStatusApi();
     if (code === 200) {
       useUser.loginStatus = true;
       useUser.account = account;
       useUser.profile = profile;
     }
-  }
+  };
 
-  // 搜索框的focus事件
-  const handleFocus = async () => {
-    const { data } = await searchHotApi();
-    console.log("🚀 ~ file: HeaderProfile.vue:30 ~ handleFocus ~ res 热搜列表:", data)
-    hotDetailList = [...data];
-  }
+  // 点击菜单项的command事件
+  const handleCommand = () => {
+
+  };
 </script>
 
 <template>
   <div class="header-profile">
     <!-- 搜索框 -->
-    <el-dropdown trigger="click">
-      <el-input v-model="searchValue" placeholder="请输入歌曲/歌手/视频" size="large" @focus="handleFocus">
+    <el-dropdown trigger="click" max-height="300px"> 
+      <el-input v-model="searchValue" placeholder="请输入歌曲/歌手/视频" size="large">
         <template #prefix>
-          <el-icon class="el-input__icon" @click="checkUserStatus"><Search /></el-icon>
+          <el-icon class="el-input__icon"><Search /></el-icon>
         </template>
       </el-input>
-      <template #dropdown>
+      <template v-if="hotDetailList.length" #dropdown>
         <el-dropdown-menu>
-          <template v-for="(i, index) in hotDetailList" :key="index">
-            <el-dropdown-item :icon="i.iconUrl || 'User'">{{ i.searchWord }}</el-dropdown-item>
+          <template v-for="i in hotDetailList">
+            <el-dropdown-item icon="User">{{ i.searchWord }}</el-dropdown-item>
           </template>
         </el-dropdown-menu>
       </template>
@@ -57,7 +62,7 @@
     </div>
     <div v-else-if="loginStatus" class="profile">
       <el-image :src="profile?.avatarUrl" style="width:38px; height:38px; border: 1px solid #fff; border-radius: 50%;" fit="contain" />
-      <el-dropdown placement="bottom-start">
+      <el-dropdown placement="bottom-start" @command="handleCommand">
         <span class="text">{{ profile?.nickname }}</span>
         <template #dropdown>
           <el-dropdown-menu>

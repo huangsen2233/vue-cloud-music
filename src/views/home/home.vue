@@ -7,11 +7,10 @@
 
   // const { homeId } = useHomeStore();
 
-  const dialogVisible = ref(true);
+  const dialogVisible = ref(false);
 
   const changeDialogVisible = () => {
     dialogVisible.value = !dialogVisible.value;
-    console.log("🚀 ~ file: home.vue:14 ~ changeDialogVisible ~ dialogVisible.value:", dialogVisible.value)
   }
 
   provide('on-login', changeDialogVisible);
