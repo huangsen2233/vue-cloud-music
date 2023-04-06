@@ -26,7 +26,6 @@
       if (isValid) {
         const res = await loginPhoneApi(formData);
         console.log('手机登录接口', res);
-        
       } else {
         ElMessage({
           showClose: true,
@@ -73,8 +72,12 @@
 </template>
 
 <style scoped>
-  :deep(.el-form-item)  {
+  .el-form-item {
     padding: 5px;
+  }
+
+  .el-form-item:nth-last-child(-n+2) {
+    margin: 0;
   }
 
   .form-item-button :deep(.el-form-item__content) {

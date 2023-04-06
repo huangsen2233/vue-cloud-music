@@ -22,9 +22,9 @@ const request = axios.create({
 
 request.interceptors.request.use(
   (config: AxiosRequestConfig | any) => {
-    if (config.url !== '/login/qr/check' && config.url !== '/user/account') {
+    /* if (config.url !== '/login/qr/check' && config.url !== '/user/account') {
       startLoading({});
-    }
+    } */
     config.params = { ...config.params, timestamp: Date.now() }; // 添加一个时间戳的参数
     return config;
   },
@@ -36,7 +36,7 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   response => {
     // console.log('响应拦截器response', response);
-    endLoading();
+    // endLoading();
     if (response.data.code === 503) {
       // console.log('验证码错误');
       return Promise.reject(response.data.message);
@@ -45,7 +45,7 @@ request.interceptors.response.use(
   },
   error => {
     // console.log('响应拦截器error', error);
-    endLoading();
+    // endLoading();
     return Promise.reject(error);
   }
 );

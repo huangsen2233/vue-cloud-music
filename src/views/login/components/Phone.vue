@@ -82,8 +82,11 @@
 </template>
 
 <style lang="less" scoped>
-  :deep(.el-form-item)  {
+  .el-form-item {
     padding: 5px;
+  }
+  .el-form-item:nth-last-child(-n+2) {
+    margin: 0;
   }
 
   .form-item-code :deep(.el-input) {

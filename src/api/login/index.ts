@@ -47,6 +47,7 @@ export const loginQrKeyApi = () => {
 /**
  * @description 通过key生成二维码
  * @param { String } key
+ * @param { String } qrimg 是否返回二维码的base64地址
  * @returns Promise
  */
 export const createQrApi = (key: string, qrimg: boolean = true) => {

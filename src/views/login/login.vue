@@ -3,73 +3,73 @@
   import Account from "./components/Account.vue";
   import Phone from "./components/Phone.vue";
   import QrCode from "./components/QrCode.vue";
+  import { useRouter } from "vue-router";
   import type { TabPaneName } from 'element-plus';
 
+  const router = useRouter();
   const activeTabName = ref('account');
-
   const qrCodeRef = ref<InstanceType<typeof QrCode>>();
-
+  
+  // tab页的change事件
   const handleTabChange = (tabName: TabPaneName) => {
     if (tabName === 'qr_code') {
       qrCodeRef.value?.createQr();
     }
   }
 
+  // 关闭登录
+  const closeLogin = () => {
+    router.push('/home');
+  }
 
 </script>
 
 <template>
-  <el-card class="card">
-    <header class="title">
-      欢迎登录 music!
-      <el-icon class="close" ><CircleClose /></el-icon>
-    </header>
-    <el-tabs v-model="activeTabName" stretch @tab-change="handleTabChange">
-      <el-tab-pane name="account">
-        <template #label>
-          <span class="custom-tabs-label">
-            <el-icon><UserFilled /></el-icon>
-            <span style="padding-left: 5px;">账号登录</span>
-          </span>
-        </template>
-        <template #default>
-          <Account />
-        </template>
-      </el-tab-pane>
-      <el-tab-pane name="phone">
-        <template #label>
-          <span class="custom-tabs-label">
-            <el-icon><PhoneFilled /></el-icon>
-            <span style="padding-left: 5px;">手机登录</span>
-          </span>
-        </template>
-        <template #default>
-          <Phone />
-        </template>
-      </el-tab-pane>
-      <el-tab-pane name="qr_code">
-        <template #label>
-          <span class="custom-tabs-label">
-            <el-icon><Grid /></el-icon>
-            <span style="padding-left: 5px;">二维码登录</span>
-          </span>
-        </template>
-        <template #default>
-          <QrCode ref="qrCodeRef" />
-        </template>
-      </el-tab-pane>
-    </el-tabs>
-  </el-card>
+  <el-tabs v-model="activeTabName" stretch @tab-change="handleTabChange">
+    <el-tab-pane name="account">
+      <template #label>
+        <span class="custom-tabs-label">
+          <el-icon><UserFilled /></el-icon>
+          <span style="padding-left: 5px;">账号登录</span>
+        </span>
+      </template>
+      <template #default>
+        <Account />
+      </template>
+    </el-tab-pane>
+    <el-tab-pane name="phone">
+      <template #label>
+        <span class="custom-tabs-label">
+          <el-icon><PhoneFilled /></el-icon>
+          <span style="padding-left: 5px;">手机登录</span>
+        </span>
+      </template>
+      <template #default>
+        <Phone />
+      </template>
+    </el-tab-pane>
+    <el-tab-pane name="qr_code">
+      <template #label>
+        <span class="custom-tabs-label">
+          <el-icon><Grid /></el-icon>
+          <span style="padding-left: 5px;">二维码登录</span>
+        </span>
+      </template>
+      <template #default>
+        <QrCode ref="qrCodeRef" />
+      </template>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <style lang="less" scoped>
   .card {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 40%;
+    // position: absolute;
+    // top: 40%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    // width: 30%;
+    // height: 40%;
     font-size: 18px;
 
     .title {

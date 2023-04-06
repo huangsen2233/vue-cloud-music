@@ -1,15 +1,16 @@
 <script setup lang="ts">
-  import { ref, defineExpose } from 'vue';
+  import { ref, inject, defineExpose } from 'vue';
   import { loginQrKeyApi, createQrApi, checkQrApi } from '@/api/login';
   import { getUserAccountApi } from '@/api/user';
   import { useUserStore } from '@/stores/user';
-  import { useRouter } from "vue-router";
+  // import { useRouter } from "vue-router";
   import localCache from '@/utils/cache';
 
   let qrUrl = ref();
   let timer = ref();
   const useUser = useUserStore();
-  const router = useRouter();
+  // const router = useRouter();
+  const closeDialog: any = inject('on-login');
 
   // 生成一个二维码的key
   const createQr = async () => {
@@ -18,7 +19,6 @@
     const { data: { qrimg } } = await createQrApi(unikey);
     // console.log('二维码base64图片地址', qrimg);
     qrUrl.value = qrimg;
-
     timer.value = setInterval(() => {
       checkQr(unikey);
     }, 5000)
@@ -35,6 +35,7 @@
       if (accountCode === 200) {
         clearInterval(timer.value);
         // console.log('获取账号信息', accountCode, profile);
+        useUser.loginStatus = true;
         useUser.account = account;
         useUser.profile = profile;
         ElMessage({
@@ -42,7 +43,7 @@
           showClose: true,
           type: 'success',
         });
-        router.push('/home');
+        closeDialog();
       }
     }
   }

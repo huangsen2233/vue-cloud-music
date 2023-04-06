@@ -2,7 +2,7 @@ import request from '@/utils/request';
 
 /**
  * @description 获取账号信息
- * @param { String } key
+ * @param { String }
  * @returns Promise
  */
 export const getUserAccountApi = () => {

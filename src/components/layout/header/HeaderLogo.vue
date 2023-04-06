@@ -6,7 +6,7 @@
 
 <template>
   <div class="header-logo">
-    <el-image style="width: 60px; height: 60px" :src="logoPng" fit="contain" />
+    <el-image :src="logoPng" fit="contain" />
     <h2>Music</h2>
   </div>
 </template>
@@ -17,9 +17,11 @@
     /* justify-content: center; */
     align-items: center;
     color: #fff;
-    font: 22px bolder;
+    font: 18px bolder;
 
     .el-image {
+      width: 50px;
+      height: 50px;
       margin-right: 10px;
     }
   }
