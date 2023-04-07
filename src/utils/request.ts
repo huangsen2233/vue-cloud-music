@@ -10,6 +10,8 @@ declare module "axios" {
     message: string
     profile: any
     account: any
+    banners: any
+    result: any
   }
   export function create(config?: AxiosRequestConfig): AxiosInstance;
 }

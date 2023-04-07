@@ -10,6 +10,9 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
+    ElCarousel: typeof import('element-plus/es')['ElCarousel']
+    ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDialog: typeof import('element-plus/es')['ElDialog']
@@ -35,6 +38,7 @@ declare module '@vue/runtime-core' {
     HeaderMenu: typeof import('./src/components/layout/header/HeaderMenu.vue')['default']
     HeaderProfile: typeof import('./src/components/layout/header/HeaderProfile.vue')['default']
     Main: typeof import('./src/components/layout/main/Main.vue')['default']
+    PlaylistItem: typeof import('./src/components/common/PlaylistItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

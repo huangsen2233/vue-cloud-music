@@ -1,17 +1,14 @@
 <script lang="ts" setup>
-  import { ref, inject, reactive, onMounted } from 'vue';
+  import { ref, inject, reactive, onBeforeMount } from 'vue';
   // import { useRouter } from "vue-router";
   import { useUserStore } from "@/stores/user";
   import { storeToRefs } from "pinia";
-  import { loginStatusApi } from "@/api/login";
   import { searchHotApi } from "@/api/search";
   import type { IHotDetail } from "./type";
 
-  onMounted(async () => {
+  onBeforeMount(async () => {
     const { data } = await searchHotApi();
-    // console.log("🚀 ~ file: HeaderProfile.vue:30 ~ handleFocus ~ res 热搜列表:", data)
-    hotDetailList = [...data];
-    console.log("🚀 ~ file: HeaderProfile.vue:32 ~ onMounted ~ hotDetailList 列表数据:", hotDetailList)
+    hotDetailList.push(...data);
   });
 
   const useUser = useUserStore();
@@ -22,16 +19,6 @@
   // 打开登录框
   const openLoginDialog: any = inject('on-login');
 
-  // 检查登录状态
-  const checkUserStatus = async () => {
-    const { data: { code, account, profile } } = await loginStatusApi();
-    if (code === 200) {
-      useUser.loginStatus = true;
-      useUser.account = account;
-      useUser.profile = profile;
-    }
-  };
-
   // 点击菜单项的command事件
   const handleCommand = () => {
 
@@ -41,17 +28,18 @@
 <template>
   <div class="header-profile">
     <!-- 搜索框 -->
-    <el-dropdown trigger="click" max-height="300px"> 
+    <el-dropdown trigger="click" max-height="300px" placement="bottom"> 
       <el-input v-model="searchValue" placeholder="请输入歌曲/歌手/视频" size="large">
         <template #prefix>
           <el-icon class="el-input__icon"><Search /></el-icon>
         </template>
       </el-input>
-      <template v-if="hotDetailList.length" #dropdown>
+      <template #dropdown>
         <el-dropdown-menu>
-          <template v-for="i in hotDetailList">
-            <el-dropdown-item icon="User">{{ i.searchWord }}</el-dropdown-item>
-          </template>
+          <el-dropdown-item v-for="(i,index) in hotDetailList" :key="index">
+            {{ i.searchWord }}
+            <el-image v-if="i.iconUrl" style="width:20px; height:20px; marginLeft:5px;" :src="i.iconUrl" fit="contain" />
+          </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -108,5 +96,8 @@
     }
   }
   
+  .el-dropdown-menu {
+    width: 160px;
+  }
 
 </style>

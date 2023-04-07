@@ -1,20 +1,34 @@
 <script setup lang="ts">
   import { ref, provide, onMounted } from 'vue';
-  import { useHomeStore } from "@/stores/home";
+  import { useUserStore } from "@/stores/user";
   import { loginStatusApi, logoutApi } from "@/api/login";
   import Login from "../login/login.vue"
   import Header from "@/components/layout/header/Header.vue";
 
-  // const { homeId } = useHomeStore();
+  onMounted(() => {
+    checkUserStatus();
+  })
+
+  const useUser = useUserStore();
 
   const dialogVisible = ref(false);
 
+  // 登录框的展示、隐藏
   const changeDialogVisible = () => {
     dialogVisible.value = !dialogVisible.value;
   }
 
+  // 检查登录状态
+  const checkUserStatus = async () => {
+    const { data: { code, account, profile } } = await loginStatusApi();
+    if (code === 200) {
+      useUser.loginStatus = true;
+      useUser.account = account;
+      useUser.profile = profile;
+    }
+  };
+
   provide('on-login', changeDialogVisible);
-  
 </script>
 
 <template>
@@ -22,15 +36,24 @@
     <el-header>
       <Header />
     </el-header>
-    <el-main>Main</el-main>
+    <el-main>
+      <el-card>      
+        <router-view v-slot="{ Component }">
+          <transition>
+            <!-- 
+              原因：:is="Component"属性会使所有的组件都渲染在这里，而外层是 transition 虚拟组件，也就是说所有组件都会包裹在它里面，这是不允许的 
+              解决：把组件都包裹成单root节点，加一个div标签，把Component包裹一下
+            -->
+            <div>
+              <component :is="Component" />
+            </div>
+          </transition>
+        </router-view>
+      </el-card>
+    </el-main>
     <el-footer>Footer</el-footer>
   </el-container>
-  <el-dialog
-    v-model="dialogVisible"
-    title="登录"
-    width="26%"
-    center
-  >
+  <el-dialog v-model="dialogVisible" title="登录" width="26%" center>
     <template #header>
       <div class="title">欢迎登录 music!</div>
     </template>
@@ -45,8 +68,14 @@
   }
   .el-header {
     height: 80px;
-    background: rgba(36,36,36);
+    background: rgba(36,36,36,0.9);
   }
+
+  .el-main {
+    width: 80%;
+    margin: 0 auto;
+  }
+
   .el-dialog__headerbtn :deep( .el-dialog__close) {
     font-size: 22px;
   }
