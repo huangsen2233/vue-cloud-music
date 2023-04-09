@@ -1,23 +1,26 @@
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue';
   import PlaylistItem from "@/components/common/PlaylistItem.vue";
   import type { PropType } from 'vue';
 
   const props = defineProps({
     playList: Array as PropType<any[]>
   });
+
+  const emits = defineEmits<{
+    (event: 'on-router'): void
+  }>();
   
 </script>
 
 <template>
   <div class="playlist">
     <section class="playlist-title">
-      <h2>推荐歌单</h2>
-      <i>更多<el-icon><DArrowRight /></el-icon></i>
+      <h2 @click="emits('on-router')">推荐歌单</h2>
+      <a @click.prvent="emits('on-router')">更多<el-icon><DArrowRight /></el-icon></a>
     </section>
     <section class="playlist-content">
-      <div class="item" v-for="i in props.playList">
-        <PlaylistItem :playlist-info="i" />
+      <div class="item" v-for="item in props.playList">
+        <PlaylistItem :url="item.picUrl" :name="item.name" :play-count="item.playCount" />
       </div>
     </section>
   </div>
@@ -28,8 +31,8 @@
     width: 100%;
 
     &-title {
-      border-bottom: 1px solid red;
-      // margin-bottom: 5px;
+      border-bottom: 5px solid var(--el-color-primary);
+      margin: 20px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -38,31 +41,37 @@
         cursor: pointer;
       }
 
-      & > i {
-        box-sizing: border-box;
+      & > a {
+        display: block;
+        padding: 10px 0;
         font: 18px bolder;
         cursor: pointer;
 
         .el-icon {
           vertical-align: middle;
+          font-size: 20px;
         }
       }
 
-      & > i:hover {
-        border-bottom: 2px solid #000;
+      & > a:hover {
+        text-decoration: underline;
       }
-
     }
 
     &-content {
       width: 100%;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: flex-start;
 
       .item {
         box-sizing: border-box;
-        flex: 20%;
+        flex: 18%;
+        margin: 0 calc(10% / 4) 30px 0;
+      }
+
+      .item:nth-child(5n) {
+        margin-right: 0;
       }
     }
   }

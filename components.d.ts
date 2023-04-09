@@ -9,6 +9,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BackTop: typeof import('./src/components/common/BackTop.vue')['default']
+    ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
@@ -26,10 +28,11 @@ declare module '@vue/runtime-core' {
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElLink: typeof import('element-plus/es')['ElLink']
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
-    ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    ElPagination: typeof import('element-plus/es')['ElPagination']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     Footer: typeof import('./src/components/layout/footer/Footer.vue')['default']
@@ -37,6 +40,8 @@ declare module '@vue/runtime-core' {
     HeaderLogo: typeof import('./src/components/layout/header/HeaderLogo.vue')['default']
     HeaderMenu: typeof import('./src/components/layout/header/HeaderMenu.vue')['default']
     HeaderProfile: typeof import('./src/components/layout/header/HeaderProfile.vue')['default']
+    Home: typeof import('./src/components/layout/main/home.vue')['default']
+    LoginDiaLog: typeof import('./src/components/dialog/LoginDiaLog.vue')['default']
     Main: typeof import('./src/components/layout/main/Main.vue')['default']
     PlaylistItem: typeof import('./src/components/common/PlaylistItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

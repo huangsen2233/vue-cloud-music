@@ -8,9 +8,9 @@
 </script>
 
 <template>
-  <el-carousel type="card" trigger="click" arrow="always" height="300px" :interval="3500" indicator-position="none">
+  <el-carousel type="card" trigger="click" arrow="hover" height="300px" :interval="3500" indicator-position="none">
     <el-carousel-item v-for="i in props.bannerList" :key="i">
-      <el-image :src="i.imageUrl" fit="contain" />
+      <el-image :src="i.imageUrl" style="width:100%; height:300px;" fit="scale-down" />
     </el-carousel-item>
   </el-carousel>
 </template>

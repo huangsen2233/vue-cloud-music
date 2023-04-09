@@ -49,7 +49,7 @@
       <span class="text" @click="openLoginDialog">请先登录</span>
     </div>
     <div v-else-if="loginStatus" class="profile">
-      <el-image :src="profile?.avatarUrl" style="width:38px; height:38px; border: 1px solid #fff; border-radius: 50%;" fit="contain" />
+      <el-image :src="profile?.avatarUrl" style="width: 38px; height: 38px; border: 1px solid #fff; border-radius: 50%;" fit="contain" />
       <el-dropdown placement="bottom-start" @command="handleCommand">
         <span class="text">{{ profile?.nickname }}</span>
         <template #dropdown>

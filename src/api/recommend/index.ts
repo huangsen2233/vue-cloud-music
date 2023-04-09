@@ -18,11 +18,31 @@ export const recommendResourceApi = () => {
 }
 
 /**
- * @description 获取推荐歌单
+ * @description 获取每日推荐歌曲(需要登录)
+ * @returns Promise
+ */
+export const recommendSongsApi = () => {
+  return request.get('/recommend/songs')
+}
+
+/**
+ * @description 推荐歌单
+ * @param {String} limit 可选参数，取出歌单数量 , 默认为 20
  * @returns Promise
  */
 export const personalizedApi = (limit: number = 20) => {
   return request.get('/personalized', {
+    params: { limit }
+  })
+}
+
+/**
+ * @description 推荐新音乐
+ * @param {String} limit 可选参数，取出音乐数量 , 默认为 10
+ * @returns Promise
+ */
+export const newsongApi = (limit: number = 10) => {
+  return request.get('/personalized/newsong', {
     params: { limit }
   })
 }
