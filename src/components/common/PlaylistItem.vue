@@ -1,39 +1,60 @@
 <script lang="ts" setup>
   import { ref, reactive, computed, inject } from 'vue';
+  import { formatTimestamp } from "@/utils/dateFormat";
 
-  const { url, name, playCount, creatorName } = defineProps<{
+  const { url, name, playCount, creatorName, creatorUrl, createTime, signature, tags } = defineProps<{
     url: string
     name: string
     playCount: number
     creatorName?: string
+    creatorUrl?: string
+    createTime?: number
+    signature?: string
+    tags?: string[]
   }>();
 
   // 歌单播放次数
   const count = computed(() => {
     return function(value: number) {
-      return value.toString().slice(0,4);
+      const str = value.toString();
+      return str.slice(0,str.length - 4);
     }
   });
-
-  const handleRouter = inject('on-router');
 </script>
 
 <template>
   <div class="playlist-item">
     <div class="img">
-      <el-image style="width: 100%; height: 100%;" :src="url" :title="name" fit="contain" @click="handleRouter" />
+      <el-image style="width: 100%; height: 100%;" :src="url" :title="name" fit="contain"/>
       <div class="count">
         <el-icon><Headset /></el-icon>
         <span>{{ count(playCount) }}W</span>
-        <el-icon color="#ddd" @click="handleRouter"><VideoPlay /></el-icon>
+        <el-icon color="#ddd"><VideoPlay /></el-icon>
       </div>
     </div>
     <a class="content"><span>{{ name }}</span></a>
-    <span>by <a>{{ creatorName }}</a></span>
+    <div class="creator" v-if="creatorName">
+      by
+      <!-- 弹出框-歌单信息 -->
+      <el-popover placement="bottom" width="auto" trigger="click" popper-class="elpopover">
+        <template #reference>
+          <a style="color:#000;">{{ creatorName }}</a>
+        </template>
+        <el-descriptions title="歌单信息" border :column="1">
+          <el-descriptions-item label="创建人">{{ creatorName }}</el-descriptions-item>
+          <el-descriptions-item label="创建时间">{{ formatTimestamp(createTime as number) }}</el-descriptions-item>
+          <el-descriptions-item label="播放次数">{{ playCount }} 次</el-descriptions-item>
+          <el-descriptions-item label="歌单签名">{{ signature || '暂无签名...' }} </el-descriptions-item>
+          <el-descriptions-item label="歌单标签">
+            <el-tag style="margin: 0 5px;" v-for="tag in tags">{{ tag }}</el-tag>
+          </el-descriptions-item>
+        </el-descriptions>
+      </el-popover>
+    </div>
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
   .img {
     position: relative;
 
@@ -44,6 +65,8 @@
     .count {
       position: absolute;
       bottom: 4px;
+      left: 0;
+      right: 0;
       box-sizing: border-box;
       width: 100%;
       height: 40px;
@@ -69,7 +92,7 @@
       & > .el-icon:nth-of-type(2):hover {
         cursor: pointer;
         color: #fff;
-        transform: scale(1.2);
+        transform: scale(1.1);
       }
     }
   }
@@ -89,6 +112,16 @@
   }
 
   .content:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .creator {
+    padding-top: 10px;
+    color: rgba(0,0,0,0.6);
+    font-size: 14px;
+  }
+  .creator:hover a{
     cursor: pointer;
     text-decoration: underline;
   }

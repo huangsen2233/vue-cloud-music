@@ -41,7 +41,7 @@
     router.push('/song');
   };
   
-  provide('on-router', routeToSong);
+  // provide('on-router', routeToSong);
 </script>
 
 <template>

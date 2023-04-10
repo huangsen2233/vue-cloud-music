@@ -61,7 +61,7 @@
   <!-- 登录框 -->
   <LoginDiaLog :dialog-visible="dialogVisible" />
   <!-- 回到顶部 -->
-  <BackTop />
+  <BackTop :right="30" />
 </template>
 
 <style lang="less" scoped>

@@ -9,11 +9,36 @@
 </script>
 
 <template>
-  <div v-for="item in playLists" :key="item"> 
-    <PlaylistItem :url="item.coverImgUrl" :name="item.name" :play-count="item.playCount" :creator-name="item.creator.nickname"/>
+  <div class="playlists">
+    <div class="playlists-item" v-for="item in playLists" :key="item"> 
+      <PlaylistItem 
+        :url="item.coverImgUrl" 
+        :name="item.name" 
+        :play-count="item.playCount" 
+        :creator-name="item.creator.nickname" birthday
+        :creator-url="item.creator.avatarUrl"
+        :create-time="item.createTime"
+        :signature="item.creator.signature"
+        :tags="item.tags"
+      />
+    </div>
   </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
+  .playlists {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
 
+    &-item {
+      flex: 15%;
+      margin: 0 calc(10% / 5) 30px 0;
+    }
+    
+    &-item:nth-child(6n) {
+      margin-right: 0;
+    }
+  }
 </style>
