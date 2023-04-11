@@ -42,9 +42,9 @@
 <template>
   <el-pagination
     :model-value:current-page="props.currentPage"
-    model-value:page-size="props.pageSize"
+    :model-value:page-size="props.pageSize"
     :total="props.total"
-    :page-sizes="[30, 60, 90, 120]"
+    :page-sizes="[18, 24, 30, 60]"
     :small="props.small"
     :disabled="props.disabled"
     :background="props.background"

@@ -29,7 +29,7 @@
       <!-- 弹出框-歌单标签 -->
       <el-popover placement="bottom-end" :width="700" trigger="hover" popper-class="elpopover">
         <template #reference>
-          <el-button type="primary" plain>
+          <el-button type="primary" size="large" plain>
             选择分类<el-icon style="padding-left: 5px;"><ArrowDown /></el-icon>
           </el-button>
         </template>
@@ -47,10 +47,10 @@
       </el-popover>
     </section>
     <section class="playlist-tag-all">
-      <el-button type="primary" @click="switchPlaylist('全部')">
+      <el-button type="primary" size="large" @click="switchPlaylist('全部')">
         全部<el-icon style="padding-left: 5px;"><DArrowRight /></el-icon>
       </el-button>
-      <el-button type="danger" @click="switchPlaylist('热门')">
+      <el-button type="danger" size="large" @click="switchPlaylist('热门')">
         热门<el-icon style="padding-left: 5px;"><Sunny /></el-icon>
       </el-button>
     </section>
@@ -69,7 +69,7 @@
         font-size: 22px;
         font-weight: bold;
         vertical-align: middle;
-        padding-right: 10px;
+        padding-right: 20px;
       }
     }
   }
