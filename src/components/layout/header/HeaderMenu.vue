@@ -43,7 +43,7 @@
     width: 500px;
 
     &-item {
-      width: 100px;
+      width: 80px;
       border-bottom: 8px solid rgba(36,36,36,0.9);
       color: #ccc;
       font-size: 18px;

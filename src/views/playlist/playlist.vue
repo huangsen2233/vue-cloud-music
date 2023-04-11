@@ -4,10 +4,22 @@
   import PlaylistTag from './components/PlaylistTag.vue';
   import Playlists from "./components/Playlists.vue";
   import PlaylistPagination from './components/PlaylistPagination.vue';
+  import yzIcon from "@/assets/imgs/yuzhong.png";
+  import fgIcon from "@/assets/imgs/fengge.png";
+  import cjIcon from "@/assets/imgs/changjing.png";
+  import qgIcon from "@/assets/imgs/qinggan.png";
+  import ztIcon from "@/assets/imgs/zhuti.png";
+
+  export type playlistType = {
+    limit?: number
+    order?: string
+    cat?: string
+    offset?: number
+  }
 
   onMounted(() => {
-    // getPlaylist();
     getTags();
+    getPlaylist({});
 /*     const result = await playlistHotApi();
     console.log("🚀 ~ file: song.vue:7 ~ onMounted ~ res 热门歌曲分类:", result)
     const resu = await highqualityTagsApi();
@@ -19,10 +31,18 @@
   const categoriesTags: any = ref([]);
   const subTags: any = ref([]);
   const tagsList: any = ref({}); // 全部标签
+  const tagsIcons: any = ref({
+    '语种': yzIcon,
+    '风格': fgIcon,
+    '场景': cjIcon,
+    '情感': qgIcon,
+    '主题': ztIcon
+  }); // 标签图标
 
   // 获取歌单列表
-  const getPlaylist = async () => {
-    const result: any = await playlistApi({ limit: 48 });
+  const getPlaylist = async (params: playlistType) => {
+    const result: any = await playlistApi(params);
+    console.log("🚀 ~ file: playlist.vue:45 ~ getPlaylist ~ result: 歌单列表", result)
     playlists.value = result.playlists; 
     total.value = result.total; 
   };
@@ -35,17 +55,21 @@
     for(let i = 0; i < Object.keys(categoriesTags.value).length; i++) {
       tagsList.value[categoriesTags.value[i]] = subTags.value.filter((sub: any) => sub.category === i);
     }
-    console.log("🚀 ~ file: playlist.vue:17 ~ onMounted ~ tagsList 全部标签:", tagsList.value)
+    // console.log("🚀 ~ file: playlist.vue:17 ~ onMounted ~ tagsList 全部标签:", tagsList.value)
   };
 </script>
 
 <template>
   <!-- 歌单标签 -->
-  <PlaylistTag :tags-list="tagsList" />
+  <PlaylistTag :tags-list="tagsList" :tags-icons="tagsIcons" @on-switch="getPlaylist"/>
   <!-- 歌单列表 -->
   <Playlists :play-lists="playlists" />
   <!-- 分页 -->
-  <!-- <PlaylistPagination :total="total" /> -->
+  <PlaylistPagination
+    :total="total"
+    @on-page="getPlaylist"
+    @on-size="getPlaylist"
+  />
 </template>
 
 <style scoped>

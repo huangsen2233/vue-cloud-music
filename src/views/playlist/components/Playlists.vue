@@ -15,7 +15,7 @@
         :url="item.coverImgUrl" 
         :name="item.name" 
         :play-count="item.playCount" 
-        :creator-name="item.creator.nickname" birthday
+        :creator-name="item.creator.nickname"
         :creator-url="item.creator.avatarUrl"
         :create-time="item.createTime"
         :signature="item.creator.signature"
@@ -31,6 +31,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    padding: 30px 0;
 
     &-item {
       flex: 15%;

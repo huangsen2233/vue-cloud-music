@@ -41,11 +41,14 @@
           <a style="color:#000;">{{ creatorName }}</a>
         </template>
         <el-descriptions title="歌单信息" border :column="1">
-          <el-descriptions-item label="创建人">{{ creatorName }}</el-descriptions-item>
-          <el-descriptions-item label="创建时间">{{ formatTimestamp(createTime as number) }}</el-descriptions-item>
-          <el-descriptions-item label="播放次数">{{ playCount }} 次</el-descriptions-item>
-          <el-descriptions-item label="歌单签名">{{ signature || '暂无签名...' }} </el-descriptions-item>
-          <el-descriptions-item label="歌单标签">
+          <el-descriptions-item label="创建人" label-align="right">
+            {{ creatorName }}
+            <el-avatar :src="creatorUrl" shape="circle" style="width: 30px; height: 30px; vertical-align: middle; margin-left: 5px;"></el-avatar>
+          </el-descriptions-item>
+          <el-descriptions-item label="创建时间" label-align="right">{{ formatTimestamp(createTime as number) }}</el-descriptions-item>
+          <el-descriptions-item label="播放次数" label-align="right">{{ playCount }} 次</el-descriptions-item>
+          <el-descriptions-item label="歌单签名" label-align="right">{{ signature || '暂无签名...' }} </el-descriptions-item>
+          <el-descriptions-item label="歌单标签" label-align="right">
             <el-tag style="margin: 0 5px;" v-for="tag in tags">{{ tag }}</el-tag>
           </el-descriptions-item>
         </el-descriptions>

@@ -9,6 +9,12 @@ export function registerIcons (app: App): void {
   })
 }
 
+/* export function registerZh (app: App) {
+  app.use(ElementPlus, {
+    locale: zhCn,
+  })
+}
+ */
 export function registerMessage (app: App): void {
   // app.provide('$message', ElMessage);
   /* app.config.globalProperties.$message = () => {

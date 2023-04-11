@@ -9,7 +9,7 @@ import request from '@/utils/request';
  * @returns Promise
  */
 // limit: number = 50, order: string = 'hot', cat: string = '全部', offset: number = 50
-export const playlistApi = ({ limit = 50, order = 'hot', cat = '全部', offset = 50 }) => {
+export const playlistApi = ({ limit = 30, order = 'hot', cat = '全部', offset = 30 }) => {
   return request.get('/top/playlist', {
     params: { order, cat, limit, offset }
   })
