@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     BackTop: typeof import('./src/components/common/BackTop.vue')['default']
+    BasePagination: typeof import('./src/components/common/BasePagination.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -47,6 +48,7 @@ declare module '@vue/runtime-core' {
     HeaderMenu: typeof import('./src/components/layout/header/HeaderMenu.vue')['default']
     HeaderProfile: typeof import('./src/components/layout/header/HeaderProfile.vue')['default']
     LoginDiaLog: typeof import('./src/components/dialog/LoginDiaLog.vue')['default']
+    Pagination: typeof import('./src/components/common/Pagination.vue')['default']
     PlaylistItem: typeof import('./src/components/common/PlaylistItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

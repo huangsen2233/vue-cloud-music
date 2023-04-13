@@ -1,6 +1,8 @@
 import * as ElementPlusIcons from '@element-plus/icons-vue'
 import type { App } from 'vue'
 import { ElMessage } from 'element-plus'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn';
+import ElementPlus from 'element-plus';
 
 export function registerIcons (app: App): void {
   Object.keys(ElementPlusIcons).forEach(key => {
@@ -9,12 +11,12 @@ export function registerIcons (app: App): void {
   })
 }
 
-/* export function registerZh (app: App) {
+export function registerZh (app: App) {
   app.use(ElementPlus, {
     locale: zhCn,
   })
 }
- */
+
 export function registerMessage (app: App): void {
   // app.provide('$message', ElMessage);
   /* app.config.globalProperties.$message = () => {

@@ -67,6 +67,7 @@
   <!-- 分页 -->
   <PlaylistPagination
     :total="total"
+    :page-sizes="[18, 24, 30, 60]"
     @on-page="getPlaylist"
     @on-size="getPlaylist"
   />

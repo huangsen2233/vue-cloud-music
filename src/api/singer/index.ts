@@ -1,5 +1,13 @@
 import request from '@/utils/request';
 
+type artistsType = {
+  limit?: number
+  offset?: number
+  initial?: string
+  type?: number
+  area?: number
+};
+
 /**
  * @description 歌手分类列表
  * @param {String} limit 可选参数，返回数量 , 默认为 30
@@ -9,16 +17,8 @@ import request from '@/utils/request';
  * @param {String} area 可选参数，-1:全部，7:华语，96:欧美，8:日本，16韩国，0:其
  * @returns Promise
  */
-export const artistApi = ({ limit = 30, offset = 0, initial = 0, type = -1, area = -1 }) => {
+export const artistApi = ({ limit = 30, offset = 5, initial = '0', type = -1, area = -1 }: artistsType) => {
   return request.get('/artist/list', {
     params: { limit, offset, initial, type, area }
   })
 }
-
-type artistsType = {
-  limit?: number
-  offset?: number
-  initial?: string
-  type?: number
-  area?: number
-};

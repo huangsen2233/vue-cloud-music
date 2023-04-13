@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
-  import type { playlistType } from "../playlist.vue";
 
   const props = withDefaults(defineProps<{
     currentPage?: number
@@ -20,8 +19,8 @@
   });
 
   const emits = defineEmits<{
-    (event: 'on-page', params: playlistType): void
-    (event: 'on-size', params: playlistType): void
+    (event: 'on-page', params: any): void
+    (event: 'on-size', params: any): void
   }>();
 
 
@@ -46,6 +45,7 @@
     :model-value:page-size="props.pageSize"
     :total="props.total"
     :page-sizes="props.pageSizes"
+    :default-page-size="props.pageSizes?.[0]"
     :small="props.small"
     :disabled="props.disabled"
     :background="props.background"

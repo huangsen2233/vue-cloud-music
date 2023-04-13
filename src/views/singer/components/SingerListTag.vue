@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-  import { ref, reactive, inject } from 'vue';
+  import { ref, inject } from 'vue';
 
   type letterType = {
     initial: string
+    type: number
+    area: number
   }
 
-  const tagTitle = inject('tagTitle');
-  const switchLetterSinger = inject('on-switch-letter') as ({ initial }: letterType) => void;
+  const params: any = inject('tagParams');
+
+  const switchLetterSinger = inject('on-switch-letter') as (params: letterType) => void;
 
   const letterList = [
     'A','B','C','D','E','F','G','H','I','J','K','L','M',
@@ -27,13 +30,13 @@
     } else {
       initial = letter;
     }
-    switchLetterSinger({ initial });
+    switchLetterSinger({ initial, area: params.value.area, type: params.value.type });
   }
 
 </script>
 
 <template>
-  <h2>{{ tagTitle }}</h2>
+  <h2>{{ params.title }}</h2>
   <div class="letter">
     <el-button type="danger" @click="changeLetter('热门')">
       热门<el-icon style="padding-left: 5px;"><Sunny /></el-icon>
