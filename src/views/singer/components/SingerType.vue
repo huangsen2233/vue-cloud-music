@@ -1,13 +1,8 @@
 <script lang="ts" setup>
   import { ref, reactive, inject } from 'vue';
+  import type { titleType } from "../type";
 
-  type singerType = {
-    title: string
-    type: number
-    area: number
-  };
-
-  const switchSinger = inject('on-switch-type') as (params: singerType) => void
+  const switchType = inject('switch-type') as (params: titleType) => void
 
   const collapseList = [
     { title: '全部', name: -1 },
@@ -33,7 +28,7 @@
   const changeSinger = (index1: number, index2: number, i: any, j: any) => {
     isActive1.value = index1;
     isActive2.value = index2;
-    switchSinger({ area: i.name, type: j.name, title: `${i.title}${j.title}` });
+    switchType({ area: i.name, type: j.name, title: `${i.title}${j.title}` });
   };
 </script>
 
@@ -87,13 +82,6 @@
         & > div:hover a {
           cursor: pointer;
           text-decoration: underline;
-        }
-
-        /* & > div:active {
-          color: var(--el-color-primary);
-        } */
-        & > div:visited {
-          color: var(--el-color-primary);
         }
       }
     }

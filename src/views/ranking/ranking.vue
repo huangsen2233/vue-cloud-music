@@ -1,15 +1,15 @@
 <script lang="ts" setup>
   import { ref, reactive, onMounted } from 'vue';
-  import { toplistApi } from '@/api/ranking';
+  import { toplistApi, toplistDetailApi } from '@/api/ranking';
 
   onMounted(() => {
-    getToplist();
+    getToplistDetail();
   });
 
-  // 获取所有榜单
-  const getToplist = async () => {
-    const result = await toplistApi();
-    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 所有榜单", result)
+  // 获取所有榜单摘要
+  const getToplistDetail = async () => {
+    const result = await toplistDetailApi();
+    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 所有榜单详情", result)
   }
   
 </script>

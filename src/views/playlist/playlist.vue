@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import { ref, reactive, onMounted } from 'vue';
-  import { playlistApi, playlistCatlistApi, playlistHotApi, highqualityTagsApi } from "@/api/playlist";
+  import { playlistApi, playlistCatlistApi } from "@/api/playlist";
   import PlaylistTag from './components/PlaylistTag.vue';
   import Playlists from "./components/Playlists.vue";
-  import PlaylistPagination from './components/PlaylistPagination.vue';
+  import BasePagination from '@/components/common/BasePagination.vue';
   import yzIcon from "@/assets/imgs/yuzhong.png";
   import fgIcon from "@/assets/imgs/fengge.png";
   import cjIcon from "@/assets/imgs/changjing.png";
@@ -15,19 +15,20 @@
     order?: string
     cat?: string
     offset?: number
-  }
+  };
+
+  type paginationType = {
+    currentPage: number
+    pageSize: number
+  };
 
   onMounted(() => {
     getTags();
-    getPlaylist({});
-/*     const result = await playlistHotApi();
-    console.log("🚀 ~ file: song.vue:7 ~ onMounted ~ res 热门歌曲分类:", result)
-    const resu = await highqualityTagsApi();
-    console.log("🚀 ~ file: playlist.vue:18 ~ onMounted ~ resu: 精品标签", resu) */
+    getPlaylist({...playlistParams.value});
   });
-  const playlists = ref([]);
-  const total = ref();
 
+  const paginationProp = reactive({ total: 0, currentPage: 1, pageSize: 30 });
+  const playlists = ref([]);
   const categoriesTags: any = ref([]);
   const subTags: any = ref([]);
   const tagsList: any = ref({}); // 全部标签
@@ -38,15 +39,8 @@
     '情感': qgIcon,
     '主题': ztIcon
   }); // 标签图标
-
-  // 获取歌单列表
-  const getPlaylist = async (params: playlistType) => {
-    const result: any = await playlistApi(params);
-    console.log("🚀 ~ file: playlist.vue:45 ~ getPlaylist ~ result: 歌单列表", result)
-    playlists.value = result.playlists; 
-    total.value = result.total; 
-  };
-
+  const playlistParams = ref({ limit: 30, order: 'hot', cat: '全部', offset: 0 });
+  
   // 获取歌单标签
   const getTags = async () => {
     const result: any = await playlistCatlistApi();
@@ -57,6 +51,26 @@
     }
     // console.log("🚀 ~ file: playlist.vue:17 ~ onMounted ~ tagsList 全部标签:", tagsList.value)
   };
+
+  // 获取歌单列表
+  const getPlaylist = async (params: playlistType) => {
+    playlistParams.value = { ...playlistParams.value, ...params };
+    // console.log('歌单列表参数', playlistParams.value);
+    const result: any = await playlistApi(params);
+    console.log("🚀 ~ file: playlist.vue:45 ~ getPlaylist ~ result: 歌单列表", result)
+    playlists.value = result.playlists; 
+    paginationProp.total = result.total; 
+  };
+
+  // 当前页数、每页的数量改变
+  const changePagination = (params: paginationType) => {
+    paginationProp.currentPage = params.currentPage;
+    paginationProp.pageSize = params.pageSize;
+    getPlaylist({ 
+      offset: (params.currentPage - 1) * params.pageSize, 
+      limit: params.pageSize
+    });
+  };
 </script>
 
 <template>
@@ -64,15 +78,25 @@
   <PlaylistTag :tags-list="tagsList" :tags-icons="tagsIcons" @on-switch="getPlaylist"/>
   <!-- 歌单列表 -->
   <Playlists :play-lists="playlists" />
+  <BasePagination 
+    :total="paginationProp.total"
+    :current-page="paginationProp.currentPage"
+    :page-size="paginationProp.pageSize"
+    :page-sizes="[18, 30, 60, 90]"
+    @on-page="changePagination"
+    @on-size="changePagination"
+  />
   <!-- 分页 -->
-  <PlaylistPagination
+  <!-- <PlaylistPagination
     :total="total"
     :page-sizes="[18, 24, 30, 60]"
     @on-page="getPlaylist"
     @on-size="getPlaylist"
-  />
+  /> -->
 </template>
 
 <style scoped>
-
+  .el-pagination {
+    margin-bottom: 30px;
+  }
 </style>

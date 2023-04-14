@@ -1,15 +1,10 @@
 <script lang="ts" setup>
   import { ref, inject } from 'vue';
+  import type { initialType } from "../type";
 
-  type letterType = {
-    initial: string
-    type: number
-    area: number
-  }
+  const tagTitle = inject('tagTitle') as string;
 
-  const params: any = inject('tagParams');
-
-  const switchLetterSinger = inject('on-switch-letter') as (params: letterType) => void;
+  const switchInitial = inject('switch-initial') as (params: initialType) => void;
 
   const letterList = [
     'A','B','C','D','E','F','G','H','I','J','K','L','M',
@@ -17,11 +12,13 @@
     '其它'
   ];
 
-  const isActive = ref();
+  const isActive = ref(999);
 
   // 歌手的名称首字母改变
-  const changeLetter = (letter: string, index?: number) => {
-    isActive.value = index;
+  const changeInitial = (letter: string, index?: number) => {
+    if (index !== undefined) {
+      isActive.value = index;
+    }
     let initial: string;
     if (letter === '其它') {
       initial = '0';
@@ -30,20 +27,20 @@
     } else {
       initial = letter;
     }
-    switchLetterSinger({ initial, area: params.value.area, type: params.value.type });
+    switchInitial({ initial });
   }
 
 </script>
 
 <template>
-  <h2>{{ params.title }}</h2>
+  <h2>{{ tagTitle }}</h2>
   <div class="letter">
-    <el-button type="danger" @click="changeLetter('热门')">
+    <el-button type="danger" @click="changeInitial('热门')">
       热门<el-icon style="padding-left: 5px;"><Sunny /></el-icon>
     </el-button>
     <ul>
       <template v-for="i,index in letterList">
-        <li :class="[isActive === index ? 'activeColor' : '']" @click="changeLetter(i, index)">{{ i }}</li>
+        <li :class="[isActive === index ? 'activeColor' : '']" @click="changeInitial(i, index)">{{ i }}</li>
       </template>
     </ul>
   </div>

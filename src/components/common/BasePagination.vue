@@ -26,26 +26,25 @@
 
   // 页数改变事件
   const handleCurrentChange = (currentPage: number) => {
-    console.log('页数改变', currentPage);
-    emits('on-page', { offset: currentPage * props.pageSize });
+    // console.log('页数改变', currentPage);
+    emits('on-page', { currentPage, pageSize: props.pageSize });
   };
 
   // 每页个数改变事件
   const handleSizeChange = (pageSize: number) => {
-    console.log('每页个数改变', pageSize);
-    emits('on-size', { limit: pageSize });
-    
+    // console.log('每页个数改变', pageSize);
+    emits('on-size', { pageSize, currentPage: props.currentPage });
   };
 
 </script>
 
 <template>
   <el-pagination
-    :model-value:current-page="props.currentPage"
-    :model-value:page-size="props.pageSize"
+    :current-page="props.currentPage"
+    :page-size="props.pageSize"
     :total="props.total"
     :page-sizes="props.pageSizes"
-    :default-page-size="props.pageSizes?.[0]"
+    :default-page-size="props.pageSizes?.[1]"
     :small="props.small"
     :disabled="props.disabled"
     :background="props.background"

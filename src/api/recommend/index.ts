@@ -2,7 +2,7 @@ import request from '@/utils/request';
 
 /**
  * @description 轮播图
- * type 资源类型, 0:pc, 1:android, 2:iphone, 3:ipad
+ * @param {String} type 可选参数，资源类型, 0:pc, 1:android, 2:iphone, 3:ipad
  * @returns Promise
  */
 export const getBannerApi = () => {
@@ -27,7 +27,7 @@ export const recommendSongsApi = () => {
 
 /**
  * @description 推荐歌单
- * @param {String} limit 可选参数，取出歌单数量 , 默认为 20
+ * @param {Number} limit 可选参数，取出歌单数量 , 默认为 20
  * @returns Promise
  */
 export const personalizedApi = (limit: number = 20) => {
@@ -38,7 +38,7 @@ export const personalizedApi = (limit: number = 20) => {
 
 /**
  * @description 推荐新音乐
- * @param {String} limit 可选参数，取出音乐数量 , 默认为 10
+ * @param {Number} limit 可选参数，取出音乐数量 , 默认为 10
  * @returns Promise
  */
 export const newsongApi = (limit: number = 10) => {
