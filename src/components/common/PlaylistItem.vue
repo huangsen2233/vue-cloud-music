@@ -2,7 +2,10 @@
   import { ref, reactive, computed, inject } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
 
+  const getPlaylistdetail = inject('router-playlistdetail') as (id: number) => void;
+
   const { url, name, playCount, creatorName, creatorUrl, createTime, signature, tags } = defineProps<{
+    id: number
     url: string
     name: string
     playCount: number
@@ -25,14 +28,14 @@
 <template>
   <div class="playlist-item">
     <div class="img">
-      <el-image style="width: 100%; height: 100%;" :src="url" :title="name" fit="contain"/>
+      <el-image style="width: 100%; height: 100%;" :src="url" :title="name" fit="contain" @click="getPlaylistdetail(id)" />
       <div class="count">
         <el-icon><Headset /></el-icon>
         <span>{{ count(playCount) }}W</span>
-        <el-icon color="#ddd"><VideoPlay /></el-icon>
+        <el-icon color="#ddd" @click="getPlaylistdetail(id)"><VideoPlay /></el-icon>
       </div>
     </div>
-    <a class="content"><span>{{ name }}</span></a>
+    <a class="content" @click="getPlaylistdetail(id)"><span>{{ name }}</span></a>
     <div class="creator" v-if="creatorName">
       by
       <!-- 弹出框-歌单信息 -->

@@ -2,6 +2,7 @@
   import { reactive, onMounted, provide } from 'vue';
   import { useRouter } from 'vue-router';
   import { getBannerApi, personalizedApi, newsongApi } from "@/api/recommend";
+  import { usePlaylistDetail } from "@/hooks/usePlaylistDetail";
   import Banner from "./components/Banner.vue";
   import Playlist from "./components/playlist.vue";
   import NewMusic from "./components/NewMusic.vue";
@@ -27,7 +28,7 @@
   const getresourceData = async () => {
     const { result } = await personalizedApi();
     playList.push(...result);
-    // console.log("🚀 ~ file: recommend.vue:23 ~ getresourceData ~ res: 歌单", result)
+    console.log("🚀 ~ file: recommend.vue:23 ~ getresourceData ~ res: 歌单", result)
   };
 
   // 获取推荐新音乐
@@ -37,18 +38,25 @@
     // console.log("🚀 ~ file: recommend.vue:23 ~ getresourceData ~ res: 获取推荐新音乐", result)
   };
 
-  const routeToSong = () => {
-    router.push('/song');
+  // 路由跳转到歌单
+  const routeToPlaylist = () => {
+    router.push('/playlist');
+  };
+
+  // 路由跳转到歌单详情
+  const routeToPlaylistdetail = (id: number) => {
+    router.push({ name: 'playlist-detail', params: { id } });
   };
   
-  // provide('on-router', routeToSong);
+  provide('on-router', routeToPlaylist);
+  provide('router-playlistdetail', routeToPlaylistdetail);
 </script>
 
 <template>
   <!-- 轮播图 -->
   <Banner :banner-list="bannerList" />
   <!-- 推荐歌单 -->
-  <Playlist :play-list="playList" @on-router="routeToSong" />
+  <Playlist :play-list="playList" @on-router="routeToPlaylist" />
   <!-- 新音乐 -->
   <NewMusic />
 </template>

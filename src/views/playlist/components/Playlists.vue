@@ -12,6 +12,7 @@
   <div class="playlists">
     <div class="playlists-item" v-for="item in playLists" :key="item"> 
       <PlaylistItem 
+        :id="item.id"
         :url="item.coverImgUrl" 
         :name="item.name" 
         :play-count="item.playCount" 

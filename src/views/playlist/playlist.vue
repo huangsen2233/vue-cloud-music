@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted, provide } from 'vue';
+  import { useRouter } from 'vue-router';
   import { playlistApi, playlistCatlistApi } from "@/api/playlist";
   import PlaylistTag from './components/PlaylistTag.vue';
   import Playlists from "./components/Playlists.vue";
@@ -21,6 +22,8 @@
     currentPage: number
     pageSize: number
   };
+
+  const router = useRouter();
 
   onMounted(() => {
     getTags();
@@ -71,6 +74,13 @@
       limit: params.pageSize
     });
   };
+
+  // 路由跳转到歌单详情
+  const routeToPlaylistdetail = (id: number) => {
+    router.push({ name: 'playlist-detail', params: { id } });
+  };
+
+  provide('router-playlistdetail', routeToPlaylistdetail);
 </script>
 
 <template>

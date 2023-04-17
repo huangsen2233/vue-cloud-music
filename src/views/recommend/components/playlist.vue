@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import PlaylistItem from "@/components/common/PlaylistItem.vue";
   import type { PropType } from 'vue';
+  import PlaylistItem from "@/components/common/PlaylistItem.vue";
 
   const props = defineProps({
     playList: Array as PropType<any[]>
@@ -20,7 +20,7 @@
     </section>
     <section class="playlist-content">
       <div class="item" v-for="item in props.playList">
-        <PlaylistItem :url="item.picUrl" :name="item.name" :play-count="item.playCount" />
+        <PlaylistItem :id="item.id" :url="item.picUrl" :name="item.name" :play-count="item.playCount" />
       </div>
     </section>
   </div>
@@ -42,7 +42,8 @@
       }
 
       & > a {
-        display: block;
+        display: flex;
+        align-items: center;
         padding: 10px 0;
         font: 18px bolder;
         cursor: pointer;

@@ -1,8 +1,9 @@
 <script lang="ts" setup>
   import { ref, watch } from 'vue';
-  import { useRoute } from "vue-router"
+  import { useRoute, useRouter } from "vue-router";
   
   const route = useRoute();
+  const router = useRouter();
 
   // description：页面刷新时，重置默认激活的菜单项
   watch(() => route.path, (newRoute, oldRoute) => {
@@ -17,10 +18,24 @@
     {index: 'playlist', item: '歌单'},
     {index: 'singer', item: '歌手'}
   ];
+
+  // 路由回退
+  const backRouter = () => {
+    router.back();
+  };
+
+  // 路由前进
+  const forwardRouter = () => {
+    router.forward();
+  };
 </script>
 
 <template>
   <div class="header-menu">
+    <div class="header-menu-router">
+      <el-icon @click="backRouter"><ArrowLeftBold /></el-icon>
+      <el-icon @click="forwardRouter"><ArrowRightBold /></el-icon>
+    </div>
     <el-menu
       router
       :default-active="defaultActive"
@@ -38,22 +53,46 @@
 </template>
 
 <style lang="less" scoped>
-  .el-menu {
+  .header-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     height: 80px;
-    width: 500px;
-
-    &-item {
-      width: 80px;
-      border-bottom: 8px solid rgba(36,36,36,0.9);
+    font-size: 18px;
+    
+    &-router {
       color: #ccc;
-      font-size: 18px;
+      font-size: 20px;
+      padding-right: 2em;
+
+      .el-icon {
+        padding-right: 1em;
+      }
+
+      .el-icon:hover {
+        color: #fff;
+        cursor: pointer;
+        padding-right: 1em;
+      }
     }
-    &-item:not(.is-disabled):hover {
-      color: #fff;
-      background-color: rgba(0, 0, 0);
-    }
-    &-item.is-active {
-      border-bottom: 8px solid var(--el-color-primary);
+
+    .el-menu {
+      height: 80px;
+      // width: 500px;
+
+      &-item {
+        width: 80px;
+        border-bottom: 8px solid rgba(36,36,36,0.9);
+        color: #ccc;
+        font-size: 18px;
+      }
+      &-item:not(.is-disabled):hover {
+        color: #fff;
+        background-color: rgba(0, 0, 0);
+      }
+      &-item.is-active {
+        border-bottom: 8px solid var(--el-color-primary);
+      }
     }
   }
 </style>
