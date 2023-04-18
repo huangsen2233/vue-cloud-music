@@ -16,6 +16,11 @@
   }>();
 
   const songTableData = ref([]);
+
+  const handleDbClick = (row: any) => {
+    console.log('双击事件', row);
+    
+  }
 </script>
 
 <template>
@@ -24,32 +29,32 @@
       <template #label>歌曲 {{ songs.length }}</template>
       <template #default>
         <!-- 歌曲 -->
-        <el-table :data="songs" stripe style="width: 100%" header-row-class-name="table-header">
-          <el-table-column type="index" width="100" align="center" />
-          <el-table-column label="歌曲标题" min-width="100px" >
+        <el-table 
+          :data="songs" 
+          stripe 
+          style="width: 100%" 
+          header-cell-class-name="table-header" 
+          @row-dblclick="handleDbClick"
+        >
+          <el-table-column type="index" label="序号" width="100" align="center" />
+          <el-table-column label="歌曲标题">
             <template v-slot="{ row }">
-              <el-tooltip 
-                effect="light" 
-                placement="bottom" 
-                :content="row.alia[0]" 
-                :show-arrow="false"
-                :show-after="600">
-              {{ row.name }}</el-tooltip>
+              <span style="cursor: pointer;">{{ row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="时长" min-width="100px" >
+          <el-table-column label="时长" >
             <template v-slot="{ row }">
-              {{ formatTimestamp(row.dt, 'mm:ss') }}
+              <span style="cursor: pointer;">{{ formatTimestamp(row.dt, 'mm:ss') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="歌手" min-width="100px" >
+          <el-table-column label="歌手" >
             <template v-slot="{ row }">
-              {{ row.ar[0].name }}
+              <span style="cursor: pointer;">{{ row.ar[0].name  }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="专辑" min-width="300px">
+          <el-table-column label="专辑">
           <template v-slot="{ row }">
-              {{ row.al.name }}
+              <span style="cursor: pointer;">{{ row.al.name }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -65,9 +70,14 @@
 </template>
 
 <style lang="less" scoped>
-  :deep(.table-header) {
-    background-color: red;
-    color: blue;
-    font-size: 16px;
+  .el-table {
+    border: 1px solid #ccc;
+
+    :deep(.table-header) {
+      background: linear-gradient(to bottom, #fff, #eee) !important;
+      font-size: 16px;
+      border-right: 1px solid #ccc !important;
+      border-bottom: 1px solid #ccc !important;
+    }
   }
 </style>
