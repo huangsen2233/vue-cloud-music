@@ -5,13 +5,13 @@
 
   const artists = inject('artists') as any;
   const paginationProp = inject('paginationProp') as paginationType;
-
   const switchOffset = inject('switch-offset') as (params: offsetType) => void;
+  const showPagination = inject('showPagination') as boolean;
 </script>
 
 <template>
   <div class="img-list">
-    <!-- 歌手展示 -->
+    <!-- 歌手列表 -->
     <div class="img-item" v-for="i in artists">
       <el-image :src="i.picUrl" style="width: 100%; height: 100%;" fit="cover"></el-image>
       <div class="name">
@@ -23,7 +23,8 @@
     </div>
   </div>
   <!-- 分页组件 -->
-  <BasePagination 
+  <BasePagination
+    v-if="showPagination"
     :total="paginationProp.total"
     :current-page="paginationProp.currentPage"
     :page-size="paginationProp.pageSize"

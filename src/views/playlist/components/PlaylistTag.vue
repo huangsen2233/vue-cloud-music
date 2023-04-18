@@ -8,7 +8,7 @@
   }>();
 
   const emits = defineEmits<{
-    (event: 'on-switch', params: playlistType): void
+    (event: 'on-change', params: playlistType): void
   }>();
 
   const tagTypeArr = ['primary', 'success', 'warning', 'danger', 'info'];
@@ -18,7 +18,7 @@
   // 切换歌单
   const switchPlaylist = (tag: string) => {
     cat.value = tag;
-    emits('on-switch', { cat: tag });
+    emits('on-change', { cat: tag });
   }
 </script>
 

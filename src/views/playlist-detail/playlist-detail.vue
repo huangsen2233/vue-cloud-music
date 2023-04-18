@@ -16,7 +16,7 @@
   const route = useRoute();
   const playlistDetail: any = ref({});
   const songs: any = ref([]);
-  const activeName = ref(''); 
+  const activeName = ref('song'); 
 
   // 获取歌单详情
   const getPlaylistDetail = async (id: number) => {
@@ -32,7 +32,7 @@
 
 <template>
   <SongTitle :playlist-detail="playlistDetail" />
-  <SongList :active-name="activeName"/>
+  <SongList :active-name="activeName" :songs="songs" />
 </template>
 
 <style scoped>

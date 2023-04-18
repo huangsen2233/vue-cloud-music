@@ -53,7 +53,7 @@
           <el-tag style="margin-right: 20px;">{{ i }}</el-tag>
         </template>
       </div>
-      <div>
+      <div style="width: 60%;">
         <b>介绍:</b>
         {{ playlistDetail.description }} 
       </div>
@@ -64,6 +64,7 @@
 <style lang="less" scoped>
   .title {
     display: flex;
+    padding-bottom: 30px;
 
     &-content {
       display: flex;
@@ -80,8 +81,12 @@
         }
       }
 
-      & > div b {
-        padding-right: 10px;
+      & > div {
+        padding-bottom: 10px;
+
+        b {
+          padding-right: 10px;
+        }
       }
     }
   }

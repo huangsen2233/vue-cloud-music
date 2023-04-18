@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted, provide } from 'vue';
+  import { ref, reactive, onMounted, provide, nextTick } from 'vue';
   import { useRouter } from 'vue-router';
   import { playlistApi, playlistCatlistApi } from "@/api/playlist";
   import PlaylistTag from './components/PlaylistTag.vue';
@@ -23,26 +23,27 @@
     pageSize: number
   };
 
+  type paginationPropType = {
+    total: number
+    currentPage: number
+    pageSize: number
+  }
+
   const router = useRouter();
 
   onMounted(() => {
     getTags();
-    getPlaylist({...playlistParams.value});
+    getPlaylist(playlistParams.value);
   });
 
-  const paginationProp = reactive({ total: 0, currentPage: 1, pageSize: 30 });
+  const paginationProp = ref<paginationPropType>({ total: 0, currentPage: 1, pageSize: 30 }); // 分页的数据
   const playlists = ref([]);
   const categoriesTags: any = ref([]);
   const subTags: any = ref([]);
   const tagsList: any = ref({}); // 全部标签
-  const tagsIcons: any = ref({
-    '语种': yzIcon,
-    '风格': fgIcon,
-    '场景': cjIcon,
-    '情感': qgIcon,
-    '主题': ztIcon
-  }); // 标签图标
+  const tagsIcons: any = ref({ '语种': yzIcon, '风格': fgIcon, '场景': cjIcon, '情感': qgIcon, '主题': ztIcon }); // 标签图标
   const playlistParams = ref({ limit: 30, order: 'hot', cat: '全部', offset: 0 });
+  let visible = ref(true);
   
   // 获取歌单标签
   const getTags = async () => {
@@ -52,27 +53,32 @@
     for(let i = 0; i < Object.keys(categoriesTags.value).length; i++) {
       tagsList.value[categoriesTags.value[i]] = subTags.value.filter((sub: any) => sub.category === i);
     }
-    // console.log("🚀 ~ file: playlist.vue:17 ~ onMounted ~ tagsList 全部标签:", tagsList.value)
   };
 
   // 获取歌单列表
   const getPlaylist = async (params: playlistType) => {
-    playlistParams.value = { ...playlistParams.value, ...params };
-    // console.log('歌单列表参数', playlistParams.value);
     const result: any = await playlistApi(params);
     console.log("🚀 ~ file: playlist.vue:45 ~ getPlaylist ~ result: 歌单列表", result)
     playlists.value = result.playlists; 
-    paginationProp.total = result.total; 
+    paginationProp.value.total = result.total; 
+  };
+
+  // 标签改变
+  const changeTag = (params: any) => {
+    visible.value = false;
+    nextTick(() => {
+      visible.value = true; // 重新挂载分页组件
+      paginationProp.value = { total: 0, currentPage: 1, pageSize: 30 };
+      getPlaylist({ ...playlistParams.value, ...params });
+    });
   };
 
   // 当前页数、每页的数量改变
   const changePagination = (params: paginationType) => {
-    paginationProp.currentPage = params.currentPage;
-    paginationProp.pageSize = params.pageSize;
-    getPlaylist({ 
-      offset: (params.currentPage - 1) * params.pageSize, 
-      limit: params.pageSize
-    });
+    paginationProp.value.currentPage = params.currentPage;
+    paginationProp.value.pageSize = params.pageSize;
+    const paginationParams = { offset: (params.currentPage - 1) * params.pageSize, limit: params.pageSize };
+    getPlaylist({ ...playlistParams.value, ...paginationParams});
   };
 
   // 路由跳转到歌单详情
@@ -85,10 +91,12 @@
 
 <template>
   <!-- 歌单标签 -->
-  <PlaylistTag :tags-list="tagsList" :tags-icons="tagsIcons" @on-switch="getPlaylist"/>
+  <PlaylistTag :tags-list="tagsList" :tags-icons="tagsIcons" @on-change="changeTag"/>
   <!-- 歌单列表 -->
   <Playlists :play-lists="playlists" />
-  <BasePagination 
+  <!-- 分页 -->
+  <BasePagination
+    v-if="visible"
     :total="paginationProp.total"
     :current-page="paginationProp.currentPage"
     :page-size="paginationProp.pageSize"
@@ -96,13 +104,6 @@
     @on-page="changePagination"
     @on-size="changePagination"
   />
-  <!-- 分页 -->
-  <!-- <PlaylistPagination
-    :total="total"
-    :page-sizes="[18, 24, 30, 60]"
-    @on-page="getPlaylist"
-    @on-size="getPlaylist"
-  /> -->
 </template>
 
 <style scoped>
