@@ -5,7 +5,8 @@
 
 <template>
   <div>
-    
+    音频播放区域
+    <audio src=""></audio>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import type { PropType } from 'vue';
-  import PlaylistItem from "@/components/common/PlaylistItem.vue";
+  import PlaylistItem from "@/components/playlistItem/PlaylistItem.vue";
 
   const props = defineProps({
     playList: Array as PropType<any[]>

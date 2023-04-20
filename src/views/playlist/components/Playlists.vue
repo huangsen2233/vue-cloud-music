@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
   import type { PropType } from 'vue';
-  import PlaylistItem from '@/components/common/PlaylistItem.vue';
+  import PlaylistItem from '@/components/playlistItem/PlaylistItem.vue';
 
   const props = defineProps({
     playLists: Array as PropType<any[]>

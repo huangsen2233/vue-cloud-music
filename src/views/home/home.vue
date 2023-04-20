@@ -4,8 +4,9 @@
   import { loginStatusApi, logoutApi } from "@/api/login";
   import Login from "../login/login.vue"
   import Header from "@/components/layout/header/Header.vue";
+  import Footer from "@/components/layout/footer/Footer.vue";
   import LoginDiaLog from "@/components/dialog/LoginDiaLog.vue";
-  import BackTop from "@/components/common/BackTop.vue";
+  import BaseBackTop from "@/components/common/BaseBackTop.vue";
   
   onMounted(() => {
     !useUser.loginStatus && checkUserStatus();
@@ -56,12 +57,14 @@
       </el-card>
     </el-main>
     <!-- 底部区域 -->
-    <el-footer>Footer</el-footer>
+    <el-footer>
+      <Footer />
+    </el-footer>
   </el-container>
   <!-- 登录框 -->
   <LoginDiaLog :dialog-visible="dialogVisible" />
   <!-- 回到顶部 -->
-  <BackTop :right="30" />
+  <BaseBackTop :right="30" />
 </template>
 
 <style lang="less" scoped>
