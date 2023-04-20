@@ -70,6 +70,7 @@
 <style lang="less" scoped>
   .el-container {
     background-color: rgba(245,245,245);
+    position: relative;
   }
   .el-header, .el-main, .el-footer {
     padding-left: 0;
@@ -83,5 +84,19 @@
   .el-main {
     width: 80%;
     margin: 0 auto;
+  }
+
+  .el-footer {
+    position: fixed;
+    z-index: 999;
+    bottom: -90px;
+    width: 100%;
+    height: 100px;
+    background: #ccc;
+    transition: all 0.5s;
+  }
+
+  .el-footer:hover {
+    bottom: 0;
   }
 </style>

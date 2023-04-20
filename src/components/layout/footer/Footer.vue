@@ -1,15 +1,22 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue'
+  import { useMusicStore } from "@/stores/music";
+  import { storeToRefs } from 'pinia';
 
+  const useMusic = useMusicStore();
+  const { allSong } = storeToRefs(useMusic);
+  console.log('音乐数组', allSong);
+  
 </script>
 
 <template>
-  <div>
-    音频播放区域
-    <audio src=""></audio>
+  <div class="audio">
+    <audio :src="allSong[0].url" loop controls="false"></audio>
   </div>
 </template>
 
 <style scoped>
-
+  .audio {
+    width: 60%;
+  }
 </style>

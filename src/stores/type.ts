@@ -3,3 +3,7 @@ export interface IUser {
   account: any
   profile: any
 }
+
+export interface IMusic {
+  allSong: any[]
+}

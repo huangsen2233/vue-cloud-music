@@ -1,10 +1,13 @@
 <script lang="ts" setup>
   import { ref, reactive, onMounted, watchEffect } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
+  import { useMusicStore } from "@/stores/music";
 
   onMounted(() => {
     // console.log('歌曲', songs);
   });
+
+  const useMusic = useMusicStore();
 
   const { activeName, songs } = defineProps<{
     activeName: string
@@ -15,11 +18,16 @@
     (event: 'tab-click', params?: any): void
   }>();
 
-  const songTableData = ref([]);
+  const songUrls = ref([]);
 
-  const handleDbClick = (row: any) => {
+  const handleDbClick = async (row: any) => {
     console.log('双击事件', row);
-    
+    useMusic.getSongUrl(row);
+    /* const result = await getSongUrlApi([row.id]);
+    console.log("🚀 ~ file: SongList.vue:24 ~ handleDbClick ~ result: 音乐url", result)
+    if (result.code === 200) {
+      songUrls.value = result.data;
+    } */
   }
 </script>
 
