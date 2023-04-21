@@ -22,7 +22,7 @@ export const playlistCatlistApi = () => {
   return request.get('/playlist/catlist')
 }
 
-type playlistDetailType = {
+type PlaylistDetailType = {
   id: number
   s?: number
 }
@@ -32,9 +32,29 @@ type playlistDetailType = {
  * @param {Number} s 可选参数，歌单最近的收藏者,默认为 8
  * @returns Promise
  */
-export const playlistDetailApi = ({ id, s = 8 }: playlistDetailType) => {
+export const playlistDetailApi = ({ id, s = 8 }: PlaylistDetailType) => {
   return request.get('/playlist/detail', {
     params: { id, s }
+  })
+}
+
+type PlaylistCommentType = {
+  id: number
+  limit?: number
+  offset?: number
+  before?: number
+}
+/**
+ * @description 获取歌单评论
+* @param {number} - id 必选参数,歌单id
+* @param {number} - limit 可选参数，取出评论数量 , 默认为 20
+* @param {number} - offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+* @param {number} - before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+* @returns Promise
+*/
+export const playlistCommentApi = ({ id, limit = 20, offset = 0, before }: PlaylistCommentType) => {
+  return request.get('/comment/playlist', {
+    params: { id, limit, offset, before }
   })
 }
 

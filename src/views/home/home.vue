@@ -49,9 +49,11 @@
               原因：:is="Component"属性会使所有的组件都渲染在这里，而外层是 transition 虚拟组件，也就是说所有组件都会包裹在它里面，这是不允许的 
               解决：把组件都包裹成单root节点，加一个div标签，把Component包裹一下
             -->
-            <div>
-              <component :is="Component" />
-            </div>
+            <keep-alive>
+              <div>
+                <component :is="Component" />
+              </div>
+            </keep-alive>
           </transition>
         </router-view>
       </el-card>

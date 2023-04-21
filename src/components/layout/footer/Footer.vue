@@ -11,7 +11,7 @@
 
 <template>
   <div class="audio">
-    <audio :src="allSong[0].url" loop controls="false"></audio>
+    <audio :src="allSong?.[0]?.url" autoplay loop controls></audio>
   </div>
 </template>
 

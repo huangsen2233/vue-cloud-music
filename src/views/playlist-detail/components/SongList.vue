@@ -1,17 +1,31 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted, watchEffect } from 'vue';
+  import { ref, reactive, onMounted, watch } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
   import { useMusicStore } from "@/stores/music";
 
   onMounted(() => {
-    // console.log('歌曲', songs);
+    console.log('热门评论', props.hotComments);
+    // currentComment.value = hotComments;
   });
 
-  const useMusic = useMusicStore();
+  watch(() => props.hotComments, (newVal, oldVal) => {
+    console.log('监视的热门评论', newVal, oldVal);
+    
+  }, { deep: true, immediate: true });
 
-  const { activeName, songs } = defineProps<{
+/*  watch(() => commentTotal, (newVal, oldVal) => {
+    console.log('监视的总数', newVal, oldVal);
+    
+  }, { deep: true }); */
+
+  const useMusic = useMusicStore();
+  // { activeName, songs, hotComments, newComments, commentTotal }
+  const props = defineProps<{
     activeName: string
     songs: any[]
+    hotComments: any[]
+    newComments: any[]
+    commentTotal: number
   }>();
 
   const emits = defineEmits<{
@@ -19,6 +33,8 @@
   }>();
 
   const songUrls = ref([]);
+  const currentComment: any = ref([]);
+  const currentCommentType = ref('hot');
 
   const handleDbClick = async (row: any) => {
     console.log('双击事件', row);
@@ -69,10 +85,30 @@
       </template>
     </el-tab-pane>
     <el-tab-pane name="comment">
-      <template #label>评论 {{ activeName.length }}</template>
+      <template #label>评论 {{ commentTotal }}</template>
+      <!-- 评论 -->
+      <template #default>
+        <div>发表我的评论</div>
+        <!-- <section>
+          <div>
+            <h3>热门评论</h3>
+            <h3>最新评论</h3>
+          </div>
+          <div>
+            <template v-for="i in currentComment">
+              <div>评论
+                {{ i.content }}1542286267820
+              </div>
+              <div>时间
+                {{ formatTimestamp(i.time, 'YYYY-MM-DD') }}
+              </div>
+            </template>
+          </div>
+        </section> -->
+      </template>
     </el-tab-pane>
     <el-tab-pane name="collect">
-      <template #label>收藏 {{ activeName.length }}</template>
+      <template #label>收藏 {{ 0 }}</template>
     </el-tab-pane>
   </el-tabs>
 </template>

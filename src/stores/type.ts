@@ -5,5 +5,6 @@ export interface IUser {
 }
 
 export interface IMusic {
+  currentSong: any[]
   allSong: any[]
 }

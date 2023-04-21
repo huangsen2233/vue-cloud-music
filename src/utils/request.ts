@@ -18,7 +18,7 @@ declare module "axios" {
 
 const request = axios.create({
   baseURL: 'http://127.0.0.1:3000/',
-  timeout: 20000,
+  timeout: 20 * 1000,
   withCredentials: true
 })
 
@@ -46,7 +46,10 @@ request.interceptors.response.use(
     return response.data;
   },
   error => {
-    // console.log('响应拦截器error', error);
+    console.log('响应拦截器error', error);
+    if (error.response.data.message === '亲爱的,暂无版权') {
+      return error.response.data
+    }
     // endLoading();
     return Promise.reject(error);
   }
