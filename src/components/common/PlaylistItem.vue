@@ -60,7 +60,7 @@
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
   .img {
     position: relative;
 

@@ -58,6 +58,24 @@ export const playlistCommentApi = ({ id, limit = 20, offset = 0, before }: Playl
   })
 }
 
+type PlaylistSubscribersType = {
+  id: number
+  limit?: number
+  offset?: number
+}
+/**
+ * @description 获取歌单收藏者
+* @param {number} - id 必选参数,歌单id
+* @param {number} - limit 可选参数，取出的数量 , 默认为 20
+* @param {number} - offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+* @returns Promise
+*/
+export const playlistSubscribersApi = ({ id, limit = 20, offset = 0 }: PlaylistSubscribersType) => {
+  return request.get('/playlist/subscribers', {
+    params: { id, limit, offset }
+  })
+}
+
 
 /**
  * @description 热门歌单分类

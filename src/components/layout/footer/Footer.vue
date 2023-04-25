@@ -5,7 +5,7 @@
 
   const useMusic = useMusicStore();
   const { allSong } = storeToRefs(useMusic);
-  console.log('音乐数组', allSong);
+  // console.log('音乐数组', allSong);
   
 </script>
 

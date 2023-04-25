@@ -27,8 +27,8 @@
       <el-image style="width: 200px; height: 200px" :src="playlistDetail.coverImgUrl" fit="contain" />
     </section>
     <section class="title-content">
-      <h3 style="margin: 0;">
-        <el-tag type="danger" size="large" style="font-size: 18px; margin-right: 10px;">歌单</el-tag>
+      <h3 style="margin: 0; padding-bottom: 10px;">
+        <el-tag type="danger" size="large" style="font-size: 18px; padding: 20px; margin-right: 10px;">歌单</el-tag>
         {{ playlistDetail.name }}
       </h3>
       <div class="creator">
@@ -53,7 +53,7 @@
           <el-tag style="margin-right: 20px;">{{ i }}</el-tag>
         </template>
       </div>
-      <div style="width: 60%;">
+      <div style="width: 80%;">
         <b>介绍:</b>
         {{ playlistDetail.description }} 
       </div>

@@ -44,6 +44,7 @@
   const tagsIcons: any = ref({ '语种': yzIcon, '风格': fgIcon, '场景': cjIcon, '情感': qgIcon, '主题': ztIcon }); // 标签图标
   const playlistParams = ref({ limit: 30, order: 'hot', cat: '全部', offset: 0 });
   let visible = ref(true);
+  let showPopover = ref(false);
   
   // 获取歌单标签
   const getTags = async () => {
@@ -91,7 +92,7 @@
 
 <template>
   <!-- 歌单标签 -->
-  <PlaylistTag :tags-list="tagsList" :tags-icons="tagsIcons" @on-change="changeTag"/>
+  <PlaylistTag v-model:showPopover="showPopover" :tags-list="tagsList" :tags-icons="tagsIcons" @on-change="changeTag"/>
   <!-- 歌单列表 -->
   <Playlists :play-lists="playlists" />
   <!-- 分页 -->

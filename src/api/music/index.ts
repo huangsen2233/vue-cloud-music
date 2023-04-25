@@ -42,8 +42,8 @@ type MusicCommentType = {
 * 获取歌曲评论
 * @param {number} - id 必选参数,音乐id 
 * @param {number} - limit 可选参数，取出评论数量 , 默认为 20
-* @param {number} - offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
-* @param {number} - before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+* @param {number} - offset: 可选参数，偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+* @param {number} - before: 可选参数，分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
 * @returns Promise
 */
 export const getMusicCommentApi = ({ id, limit = 20, offset = 0, before }: MusicCommentType) => {

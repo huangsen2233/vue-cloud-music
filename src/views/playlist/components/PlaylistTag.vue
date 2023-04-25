@@ -2,13 +2,15 @@
   import { ref, reactive, computed } from 'vue';
   import type { playlistType } from "../playlist.vue";
 
-  const { tagsList, tagsIcons } = defineProps<{
+  const { tagsList, tagsIcons, showPopover } = defineProps<{
+    showPopover: boolean
     tagsList: any
     tagsIcons: any
   }>();
 
   const emits = defineEmits<{
     (event: 'on-change', params: playlistType): void
+    (event: 'update:showPopover', params: boolean): void
   }>();
 
   const tagTypeArr = ['primary', 'success', 'warning', 'danger', 'info'];
@@ -19,6 +21,12 @@
   const switchPlaylist = (tag: string) => {
     cat.value = tag;
     emits('on-change', { cat: tag });
+    emits('update:showPopover', false);
+  };
+
+  // 显示弹出框
+  const popoverClick = () => {
+    emits('update:showPopover', true);
   }
 </script>
 
@@ -27,9 +35,9 @@
     <section class="playlist-tag-select">
       <span>{{ cat }}</span>
       <!-- 弹出框-歌单标签 -->
-      <el-popover placement="bottom-end" :width="700" trigger="hover" popper-class="elpopover">
+      <el-popover :visible="showPopover" placement="bottom-end" :width="700" popper-class="elpopover">
         <template #reference>
-          <el-button type="primary" size="large" plain>
+          <el-button type="primary" size="large" plain @click="popoverClick">
             选择分类<el-icon style="padding-left: 5px;"><ArrowDown /></el-icon>
           </el-button>
         </template>
