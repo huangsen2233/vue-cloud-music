@@ -2,13 +2,12 @@
   import { ref, reactive, onMounted, watch } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
   import { useMusicStore } from "@/stores/music";
+  import { useUserStore } from "@/stores/user";
+  import { storeToRefs } from "pinia";
+
   import type { PaginationType, PaginationParamsType } from "../type";
   import dianzanIcon from "@/assets/imgs/dianzan.png"
   import BasePagination from '@/components/common/BasePagination.vue';
-
-  onMounted(() => {
-
-  });
 
   watch(() => props.newComments, (newVal, oldVal) => {
     currentComment.value = newVal;
@@ -19,6 +18,9 @@
   }); */
 
   const useMusic = useMusicStore();
+  const useUser = useUserStore();
+
+  const { profile } = storeToRefs(useUser);
 
   const props = defineProps<{
     activeName: string
@@ -32,7 +34,8 @@
 
   const emits = defineEmits<{
     (event: 'tab-click', params: any): void
-    (event: 'change-pagination', params: any): void
+    (event: 'comment-pagination', params: any): void
+    (event: 'subscribers-pagination', params: any): void
   }>();
 
   const currentComment: any = ref([]);
@@ -60,10 +63,17 @@
     emits('tab-click', pane.paneName)
   };
 
-  // 最新评论的分页改变1
-  const changePagination = (params: PaginationParamsType) => {
-    emits('change-pagination', params);
+  // 最新评论的分页事件
+  const changeCommentPagination = (params: PaginationParamsType) => {
+    emits('comment-pagination', params);
   };
+
+  // 收藏者的分页事件
+  const changSubscribersPagination = (params: PaginationParamsType) => {
+    emits('subscribers-pagination', params);
+  };
+
+  const myComment = ref(''); // 我的评论
 </script>
 
 <template>
@@ -74,8 +84,8 @@
         <!-- 歌曲 -->
         <el-table 
           :data="songs" 
-          stripe 
-          style="width: 100%" 
+          stripe
+          :cell-style="{'text-align': 'center'}"
           header-cell-class-name="table-header" 
           @row-dblclick="handleDbClick"
         >
@@ -107,7 +117,13 @@
       <template #label>评论 {{ commentPagination.total }}</template>
       <!-- 评论 -->
       <template #default>
-        <div>发表我的评论</div>
+        <section style="display: flex;">
+          <el-image :src="profile?.avatarUrl" style="width: 100px; height: 100px; border: 1px solid #fff;" fit="contain" />
+          <div style="flex: 1; padding-left: 10px;">
+            <el-input style="100%" type="textarea" :rows="3" placeholder="评论一下~" v-model="myComment"></el-input>
+            <el-button style="float: right; margin-top: 10px;;" type="primary">评论</el-button>
+          </div>
+        </section>
         <section>
           <div class="comment-type" style="display: flex;">
             <h4 :class="[currentCommentType === 'new' ? 'activeComment' : '', 'normalComment']" style="padding-right: 20px;" @click="changeCommentType('new')">最新评论</h4>
@@ -148,8 +164,8 @@
             :current-page="commentPagination.currentPage"
             :page-size="commentPagination.pageSize"
             :page-sizes="[20, 30, 40, 50]"
-            @on-page="changePagination"
-            @on-size="changePagination"
+            @on-page="changeCommentPagination"
+            @on-size="changeCommentPagination"
           />
         </section>
       </template>
@@ -174,12 +190,12 @@
         </section>
         <BasePagination
           v-if="subscriberPagination.total >= 20"
-          :total="commentPagination.total"
-          :current-page="commentPagination.currentPage"
-          :page-size="commentPagination.pageSize"
+          :total="subscriberPagination.total"
+          :current-page="subscriberPagination.currentPage"
+          :page-size="subscriberPagination.pageSize"
           :page-sizes="[20, 40, 60, 80]"
-          @on-page="changePagination"
-          @on-size="changePagination"
+          @on-page="changSubscribersPagination"
+          @on-size="changSubscribersPagination"
         />
       </template>
     </el-tab-pane>
@@ -191,6 +207,7 @@
     border: 1px solid #ccc;
 
     :deep(.table-header) {
+      text-align: center;
       background: linear-gradient(to bottom, #fff, #eee) !important;
       font-size: 16px;
       border-right: 1px solid #ccc !important;

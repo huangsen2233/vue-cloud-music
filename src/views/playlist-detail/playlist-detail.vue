@@ -8,7 +8,7 @@
   import SongList from "./components/SongList.vue";
 
   onMounted(() => {
-    const id = Number(route.params.id);
+    const id = Number(route.query.id);
     if (id) {
       getPlaylistDetail(id);
       getPlaylistComment({ ...commentParams.value, id });
@@ -19,13 +19,13 @@
   const route = useRoute();
   const playlistDetail: any = ref({});
   const songs: any = ref([]);
-  const activeName = ref('collect'); 
+  const activeName = ref('song'); 
   const commentParams = ref({ id: 0, limit: 20, offset: 0 });
   const subscribersParams = ref({ id: 0, limit: 40, offset: 0 });
   const hotComments: any = ref([]);
   const newComments: any = ref([]);
   const commentPagination = ref<PaginationType>({ total: 0, currentPage: 1, pageSize: 20 });
-  const subscriberPagination = ref<PaginationType>({ total: 0, currentPage: 1, pageSize: 20 });
+  const subscriberPagination = ref<PaginationType>({ total: 0, currentPage: 1, pageSize: 40 });
   const subscribers = ref([]);
 
   // 获取歌单详情
@@ -53,7 +53,7 @@
   // 获取歌单的收藏者
   const getPlaylistSubscribers = async (params: PlaylistSubscribersType) => {
     const result: any = await playlistSubscribersApi(params);
-    console.log("🚀 ~ file: playlist-detail.vue:54 ~ getPlaylistSubscribers ~ result: 歌单的收藏者", result)
+    // console.log("🚀 ~ file: playlist-detail.vue:54 ~ getPlaylistSubscribers ~ result: 歌单的收藏者", result)
     subscribers.value = result.subscribers;
     subscriberPagination.value.total = result.total;
   };
@@ -63,11 +63,18 @@
     activeName.value = tabName;
   };
 
-  // 最新评论的分页改变
-  const handleChangePagination = (params: PaginationParamsType)  => {
+  // 最新评论的分页事件
+  const commentChangePagination = (params: PaginationParamsType)  => {
     commentPagination.value = { ...commentPagination.value, ...params };
-    console.log('当前的分页参数', { ...commentParams.value, limit: params.pageSize, offset: params.currentPage - 1 });
+    // console.log('当前的分页参数', { ...commentParams.value, limit: params.pageSize, offset: params.currentPage - 1 });
     getPlaylistComment({ ...commentParams.value, id: Number(route.params.id), limit: params.pageSize, offset: (params.currentPage - 1) * params.pageSize });
+  };
+
+  // 收藏者的分页事件
+  const collentChangePagination = (params: PaginationParamsType)  => {
+    subscriberPagination.value = { ...subscriberPagination.value, ...params };
+    // console.log('当前的分页参数', { ...subscriberPagination.value, limit: params.pageSize, offset: params.currentPage - 1 });
+    getPlaylistSubscribers({ ...subscriberPagination.value, id: Number(route.params.id), limit: params.pageSize, offset: (params.currentPage - 1) * params.pageSize });
   };
 </script>
 
@@ -82,7 +89,8 @@
     :subscribers="subscribers" 
     :subscriber-pagination="subscriberPagination"
     @tab-click="handleTabClick"
-    @change-pagination="handleChangePagination"
+    @comment-pagination="commentChangePagination"
+    @subscribers-pagination="collentChangePagination"
   />
 </template>
 

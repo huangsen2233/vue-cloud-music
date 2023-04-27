@@ -5,18 +5,23 @@
   const route = useRoute();
   const router = useRouter();
 
-  // description：页面刷新时，重置默认激活的菜单项
+  // 页面刷新时，重置默认激活的菜单项
   watch(() => route.path, (newRoute, oldRoute) => {
-    defaultActive.value = newRoute.replace('/', '');
+    const menus = ['/recommend', '/ranking', '/playlist', '/singer'];
+    if (menus.includes(newRoute)) {
+      defaultActive.value = newRoute;
+    } else {
+      defaultActive.value = '';
+    }
   });
   
   const defaultActive = ref('recommend');
 
   const menuList = [
-    {index: 'recommend', item: '推荐'},
-    {index: 'ranking', item: '排行榜'},
-    {index: 'playlist', item: '歌单'},
-    {index: 'singer', item: '歌手'}
+    {index: '/recommend', item: '推荐'},
+    {index: '/ranking', item: '排行榜'},
+    {index: '/playlist', item: '歌单'},
+    {index: '/singer', item: '歌手'}
   ];
 
   // 路由回退

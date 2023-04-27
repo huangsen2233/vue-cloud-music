@@ -84,7 +84,7 @@
 
   // 路由跳转到歌单详情
   const routeToPlaylistdetail = (id: number) => {
-    router.push({ name: 'playlist-detail', params: { id } });
+    router.push({ path: '/playlist-detail', query: { id } });
   };
 
   provide('router-playlistdetail', routeToPlaylistdetail);

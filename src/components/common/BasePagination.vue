@@ -40,14 +40,14 @@
 
 <template>
   <el-pagination
-    :current-page="props.currentPage"
-    :page-size="props.pageSize"
-    :total="props.total"
-    :page-sizes="props.pageSizes"
-    :default-page-size="props.pageSizes?.[1]"
-    :small="props.small"
-    :disabled="props.disabled"
-    :background="props.background"
+    :current-page="currentPage"
+    :page-size="pageSize"
+    :total="total"
+    :page-sizes="pageSizes"
+    :default-page-size="pageSizes?.[1]"
+    :small="small"
+    :disabled="disabled"
+    :background="background"
     layout="total, sizes, prev, pager, next, jumper"
     @current-change="handleCurrentChange"
     @size-change="handleSizeChange"

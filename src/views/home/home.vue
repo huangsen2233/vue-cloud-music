@@ -36,14 +36,14 @@
 
 <template>
   <el-container>
-    <!-- 头部区域 -->
+    <!-- 导航区 -->
     <el-header>
       <Header />
     </el-header>
-    <!-- 主体区域 -->
+    <!-- 路由页面 -->
     <el-main>
       <el-card>      
-        <router-view :key="$route.fullPath"  v-slot="{ Component }">
+        <router-view  v-slot="{ Component }">
           <transition>
             <!-- 
               原因：:is="Component"属性会使所有的组件都渲染在这里，而外层是 transition 虚拟组件，也就是说所有组件都会包裹在它里面，这是不允许的 
@@ -53,7 +53,7 @@
               解决：exclude排除动态路由组件或者在router-view上使用:key="$route.fullPath"
             -->
             <div>
-              <keep-alive>
+              <keep-alive :exclude="['playlist-detail']">
                 <component :is="Component" />
               </keep-alive>
             </div>
@@ -61,7 +61,7 @@
         </router-view>
       </el-card>
     </el-main>
-    <!-- 底部区域 -->
+    <!-- 音乐栏 -->
     <el-footer>
       <Footer />
     </el-footer>

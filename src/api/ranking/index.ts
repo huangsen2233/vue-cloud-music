@@ -9,7 +9,7 @@ export const toplistApi = () => {
 }
 
 /**
- * @description 所有榜单摘要
+ * @description 所有榜单详情摘要
  * @returns Promise
  */
 export const toplistDetailApi = () => {
