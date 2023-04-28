@@ -8,16 +8,21 @@
     rankinglist: any[]
   }>();
 
+  const emits = defineEmits<{
+    (event: 'switch-ranking', params: number): void
+  }>();
+
   const value1 = ref(-1);
   const value2 = ref(-1);
   const currentRanking = ref<any>();
 
   // 切换榜单
-  const switchRanking = (val1: number, val2: number, data: any[]) => {
+  const switchRanking = (val1: number, val2: number, data: any) => {
     console.log('当前榜单', data);
     value1.value = val1;
     value2.value = val2;
     currentRanking.value = data;
+    emits('switch-ranking', data.id);
   };
 </script>
 
@@ -49,6 +54,7 @@
       .item {
         display: flex;
         padding: 15px;
+        cursor: pointer;
 
         &-name {
           display: flex;
