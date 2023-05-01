@@ -53,7 +53,7 @@
               解决：exclude排除动态路由组件或者在router-view上使用:key="$route.fullPath"
             -->
             <div>
-              <keep-alive :exclude="['playlist-detail']">
+              <keep-alive :exclude="['playlist-detail', 'singer-detail']">
                 <component :is="Component" />
               </keep-alive>
             </div>

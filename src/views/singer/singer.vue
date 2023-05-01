@@ -1,16 +1,19 @@
 <script lang="ts" setup>
   import { ref, reactive, onMounted, provide, nextTick } from 'vue';
+  import { useRouter } from 'vue-router';
   import { artistApi } from "@/api/singer";
   import type { artistsType, titleType, offsetType, initialType, paginationType } from "./type";
   import SingerType from "./components/SingerType.vue";
   import SingerList from "./components/SingerList.vue";
 
   onMounted(() => {
-    getArtist(artistParams.value);
+    getArtist({ ...artistParams.value });
   });
 
+  const router = useRouter();
+
   // 获取歌手列表的默认参数
-  const artistParams = ref({ limit: 30, offset: 0, initial: '0', type: -1, area: -1 });
+  const artistParams = ref({ limit: 30, offset: 0, initial: '-1', type: -1, area: -1 });
   const tagTitle = ref('全部');
   const showPagination = ref(true);
   const showTag = ref(true);
@@ -58,6 +61,11 @@
     getArtist(artistParams.value);
   };
 
+  // 跳转到歌手详情页
+  const routerToSingerDetail = (id: number) => {
+    router.push({ path: '/singer-detail', query: { id } });
+  };
+
   provide('tagTitle', tagTitle);
   provide('artists', artists);
   provide('paginationProp', paginationProp);
@@ -66,6 +74,7 @@
   provide('switch-offset', switchOffset);
   provide('showPagination', showPagination);
   provide('showTag', showTag);
+  provide('router-singer-detail', routerToSingerDetail);
 </script>
 
 <template>

@@ -31,6 +31,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/singer',
     component: () => import('@/views/singer/singer.vue')
   },
+  {
+    name: 'singer-detail',
+    path: '/singer-detail',
+    component: () => import('@/views/singer-detail/singer-detail.vue')
+  },
   { 
     name: 'NotFound', 
     path: '/:pathMatch(.*)*', 

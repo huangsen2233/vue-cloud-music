@@ -5,8 +5,10 @@
 
   const artists = inject('artists') as any;
   const paginationProp = inject('paginationProp') as paginationType;
-  const switchOffset = inject('switch-offset') as (params: offsetType) => void;
   const showPagination = inject('showPagination') as boolean;
+
+  const switchOffset = inject('switch-offset') as (params: offsetType) => void;
+  const routerToSingerDetail = inject('router-singer-detail') as (id: number) => void;
 </script>
 
 <template>
@@ -15,9 +17,9 @@
     <div class="img-item" v-for="i in artists">
       <el-image :src="i.picUrl" style="width: 100%; height: 100%;" fit="cover"></el-image>
       <div class="name">
-        <a>{{ i.name }}</a>
+        <a @click="routerToSingerDetail(i.id)">{{ i.name }}</a>
         <el-tooltip effect="light" :content="`${i.name}的个人主页`" placement="top" :show-arrow="false">
-          <el-avatar size="small" :src="i.img1v1Url" />
+          <el-avatar size="small" :src="i.img1v1Url" @click="routerToSingerDetail(i.id)" />
         </el-tooltip>
       </div>
     </div>
@@ -66,6 +68,6 @@
   }
 
   .el-pagination {
-    margin: 30px 0;
+    margin: 40px 0 30px;
   }
 </style>

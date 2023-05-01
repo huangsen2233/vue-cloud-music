@@ -1,10 +1,6 @@
 <script lang="ts" setup>
-  import { ref, reactive, computed, onMounted } from 'vue';
+  import { ref, reactive, computed } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
-
-  onMounted(() => {
-    
-  })
 
   const { playlistDetail } = defineProps<{
     playlistDetail: any

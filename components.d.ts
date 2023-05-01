@@ -9,7 +9,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    BackTop: typeof import('./src/components/common/BackTop.vue')['default']
     BaseBackTop: typeof import('./src/components/common/BaseBackTop.vue')['default']
     BasePagination: typeof import('./src/components/common/BasePagination.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']

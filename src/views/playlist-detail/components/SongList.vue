@@ -120,8 +120,8 @@
         <section style="display: flex;">
           <el-image :src="profile?.avatarUrl" style="width: 100px; height: 100px; border: 1px solid #fff;" fit="contain" />
           <div style="flex: 1; padding-left: 10px;">
-            <el-input style="100%" type="textarea" :rows="3" placeholder="评论一下~" v-model="myComment"></el-input>
-            <el-button style="float: right; margin-top: 10px;;" type="primary">评论</el-button>
+            <el-input style="100%" type="textarea" :rows="3" placeholder="评论一下~~~" v-model="myComment"></el-input>
+            <el-button style="margin-top: 10px;;" type="primary">评论</el-button>
           </div>
         </section>
         <section>
@@ -269,8 +269,14 @@
       flex: 20%;
       display: flex;
       align-items: center;
+      padding: 10px;
       margin-bottom: 20px;
     }
+  }
+
+  .collector-item:hover {
+    cursor: pointer;
+    background: #E6E6E6;
   }
   .el-pagination {
     padding: 30px 0;

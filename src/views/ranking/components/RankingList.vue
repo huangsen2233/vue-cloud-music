@@ -1,9 +1,6 @@
 <script lang="ts" setup>
   import { ref, reactive, onMounted } from 'vue';
 
-  onMounted(() => {
-  });
-
   const props = defineProps<{
     rankinglist: any[]
   }>();
@@ -18,7 +15,6 @@
 
   // 切换榜单
   const switchRanking = (val1: number, val2: number, data: any) => {
-    console.log('当前榜单', data);
     value1.value = val1;
     value2.value = val2;
     currentRanking.value = data;
@@ -33,21 +29,24 @@
       <section class="list">
         <div 
           :class="[value1 === index1 && value2 === index2 ? 'active-item' : '', 'item']" 
-          v-for="(j, index2) in i.list" @click="switchRanking(index1, index2, j)"
+          v-for="(j, index2) in i.list" 
+          @click="switchRanking(index1, index2, j)"
         >
-          <el-image style="width: 60px; height: 60px" :src="j.coverImgUrl" fit="cover" />
+          <el-image style="width: 120px; height: 120px" :src="j.coverImgUrl" fit="cover" />
           <div class="item-name">
             <span>{{ j.name }}</span>
+            <el-tooltip popper-class="description" :content="j.description" effect="light" :show-arrow="false" :show-after="500">
+              <div>简介: {{ j.description }}</div>
+            </el-tooltip>
             <span style="color: #999">{{ j.updateFrequency }}</span>
           </div>
         </div>
-        <!-- {{ i.list[0].name }}  -->
       </section>
     </div>
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
   .ranking-list {
     padding-bottom: 40px;
     .list {
@@ -57,10 +56,18 @@
         cursor: pointer;
 
         &-name {
+          box-sizing: border-box;
           display: flex;
           flex-direction: column;
           justify-content: space-around;
-          padding-left: 10px;
+          width: calc(100% - 120px);
+          padding-left: 30px;
+
+          & > div {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
         }
 
         .el-image {
@@ -70,6 +77,10 @@
       .active-item {
         background: #E6E6E6;
       }
-      }
+    }
+  }
+
+  .el-popper.description {
+    font-size: 16px !important;
   }
 </style>
