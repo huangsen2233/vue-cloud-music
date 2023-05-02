@@ -15,7 +15,9 @@ export const useMusicStore = defineStore('music', {
       console.log("🚀 ~ file: music.ts:14 ~ getSongUrl ~ result: 音乐url", result)
       this.allSong = result.data;
       this.fee = result.data[0].fee;
-      if (this.fee === 1) {
+      if (!result.data[0].url) {
+        return ElNotification({ title: 'Warning', message: `${songInfo.name} 暂无音源.`, type: 'warning', duration: 2000});
+      } else if (this.fee === 1) {
         ElNotification({ title: 'Warning', message: `该歌曲为VIP专享, 正在播放 ${songInfo.name} 试听部分`, type: 'warning', duration: 2000});
       } else {
         ElNotification({ title: 'Success', message: `正在播放 ${songInfo.name}`, type: 'success', duration: 2000});

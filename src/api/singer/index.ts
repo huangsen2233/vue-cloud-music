@@ -65,6 +65,17 @@ export const getArtistAlbumApi = ({ id, limit = 30, offset = 0 }: ArtistAlbumTyp
 }
 
 /**
+ * @description 获取专辑内容
+ * @param {Number} id 必选参数，专辑id
+ * @returns Promise
+ */
+export const getAlbumApi = (id: number) => {
+  return request.get('/album', {
+    params: { id }
+  })
+}
+
+/**
  * @description 歌手MV     具体 mv 播放地址可调 用/mv传入此接口获得的 mvid 来拿到 , 如 : /artist/mv?id=6452,/mv?mvid=5461064
  * @param {Number} id 必选参数，歌手id
  * @returns Promise
