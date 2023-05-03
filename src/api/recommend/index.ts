@@ -30,7 +30,7 @@ export const recommendSongsApi = () => {
  * @param {Number} limit 可选参数，取出歌单数量 , 默认为 20
  * @returns Promise
  */
-export const personalizedApi = (limit: number = 20) => {
+export const personalizedApi = (limit: number = 24) => {
   return request.get('/personalized', {
     params: { limit }
   })

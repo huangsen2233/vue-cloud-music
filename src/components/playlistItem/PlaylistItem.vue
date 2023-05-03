@@ -28,7 +28,7 @@
 <template>
   <div class="playlist-item">
     <div class="img">
-      <el-image style="width: 100%; height: 100%;" :src="url" :title="name" fit="contain" @click="getPlaylistdetail(id)" />
+      <el-image style="width: 100%; height: 300px;" :src="url" :title="name" fit="cover" @click="getPlaylistdetail(id)" />
       <div class="count">
         <el-icon><Headset /></el-icon>
         <span>{{ count(playCount) }}W</span>
@@ -65,15 +65,17 @@
     position: relative;
 
     .el-image {
-      border-radius: 5%;
+      border-radius: 10px;
+    }
+
+    .el-image:hover {
+      cursor: pointer;
     }
 
     .count {
-      position: absolute;
-      bottom: 4px;
-      left: 0;
-      right: 0;
       box-sizing: border-box;
+      position: absolute;
+      bottom: 0;
       width: 100%;
       height: 40px;
       padding: 0 20px;
@@ -98,7 +100,7 @@
       & > .el-icon:nth-of-type(2):hover {
         cursor: pointer;
         color: #fff;
-        transform: scale(1.1);
+        transform: scale(1.2);
       }
     }
   }

@@ -4,7 +4,7 @@
   import { getBannerApi, personalizedApi, newsongApi } from "@/api/recommend";
   import { usePlaylistDetail } from "@/hooks/usePlaylistDetail";
   import Banner from "./components/Banner.vue";
-  import Playlist from "./components/playlist.vue";
+  import Playlists from "./components/Playlists.vue";
   import NewMusic from "./components/NewMusic.vue";
 
   onMounted(() => {
@@ -56,7 +56,7 @@
   <!-- 轮播图 -->
   <Banner :banner-list="bannerList" />
   <!-- 推荐歌单 -->
-  <Playlist :play-list="playList" @on-router="routeToPlaylist" />
+  <Playlists :play-list="playList" @on-router="routeToPlaylist" />
   <!-- 新音乐 -->
   <NewMusic />
 </template>

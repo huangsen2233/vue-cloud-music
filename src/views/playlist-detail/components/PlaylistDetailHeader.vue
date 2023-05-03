@@ -20,11 +20,11 @@
 <template>
   <div class="title">
     <section class="title-img">
-      <el-image style="width: 200px; height: 200px" :src="playlistDetail.coverImgUrl" fit="contain" />
+      <el-image style="width: 200px; height: 200px" :src="playlistDetail.coverImgUrl" fit="cover" />
     </section>
     <section class="title-content">
       <h3 style="margin: 0; padding-bottom: 10px;">
-        <el-tag type="danger" size="large" style="font-size: 18px; padding: 20px; margin-right: 10px;">歌单</el-tag>
+        <el-tag type="danger" size="large" style="font-size: 20px; padding: 20px; margin-right: 10px;">歌单</el-tag>
         {{ playlistDetail.name }}
       </h3>
       <div class="creator">

@@ -67,11 +67,11 @@
 
       .item {
         box-sizing: border-box;
-        flex: 18%;
-        margin: 0 calc(10% / 4) 30px 0;
+        flex: 15%;
+        margin: 0 calc(10% / 5) 30px 0;
       }
 
-      .item:nth-child(5n) {
+      .item:nth-child(6n) {
         margin-right: 0;
       }
     }

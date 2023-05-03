@@ -9,8 +9,8 @@
     getAlbumApi
   } from '@/api/singer';
   import type { ArtistSongType, ArtistAlbumType, PaginationPropType } from "./type";
-  import SingerInfo from "./components/SingerInfo.vue";
-  import SingerWorks from "./components/SingerWorks.vue";
+  import SingerDetailHeader from "./components/SingerDetailHeader.vue";
+  import SingerDetailBody from "./components/SingerDetailBody.vue";
 
   onMounted(() => {
     const id = Number(route.query.id);
@@ -19,7 +19,6 @@
       getArtistAlbum({ ...artistAlbumParams.value, id });
       getArtistMv(id);
       getArtistDesc(id);
-
 
       // getArtist(id);
       // getArtistSong({ ...artistSongParmas.value, id });
@@ -36,7 +35,7 @@
   const artist = ref<any>({});
   const user = ref<any>({});
   const identify = ref<any>({});
-  const fansCount = Number(route.query.fansCount);
+  const fansCount = route.query.fansCount ? Number(route.query.fansCount) : 0;
   const activeName  = ref<any>(1);
   const hotAlbums = ref<any[]>([]);
   const paginationProp = ref<PaginationPropType>({ total: 0, currentPage: 1, pageSize: 10 });
@@ -48,7 +47,7 @@
   // 获取歌手详情
   const getArtistDetail = async (id: number) => {
     const result: any = await getArtistDetailApi(id);
-    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手详情", result.data)
+    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手详情", result.data)
     artist.value = result.data.artist;
     user.value = result.data.user ?? {};
     identify.value = result.data.identify;
@@ -57,7 +56,7 @@
   // 获取歌手专辑
   const getArtistAlbum = async (params: ArtistAlbumType) => {
     const result: any = await getArtistAlbumApi(params);
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", result)
+    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", result)
     for(let i = 0; i < result.hotAlbums.length; i++) {
       const albumData: any = await getAlbumApi(result.hotAlbums[i].id);
       result.hotAlbums[i].songs = [...albumData.songs];
@@ -69,7 +68,7 @@
   // 获取歌手MV
   const getArtistMv = async (id: number) => {
     const result: any = await getArtistMvApi(id);
-    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
+    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
     mvs.value = result.mvs;
   };
 
@@ -116,8 +115,8 @@
 
 <template>
   <div class="singer">
-    <SingerInfo :artist="artist" :user="user" :identify="identify" :fans-count="fansCount" />
-    <SingerWorks 
+    <SingerDetailHeader :artist="artist" :user="user" :identify="identify" :fans-count="fansCount" />
+    <SingerDetailBody 
       :active-name="activeName" 
       :hot-albums="hotAlbums" 
       :pagination-prop="paginationProp"

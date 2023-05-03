@@ -72,8 +72,19 @@
             <section class="album-item" v-for="i in hotAlbums">
               <el-image style="width: 200px; height: 200px" :src="i.picUrl" fit="cover" />
               <div class="song">
-                <div style="font-size: 20px; font-weight: bolder;">{{ i.name }}</div>
-                <div style="padding: 10px 0;">{{ formatTimestamp(i.publishTime) }}</div>
+                <b style="font-size: 20px; font-weight: bolder;">{{ i.name }}</b>
+                <div style="padding-bottom: 10px;">
+                  发行时间: {{ formatTimestamp(i.publishTime) }}
+                </div>
+                <div style="padding-bottom: 10px;">
+                  发行公司: {{ i.company }}
+                </div>
+
+                <!-- 面板组件 展开 专辑歌曲 -->
+                <!-- 面板组件 展开 专辑歌曲 -->
+                <!-- 面板组件 展开 专辑歌曲 -->
+                <!-- 面板组件 展开 专辑歌曲 -->
+
                 <el-table :data="i.songs" border stripe :show-header="false">
                   <el-table-column type="index" width="120px">
                     <template v-slot="{ row, $index }: any">
@@ -153,7 +164,7 @@
         flex: 50%;
         display: flex;
         justify-content: space-between;
-        padding-bottom: 30px;
+        padding-bottom: 50px;
 
         .song {
           flex: 100%;

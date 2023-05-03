@@ -4,8 +4,8 @@
   import { playlistDetailApi, playlistCommentApi, playlistSubscribersApi } from "@/api/playlist";
   import { getSongDetailApi } from "@/api/music";
   import type { PlaylistCommentType, PaginationType, PaginationParamsType, PlaylistSubscribersType } from "./type";
-  import SongTitle from "./components/SongTitle.vue";
-  import SongList from "./components/SongList.vue";
+  import PlaylistDetailHeader from "./components/PlaylistDetailHeader.vue";
+  import PlaylistDetailBody from "./components/PlaylistDetailBody.vue";
 
   onMounted(() => {
     const id = Number(route.query.id);
@@ -79,8 +79,8 @@
 </script>
 
 <template>
-  <SongTitle :playlist-detail="playlistDetail" />
-  <SongList
+  <PlaylistDetailHeader :playlist-detail="playlistDetail" />
+  <PlaylistDetailBody
     :active-name="activeName" 
     :songs="songs"
     :comment-pagination="commentPagination"

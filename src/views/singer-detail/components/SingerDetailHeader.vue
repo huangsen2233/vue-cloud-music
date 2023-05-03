@@ -20,11 +20,12 @@
   <div class="singer-info">
     <el-image style="width: 400px; height: 250px" :src="artist.avatar" fit="cover" />
     <section class="message">
-      <b style="font-size: 30px;">
-        {{ artist.name }} 
-        <span style="padding: 0 5px; font-size: 16px; color: ;" v-for="i in artist.alias">{{ i }}</span>
-      </b>
-      <div>
+      <h3 style="margin: 0;">
+        <el-tag type="danger" size="large" style="font-size: 20px; padding: 20px; margin-right: 10px;">歌手</el-tag>
+        <b style="font-size: 22px;">{{ artist.name }}</b> 
+        <span style="padding-left: 15px; font-size: 16px;" v-for="i in artist.alias">{{ i }}</span>
+      </h3>
+      <div v-if="fansCount">
         <b>粉丝数: </b>
         <span>{{ fansCount }}</span>
       </div>

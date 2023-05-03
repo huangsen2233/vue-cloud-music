@@ -279,6 +279,6 @@
     background: #E6E6E6;
   }
   .el-pagination {
-    padding: 30px 0;
+    padding: 40px 0 30px;
   }
 </style>

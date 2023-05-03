@@ -3,8 +3,8 @@
   import { useRouter } from "vue-router";
   import { toplistApi, toplistDetailApi, toplistArtistApi } from '@/api/ranking';
   import { playlistDetailApi, playlistCommentApi, playlistSubscribersApi  } from "@/api/playlist";
-  import RankingList from './components/RankingList.vue';
-  import SingerList from "./components/SingerList.vue";
+  import PlaylistRanking from './components/PlaylistRanking.vue';
+  import SingerRanking from "./components/SingerRanking.vue";
 
   onMounted(() => {
     getToplistDetail();
@@ -54,16 +54,23 @@
     activeName.value = type;
     getToplistArtist(type);
   }; 
+
+  // 跳转到歌手详情页
+  const routerToSingerDetail = (id: number, fansCount?: number) => {
+    router.push({ path: '/singer-detail', query: { id, fansCount } });
+  };
 </script>
 
 <template>
   <div class="ranking">
     <el-row :gutter="20">
       <el-col :span="6" style="border-right: 1px solid #e6e6e6;">
-        <RankingList :rankinglist="rankinglist" @switch-ranking="switchRanking" />
+        <!-- 歌单排行榜 -->
+        <PlaylistRanking :rankinglist="rankinglist" @switch-ranking="switchRanking" />
       </el-col>
       <el-col :span="18">
-        <SingerList :active-name="activeName" :singer-list="singerList" @switch-singer="switchSinger" />
+        <!-- 歌手排行榜 -->
+        <SingerRanking :active-name="activeName" :singer-list="singerList" @switch-singer="switchSinger" @router-singer-detail="routerToSingerDetail" />
       </el-col>
     </el-row>
   </div>
