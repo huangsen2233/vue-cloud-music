@@ -62,8 +62,8 @@
   };
 
   // 跳转到歌手详情页
-  const routerToSingerDetail = (id: number) => {
-    router.push({ path: '/singer-detail', query: { id } });
+  const routerToSingerDetail = (id: number, fansCount: number) => {
+    router.push({ path: '/singer-detail', query: { id, fansCount } });
   };
 
   provide('tagTitle', tagTitle);

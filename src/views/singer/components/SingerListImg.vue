@@ -3,12 +3,12 @@
   import type { offsetType, paginationType } from "../type";
   import BasePagination from "@/components/common/BasePagination.vue";
 
-  const artists = inject('artists') as any;
+  const artists = inject('artists') as any[];
   const paginationProp = inject('paginationProp') as paginationType;
   const showPagination = inject('showPagination') as boolean;
 
   const switchOffset = inject('switch-offset') as (params: offsetType) => void;
-  const routerToSingerDetail = inject('router-singer-detail') as (id: number) => void;
+  const routerToSingerDetail = inject('router-singer-detail') as (id: number, fansCount: number) => void;
 </script>
 
 <template>
@@ -17,9 +17,9 @@
     <div class="img-item" v-for="i in artists">
       <el-image :src="i.picUrl" style="width: 100%; height: 100%;" fit="cover"></el-image>
       <div class="name">
-        <a @click="routerToSingerDetail(i.id)">{{ i.name }}</a>
+        <a @click="routerToSingerDetail(i.id, i.fansCount)">{{ i.name }}</a>
         <el-tooltip effect="light" :content="`${i.name}的个人主页`" placement="top" :show-arrow="false">
-          <el-avatar size="small" :src="i.img1v1Url" @click="routerToSingerDetail(i.id)" />
+          <el-avatar size="small" :src="i.img1v1Url" @click="routerToSingerDetail(i.id, i.fansCount)" />
         </el-tooltip>
       </div>
     </div>

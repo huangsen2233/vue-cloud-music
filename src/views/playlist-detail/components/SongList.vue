@@ -38,7 +38,7 @@
     (event: 'subscribers-pagination', params: any): void
   }>();
 
-  const currentComment: any = ref([]);
+  const currentComment = ref<any[]>([]);
   const currentCommentType = ref('new');
 
   // 表格的双击事件-播放歌曲
@@ -138,7 +138,7 @@
                   <span style="padding-left: 5px;">{{ i.content }}</span>
                 </div>
                 <div v-if="i.beReplied.length > 0" style="margin: 15px 0;">
-                  <template v-for="j in i.beReplied">
+                  <template v-for="j in i.beReplied as any[]">
                     <div class="replied">
                       <a style="color: var(--el-color-primary)">{{ j.user.nickname }}</a> :
                       <span style="padding-left: 5px;">{{ j.content }}</span>

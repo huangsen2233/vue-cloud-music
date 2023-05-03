@@ -9,11 +9,14 @@
     hotAlbums: any[]
     paginationProp: PaginationPropType
     mvs: any[]
+    briefDesc: string
+    introduction: any[]
   }>();
 
   const emits = defineEmits<{
     (event: 'play-album', params: any): void;
     (event: 'change-pagination', params: PaginationPropType): void;
+    (event: 'play-mv', mvid: number): void;
   }>();
 
   const handleClick = async (id: number) => {
@@ -32,6 +35,14 @@
     }
   });
 
+  // 个人介绍的文字换行
+  const _introduction = computed(() => {
+    return props.introduction.map(item => {
+      item.txt = [...item.txt.split('●')];
+      return item;
+    });
+  });
+
   // 播放专辑
   const playAlbum = (row: any) => {
     emits('play-album', row);
@@ -41,6 +52,12 @@
   const changePagination = (params: any) => {
     // console.log('分页改变', params);
     emits('change-pagination', params)
+  };
+
+  // 播放mv
+  const playVideo = () => {
+    console.log('播放mv');
+    
   };
 </script>
 
@@ -89,13 +106,13 @@
         <!-- mv视频 -->
         <template #default>
           <div class="mv">
-            <!--  publishTime  name playCount -->
             <section class="mv-item" v-for="i in mvs">
-              <el-image style="width: 280px; height: 150px; border-radius: 5%;" :src="i.imgurl" fit="cover" />
+              <el-image style="width: 280px; height: 150px; border-radius: 20px;" :src="i.imgurl" fit="cover" />
               <div class="playcount">
-                {{ count(i.playCount) }}
+                <span>{{ count(i.playCount) }}</span>
+                <span>{{ formatTimestamp(i.duration, 'mm:ss') }}</span>
               </div>
-              <div class="playicon">
+              <div class="playicon" @click="emits('play-mv', i.id)">
                 <el-icon><VideoPlay /></el-icon>
               </div>
               <div>{{ i.name }}</div>
@@ -104,7 +121,22 @@
           </div>
         </template>
       </el-tab-pane>
-      <el-tab-pane label="个人介绍" :name="3"></el-tab-pane>
+      <el-tab-pane label="个人介绍" :name="3">
+        <template #label>个人介绍</template>
+        <!-- 个人介绍 -->
+        <template #default>
+          <div class="introduce">
+            <section class="introduce-personal">
+              <h3>艺人简介</h3>
+              <div>{{ briefDesc }}</div>
+            </section>
+            <section v-for="i in _introduction">
+              <h3>{{ i.ti }}</h3>
+              <div v-for="j in i.txt">{{ j }}</div>
+            </section>
+          </div>
+        </template>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -158,46 +190,69 @@
         width: 280px;
         margin: 0 20px 20px 0;
 
-        .el-image:hover {
+        .el-image {
+          position: relative;
+        }
+
+        .el-image:hover ~ .playicon {
+          opacity: 1;
+          z-index: 1;
+        }
+
+        .playicon {
+          box-sizing: border-box;
+          position: absolute;
+          z-index: -1;
+          top: 0;
+          height: 150px;
+          width: 280px;
+          border-radius: 20px;
+          background-color: rgba(0, 0, 0, 0.5);
+          opacity: 0;
           cursor: pointer;
-          border-radius: 20%;
-          // background-color: rgba(54,48,51,0.4);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          &:hover {
+            opacity: 1;
+            z-index: 1;
+          }
+
+          .el-icon {
+            font-size: 80px;
+            color: #fff;
+          }
         }
 
         .playcount {
           box-sizing: border-box;
           position: absolute;
-          bottom: 60px;
+          top: 120px;
           right: 0px;
           width: 100%;
           height: 30px;
           line-height: 30px;
-          border-radius: 5%;
+          border-radius: 20px;
           text-align: right;
-          padding-right: 20px;
+          padding: 0 20px;
           background: rgba(54,48,51,0.4);
           color: #fff;
+          display: flex;
+          justify-content: space-between;
         }
+      }
+    }
 
-        .playicon {
-          display: none;
-          box-sizing: border-box;
-          position: absolute;
-          bottom: 40%;
-          right: 35%;
-          // width: 100%;
-          // height: 30px;
-          // font-size: 50px;
-          // line-height: 30px;
-          color: #fff;
+    .introduce {
 
-          .el-icon {
-            font-size: 80px;
-            color: var(--el-color-primar);
-          }
-        }
-        .el-image:hover .playicon{
-          display: block;
+      & > section {
+        padding-bottom: 30px;
+
+        & > div {
+          text-indent: 2em;
+          line-height: 2;
+          letter-spacing: 1px;
         }
       }
     }

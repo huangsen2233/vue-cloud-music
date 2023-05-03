@@ -22,11 +22,11 @@
     <template v-for="i in singerList">
       <el-tab-pane :label="i.label" :name="i.name">
         <template #default>
-          <div class="singer" v-for="j in i.list">
+          <div class="singer" v-for="(j, index) in (i.list as any[])">
             <el-image style="width: 180px; height: 180px" :src="j.img1v1Url" fit="cover" />
             <!-- <el-image style="width: 60px; height: 60px" :src="j.picUrl" fit="cover" /> -->
             <div class="singer-info">
-              <h1>{{ j.lastRank + 1 }}</h1>
+              <h1>{{ index + 1 }}</h1>
               <span>{{ j.name }}</span>
               <span>热度: {{ j.score }}</span>
               <a>查看更多<el-icon><DArrowRight /></el-icon></a>
@@ -63,5 +63,8 @@
         text-decoration: underline;
       }
     }
+  }
+  .singer:last-child {
+    flex-grow: 0;
   }
 </style>

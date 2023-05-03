@@ -9,3 +9,7 @@ export interface IMusic {
   allSong: any[]
   fee: number
 }
+
+export interface IVideo {
+  videoUrl: string
+}

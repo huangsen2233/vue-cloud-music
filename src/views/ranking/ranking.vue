@@ -38,25 +38,16 @@
   // 获取歌手榜单
   const getToplistArtist = async (type: number) => {
     const result: any = await toplistArtistApi(type);
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手榜单", result)
+    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手榜单", result)
     const index = type - 1;
     singerList.value[index].list.length = 0;
     singerList.value[index].list.push(...result.list.artists);
-  };
-  
-  // 获取歌单详情
-  const getPlaylistDetail = async (id: number) => {                                                                                                                                                                                                             
-    const result = await playlistDetailApi({ id });
-    console.log("🚀 ~ file: ranking.vue:18 ~ getPlaylistDetail ~ result: 歌单详情", result)
-    const res: any = await playlistCommentApi({ id, limit: 20, offset: 0 });
-    console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", res);
   };
 
   // 跳转到歌单详情页
   const switchRanking = (id: number) => {
     router.push({ path: '/playlist-detail', query: { id } })
   };
-
 
   // 切换不同地区的歌手排行榜
   const switchSinger = (type: number) => {

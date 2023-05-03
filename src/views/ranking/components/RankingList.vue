@@ -29,7 +29,7 @@
       <section class="list">
         <div 
           :class="[value1 === index1 && value2 === index2 ? 'active-item' : '', 'item']" 
-          v-for="(j, index2) in i.list" 
+          v-for="(j, index2) in (i.list as any[])" 
           @click="switchRanking(index1, index2, j)"
         >
           <el-image style="width: 120px; height: 120px" :src="j.coverImgUrl" fit="cover" />
@@ -82,5 +82,6 @@
 
   .el-popper.description {
     font-size: 16px !important;
+    max-width: 500px;
   }
 </style>

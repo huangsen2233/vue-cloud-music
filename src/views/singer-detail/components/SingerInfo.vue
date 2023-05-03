@@ -5,6 +5,8 @@
   const props = defineProps<{
     artist: any
     user: any
+    identify: any
+    fansCount: number
   }>();
 
   // 获取歌手单曲
@@ -16,18 +18,21 @@
 
 <template>
   <div class="singer-info">
-    <el-image style="width: 500px; height: 300px" :src="artist.avatar" fit="cover" />
+    <el-image style="width: 400px; height: 250px" :src="artist.avatar" fit="cover" />
     <section class="message">
-      <h1>{{ artist.name }}</h1>
+      <b style="font-size: 30px;">
+        {{ artist.name }} 
+        <span style="padding: 0 5px; font-size: 16px; color: ;" v-for="i in artist.alias">{{ i }}</span>
+      </b>
       <div>
-        <b style="margin-right: 5px;">别称: </b>
-        <span style="padding: 0 5px;" v-for="i in artist.alias">{{ i }}</span>
+        <b>粉丝数: </b>
+        <span>{{ fansCount }}</span>
       </div>
-      <div>
-        <b style="margin-right: 5px;">职业: </b>
-        <span style="padding-right: 10px;" v-for="j in artist.identities">{{ j }}</span>
+      <div v-if="identify">
+        <b style="margin-right: 5px;">简介: </b>
+        <span>{{ identify?.imageDesc }}</span>
       </div>
-      <div v-if="user.userId">
+      <div v-if="user.signature">
         <b style="margin-right: 5px;">签名: </b>
         {{ user.signature }}
       </div>
