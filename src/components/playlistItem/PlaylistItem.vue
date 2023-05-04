@@ -20,7 +20,11 @@
   const count = computed(() => {
     return function(value: number) {
       const str = value.toString();
-      return str.slice(0,str.length - 4);
+      if (str.length > 4) {
+        return str.slice(0,str.length - 4) + 'W';
+      } else {
+        return value + '次';
+      }
     }
   });
 </script>
@@ -28,10 +32,10 @@
 <template>
   <div class="playlist-item">
     <div class="img">
-      <el-image style="width: 100%; height: 300px;" :src="url" :title="name" fit="cover" @click="getPlaylistdetail(id)" />
+      <el-image style="width: 100%; height: 200px;" :src="url" :title="name" fit="cover" @click="getPlaylistdetail(id)" />
       <div class="count">
         <el-icon><Headset /></el-icon>
-        <span>{{ count(playCount) }}W</span>
+        <span>{{ count(playCount) }}</span>
         <el-icon color="#ddd" @click="getPlaylistdetail(id)"><VideoPlay /></el-icon>
       </div>
     </div>
@@ -89,7 +93,7 @@
 
       & > span {
         flex: 1;
-        padding: 0 20px;
+        padding-left: 10px;
         font-size: 14px;
       }
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, reactive, onActivated, onMounted } from 'vue';
   import { useRoute, useRouter } from "vue-router";
   import { useMusicStore } from "@/stores/music";
   import { useVideoStore } from "@/stores/video";
@@ -36,7 +36,8 @@
   const user = ref<any>({});
   const identify = ref<any>({});
   const fansCount = route.query.fansCount ? Number(route.query.fansCount) : 0;
-  const activeName  = ref<any>(1);
+  const activeName  = ref(1);
+  const activeCollapse = ref(0);
   const hotAlbums = ref<any[]>([]);
   const paginationProp = ref<PaginationPropType>({ total: 0, currentPage: 1, pageSize: 10 });
   const mvs = ref<any[]>([]);
@@ -118,6 +119,7 @@
     <SingerDetailHeader :artist="artist" :user="user" :identify="identify" :fans-count="fansCount" />
     <SingerDetailBody 
       :active-name="activeName" 
+      :active-collapse="activeCollapse"
       :hot-albums="hotAlbums" 
       :pagination-prop="paginationProp"
       :mvs="mvs"

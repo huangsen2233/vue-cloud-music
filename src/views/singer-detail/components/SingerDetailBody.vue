@@ -6,6 +6,7 @@
 
   const props = defineProps<{
     activeName: number
+    activeCollapse: number
     hotAlbums: any[]
     paginationProp: PaginationPropType
     mvs: any[]
@@ -70,35 +71,48 @@
         <template #default>
           <div class="album">
             <section class="album-item" v-for="i in hotAlbums">
-              <el-image style="width: 200px; height: 200px" :src="i.picUrl" fit="cover" />
+              <el-image style="width: 250px; height: 250px" :src="i.picUrl" fit="cover" />
               <div class="song">
                 <b style="font-size: 20px; font-weight: bolder;">{{ i.name }}</b>
-                <div style="padding-bottom: 10px;">
-                  发行时间: {{ formatTimestamp(i.publishTime) }}
-                </div>
-                <div style="padding-bottom: 10px;">
-                  发行公司: {{ i.company }}
-                </div>
-
-                <!-- 面板组件 展开 专辑歌曲 -->
-                <!-- 面板组件 展开 专辑歌曲 -->
-                <!-- 面板组件 展开 专辑歌曲 -->
-                <!-- 面板组件 展开 专辑歌曲 -->
-
-                <el-table :data="i.songs" border stripe :show-header="false">
-                  <el-table-column type="index" width="120px">
-                    <template v-slot="{ row, $index }: any">
-                      <div style="display: flex; justify-content: space-around; align-items: center;">
-                        <span>{{ $index + 1 }}</span>
-                        <el-icon @click="playAlbum(row)"><VideoPlay /></el-icon>
-                      </div>
+                <el-collapse :model-value="activeCollapse" style="margin-top: 20px;">
+                  <el-collapse-item title="歌手" :name="1">
+                    <template #title>
+                      <b style="font-size: 14px;">歌手</b>
                     </template>
-                  </el-table-column>
-                  <el-table-column prop="name" label="歌名" align="center" />
-                  <el-table-column prop="dt" label="时长" align="center">
-                    <template v-slot="{ row }: any">{{ formatTimestamp(row.dt, 'mm:ss') }}</template>
-                  </el-table-column>
-                </el-table>
+                    <span v-for="j in i.artists" style="padding-right: 10px;">{{ j.name }}</span>
+                  </el-collapse-item>
+                  <el-collapse-item title="发行时间" :name="2">
+                    <template #title>
+                      <b style="font-size: 14px;">发行时间</b>
+                    </template>
+                    {{ formatTimestamp(i.publishTime) }}
+                  </el-collapse-item>
+                  <el-collapse-item title="发行公司" :name="3">
+                    <template #title>
+                      <b style="font-size: 14px;">发行公司</b>
+                    </template>
+                    {{ i.company }}
+                  </el-collapse-item>
+                  <el-collapse-item title="专辑列表" :name="4">
+                    <template #title>
+                      <b style="font-size: 14px;">专辑列表</b>
+                    </template>
+                    <el-table :data="i.songs" border stripe :show-header="false">
+                      <el-table-column type="index" width="120px">
+                        <template v-slot="{ row, $index }: any">
+                          <div style="display: flex; justify-content: space-around; align-items: center;">
+                            <span>{{ $index + 1 }}</span>
+                            <el-icon @click="playAlbum(row)"><VideoPlay /></el-icon>
+                          </div>
+                        </template>
+                      </el-table-column>
+                      <el-table-column prop="name" label="歌名" align="center" />
+                      <el-table-column prop="dt" label="时长" align="center">
+                        <template v-slot="{ row }: any">{{ formatTimestamp(row.dt, 'mm:ss') }}</template>
+                      </el-table-column>
+                    </el-table>
+                  </el-collapse-item>
+                </el-collapse>
               </div>
             </section>
           </div>
@@ -171,18 +185,13 @@
           width: 200px;
           padding: 0 20px;
 
-          .el-table {
-            max-height: 140px;
-            overflow-y: auto;
-
-            .el-icon {
-              transition: all 0.1s;
-              font-size: 16px;
-            }
-            .el-icon:hover {
-              cursor: pointer;
-              transform: scale(1.5);
-            }
+          .el-table .el-icon{
+            transition: all 0.1s;
+            font-size: 16px;
+          }
+          .el-icon:hover {
+            cursor: pointer;
+            transform: scale(1.5);
           }
         }
       }

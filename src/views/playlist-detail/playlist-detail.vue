@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, reactive, onActivated, onMounted } from 'vue';
   import { useRoute } from "vue-router";
   import { playlistDetailApi, playlistCommentApi, playlistSubscribersApi } from "@/api/playlist";
   import { getSongDetailApi } from "@/api/music";

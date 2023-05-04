@@ -9,37 +9,58 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'recommend',
     path: '/recommend',
-    component: () => import('@/views/recommend/recommend.vue')
+    component: () => import('@/views/recommend/recommend.vue'),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     name: 'ranking',
     path: '/ranking',
-    component: () => import('@/views/ranking/ranking.vue')
+    component: () => import('@/views/ranking/ranking.vue'),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     name: 'playlist',
     path: '/playlist',
-    component: () => import('@/views/playlist/playlist.vue')
+    component: () => import('@/views/playlist/playlist.vue'),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     name: 'playlist-detail',
     path: '/playlist-detail',
-    component: () => import('@/views/playlist-detail/playlist-detail.vue')
+    component: () => import('@/views/playlist-detail/playlist-detail.vue'),
+    meta: {
+      keepAlive: false
+    }
   },
   {
     name: 'singer',
     path: '/singer',
-    component: () => import('@/views/singer/singer.vue')
+    component: () => import('@/views/singer/singer.vue'),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     name: 'singer-detail',
     path: '/singer-detail',
-    component: () => import('@/views/singer-detail/singer-detail.vue')
+    component: () => import('@/views/singer-detail/singer-detail.vue'),
+    meta: {
+      keepAlive: false
+    }
   },
   {
     name: 'video',
     path: '/video',
-    component: () => import('@/views/video/video.vue')
+    component: () => import('@/views/video/video.vue'),
+    meta: {
+      keepAlive: true
+    }
   },
   { 
     name: 'NotFound', 

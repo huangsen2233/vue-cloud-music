@@ -13,10 +13,6 @@
     currentComment.value = newVal;
   });
 
-  /* watch(() => props.newComments, (newVal, oldVal) => {
-    currentComment.value = newVal;
-  }); */
-
   const useMusic = useMusicStore();
   const useUser = useUserStore();
 

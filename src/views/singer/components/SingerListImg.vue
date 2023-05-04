@@ -30,7 +30,7 @@
     :total="paginationProp.total"
     :current-page="paginationProp.currentPage"
     :page-size="paginationProp.pageSize"
-    :page-sizes="[15, 30, 60, 90]"
+    :page-sizes="[18, 30, 60, 90]"
     @on-page="switchOffset"
     @on-size="switchOffset"
   />
@@ -44,7 +44,7 @@
 
     .img-item {
       flex: 15%;
-      margin: 20px calc(15% / 4) 30px 0;
+      margin: 20px calc(10% / 5) 30px 0;
 
       .name {
         display: flex;
@@ -62,7 +62,7 @@
       }
     }
 
-    .img-item:nth-child(5n) {
+    .img-item:nth-child(6n) {
       margin-right: 0;
     }
   }
