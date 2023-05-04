@@ -57,7 +57,7 @@
   // 获取歌手专辑
   const getArtistAlbum = async (params: ArtistAlbumType) => {
     const result: any = await getArtistAlbumApi(params);
-    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", result)
+    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", result)
     for(let i = 0; i < result.hotAlbums.length; i++) {
       const albumData: any = await getAlbumApi(result.hotAlbums[i].id);
       result.hotAlbums[i].songs = [...albumData.songs];
@@ -69,7 +69,7 @@
   // 获取歌手MV
   const getArtistMv = async (id: number) => {
     const result: any = await getArtistMvApi(id);
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
+    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
     mvs.value = result.mvs;
   };
 

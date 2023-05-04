@@ -4,6 +4,8 @@ export type MvDetailType = {
   desc: string
   playCount: number
   publishTime: string
+  subCount: number
+  shareCount: number
 }
 
 export type MvsType = {

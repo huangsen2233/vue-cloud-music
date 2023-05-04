@@ -42,7 +42,7 @@
   // 获取歌单评论
   const getPlaylistComment = async (params: PlaylistCommentType) => {
     const result: any = await playlistCommentApi({ ...params });
-    // console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", result);
+    console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", result);
     commentPagination.value.total = result.total;
     newComments.value = result.comments;
     if (hotComments.value.length === 0) {
@@ -67,14 +67,14 @@
   const commentChangePagination = (params: PaginationParamsType)  => {
     commentPagination.value = { ...commentPagination.value, ...params };
     // console.log('当前的分页参数', { ...commentParams.value, limit: params.pageSize, offset: params.currentPage - 1 });
-    getPlaylistComment({ ...commentParams.value, id: Number(route.params.id), limit: params.pageSize, offset: (params.currentPage - 1) * params.pageSize });
+    getPlaylistComment({ ...commentParams.value, id: Number(route.query.id), limit: params.pageSize, offset: (params.currentPage - 1) * params.pageSize });
   };
 
   // 收藏者的分页事件
   const collentChangePagination = (params: PaginationParamsType)  => {
     subscriberPagination.value = { ...subscriberPagination.value, ...params };
     // console.log('当前的分页参数', { ...subscriberPagination.value, limit: params.pageSize, offset: params.currentPage - 1 });
-    getPlaylistSubscribers({ ...subscriberPagination.value, id: Number(route.params.id), limit: params.pageSize, offset: (params.currentPage - 1) * params.pageSize });
+    getPlaylistSubscribers({ ...subscriberPagination.value, id: Number(route.query.id), limit: params.pageSize, offset: (params.currentPage - 1) * params.pageSize });
   };
 </script>
 

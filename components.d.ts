@@ -53,7 +53,7 @@ declare module '@vue/runtime-core' {
     HeaderMenu: typeof import('./src/components/layout/header/HeaderMenu.vue')['default']
     HeaderProfile: typeof import('./src/components/layout/header/HeaderProfile.vue')['default']
     LoginDiaLog: typeof import('./src/components/dialog/LoginDiaLog.vue')['default']
-    PlaylistItem: typeof import('./src/components/common/PlaylistItem.vue')['default']
+    PlaylistItem: typeof import('./src/components/playlistItem/PlaylistItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
