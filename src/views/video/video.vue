@@ -36,7 +36,7 @@
   // 获取MV详情
   const getMvDetail = async (id: number) => {
     const result: any = await getMvDetailApi(id);
-    console.log("🚀 ~ file: video.vue:27 ~ getMvDetail ~ result: mv详情", result)
+    // console.log("🚀 ~ file: video.vue:27 ~ getMvDetail ~ result: mv详情", result)
     const { artistName, name, desc, playCount, publishTime, shareCount, subCount } = result.data;
     mvDetail.value = { artistName, name, desc, playCount, publishTime, shareCount, subCount };
   };

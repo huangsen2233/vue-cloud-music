@@ -1,64 +1,73 @@
 <script lang="ts" setup>
-  import { reactive, onMounted, provide } from 'vue';
+  import { reactive, ref, onMounted, provide } from 'vue';
+  import type { PlayListType, NewSonglistType } from "./type";
   import { useRouter } from 'vue-router';
   import { getBannerApi, personalizedApi, newsongApi } from "@/api/recommend";
-  import { usePlaylistDetail } from "@/hooks/usePlaylistDetail";
   import Banner from "./components/Banner.vue";
   import Playlists from "./components/Playlists.vue";
-  import NewMusic from "./components/NewMusic.vue";
+  import NewSong from "./components/NewSong.vue";
 
   onMounted(() => {
-    getBannerData();
-    getresourceData();
-    // getNewsongData();
+    getBanner();
+    getPersonalizedPlaylist();
+    getNewsong();
   });
 
   const router = useRouter();
 
   const bannerList: any[] = reactive([]);
-  const playList: any[] = reactive([]);
+  const playList = ref<PlayListType[]>([]);
+  const newSonglist = ref<NewSonglistType[]>([]);
 
   // 获取轮播图数据
-  const getBannerData = async () => {
+  const getBanner = async () => {
     const { banners } = await getBannerApi();
     bannerList.push(...banners);
   };
 
   // 获取推荐歌单
-  const getresourceData = async () => {
+  const getPersonalizedPlaylist = async () => {
     const { result } = await personalizedApi();
-    playList.push(...result);
-    console.log("🚀 ~ file: recommend.vue:23 ~ getresourceData ~ res: 歌单", result)
+    playList.value.length = 0;
+    for (let i of result) {
+      const { id, picUrl, name, playCount } = i;
+      playList.value.push({ id, picUrl, name, playCount });
+    }
+    // console.log("🚀 ~ file: recommend.vue:23 ~ getresourceData ~ res: 歌单", result)
   };
 
   // 获取推荐新音乐
-  const getNewsongData = async () => {
+  const getNewsong = async () => {
     const { result } = await newsongApi();
-    // playList.push(...result);
-    // console.log("🚀 ~ file: recommend.vue:23 ~ getresourceData ~ res: 获取推荐新音乐", result)
+    newSonglist.value.length = 0;
+    for (let i of result) {
+      const { id, picUrl, name, song } = i;
+      newSonglist.value.push({ id, picUrl, name, song });
+    }
+    console.log("🚀 ~ file: recommend.vue:23 ~ getresourceData ~ res: 获取推荐新音乐", result)
   };
 
   // 路由跳转到歌单
-  const routeToPlaylist = () => {
+  const routerToPlaylist = () => {
     router.push('/playlist');
   };
 
   // 路由跳转到歌单详情
-  const routeToPlaylistdetail = (id: number) => {
+  const routerToPlaylistdetail = (id: number) => {
     router.push({ path: '/playlist-detail', query: { id } });
   };
   
-  provide('on-router', routeToPlaylist);
-  provide('router-playlistdetail', routeToPlaylistdetail);
+  // provide('router-playlist', routerToPlaylist);
+  provide('router-playlistdetail', routerToPlaylistdetail);
 </script>
 
 <template>
   <!-- 轮播图 -->
   <Banner :banner-list="bannerList" />
   <!-- 推荐歌单 -->
-  <Playlists :play-list="playList" @on-router="routeToPlaylist" />
+  <Playlists :play-list="playList" @router-playlist="routerToPlaylist" />
   <!-- 新音乐 -->
-  <NewMusic />
+  <NewSong :new-songlist="newSonglist" />
 </template>
 
 <style scoped>

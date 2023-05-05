@@ -1,25 +1,24 @@
 <script lang="ts" setup>
-  import type { PropType } from 'vue';
+  import type { PlayListType } from "../type";
   import PlaylistItem from "@/components/playlistItem/PlaylistItem.vue";
 
-  const props = defineProps({
-    playList: Array as PropType<any[]>
-  });
+  const props = defineProps<{
+    playList: PlayListType[]
+  }>();
 
   const emits = defineEmits<{
-    (event: 'on-router'): void
+    (event: 'router-playlist'): void
   }>();
-  
 </script>
 
 <template>
   <div class="playlist">
     <section class="playlist-title">
-      <h2 @click="emits('on-router')">推荐歌单</h2>
-      <a @click.prvent="emits('on-router')">更多<el-icon><DArrowRight /></el-icon></a>
+      <h2>推荐歌单</h2>
+      <a @click.prvent="emits('router-playlist')">更多<el-icon><DArrowRight /></el-icon></a>
     </section>
     <section class="playlist-content">
-      <div class="item" v-for="item in props.playList">
+      <div class="item" v-for="item in playList">
         <PlaylistItem :id="item.id" :url="item.picUrl" :name="item.name" :play-count="item.playCount" />
       </div>
     </section>

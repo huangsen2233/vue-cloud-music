@@ -22,9 +22,11 @@
     <section class="message">
       <h3 style="margin: 0;">
         <el-tag type="danger" size="large" style="font-size: 20px; padding: 20px; margin-right: 10px;">歌手</el-tag>
-        <b style="font-size: 22px;">{{ artist.name }}</b> 
-        <span style="padding-left: 15px; font-size: 16px;" v-for="i in artist.alias">{{ i }}</span>
       </h3>
+      <div>
+        <b>{{ artist.name }}</b> 
+        <span style="padding-left: 14px; font-size: 14px;" v-for="i in artist.alias">{{ i }}</span>
+      </div>
       <div v-if="fansCount">
         <b>粉丝数: </b>
         <span>{{ fansCount }}</span>
@@ -52,7 +54,7 @@
       justify-content: space-between;
       align-items: flex-start;
       padding-left: 30px;
-      font-size: 20px;
+      // font-size: 20px;
     }
 
     .el-button .el-icon {

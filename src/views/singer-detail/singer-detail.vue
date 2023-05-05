@@ -48,7 +48,7 @@
   // 获取歌手详情
   const getArtistDetail = async (id: number) => {
     const result: any = await getArtistDetailApi(id);
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手详情", result.data)
+    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手详情", result.data)
     artist.value = result.data.artist;
     user.value = result.data.user ?? {};
     identify.value = result.data.identify;
@@ -69,7 +69,7 @@
   // 获取歌手MV
   const getArtistMv = async (id: number) => {
     const result: any = await getArtistMvApi(id);
-    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
+    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
     mvs.value = result.mvs;
   };
 

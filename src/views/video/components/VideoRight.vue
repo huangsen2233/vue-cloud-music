@@ -25,7 +25,7 @@
       <h3>相关推荐</h3>
       <section class="mvs">
         <div class="mvs-item" v-for="i in mvs">
-          <el-image style="width: 240px; height: 150px" :src="i.cover" fit="cover" @click="emits('switch-mv', i.id)" />
+          <el-image style="width: 180px; height: 120px" :src="i.cover" fit="cover" @click="emits('switch-mv', i.id)" />
           <div class="duration">{{ formatTimestamp(i.duration, 'mm:ss') }}</div>
           <section style="padding-left: 15px;">
             <div>{{ i.name }}</div>
@@ -66,8 +66,8 @@
           .duration {
             box-sizing: border-box;
             position: absolute;
-            top: 120px;
-            width: 240px;
+            top: 90px;
+            width: 180px;
             height: 30px;
             line-height: 30px;
             text-align: right;
