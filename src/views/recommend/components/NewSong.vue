@@ -5,6 +5,11 @@
   const props = defineProps<{
     newSonglist: NewSonglistType[]
   }>();
+
+  const emits = defineEmits<{
+    (event: 'play-music', songInfo: NewSonglistType): void;
+    (event: 'router-singer-detail', id: number): void;
+  }>();
 </script>
 
 <template>
@@ -14,17 +19,19 @@
     </section>
     <section class="newsong-content">
       <div class="item" v-for="i in newSonglist">
-        <el-image style="width: 200px; height: 200px;" :src="i.picUrl" fit="cover" />
+        <el-image style="width: 200px; height: 200px;" :src="i.picUrl" fit="cover" @click="emits('play-music', i)"/>
         <div class="item-duration">
           <el-icon><Clock /></el-icon>
           <span style="padding-left: 5px;">{{ formatTimestamp(i.song.duration, 'mm:ss') }}</span>
         </div>
-        <div class="item-play">
+        <div class="item-play" @click="emits('play-music', i)">
           <el-icon><VideoPlay /></el-icon>
         </div>
         <div class="item-name">
           <h4 style="margin: 0 0 20px;">{{ i.name }}</h4>
-          <div v-for="j in i.song.artists">{{ j.name }}</div>
+          <div class="author" v-for="j in i.song.artists">
+            by <a @click="emits('router-singer-detail', j.id)">{{ j.name }}</a>
+          </div>
         </div>
       </div>
     </section>
@@ -60,6 +67,20 @@
 
         &-name {
           padding-left: 20px;
+
+          .author {
+            font-size: 14px;
+            color: #aaa;
+
+            & > a {
+              color: #000;
+            }
+
+            & > a:hover {
+              cursor: pointer;
+              text-decoration: underline;
+            }
+          }
         }
 
         &-duration {
@@ -93,9 +114,6 @@
         .el-image:hover ~ .item-play {
           display: block;
         }
-
-
-
       }
 
       .item:nth-child(3n) {

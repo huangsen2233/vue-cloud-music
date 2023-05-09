@@ -46,3 +46,21 @@ export const newsongApi = (limit: number = 10) => {
     params: { limit }
   })
 }
+
+type NewMvType = {
+  area?: string
+  limit?: number
+}
+/**
+ * @description 新MV
+ * @param {string} area 可选参数，可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
+ * @param {number} limit 可选参数，取出数量 , 默认为 20
+ * @returns Promise
+ */
+export const getNewMvApi = ({ area, limit = 12 }: NewMvType) => {
+  return request.get('/mv/first', {
+    params: { area, limit }
+  })
+}
+
+

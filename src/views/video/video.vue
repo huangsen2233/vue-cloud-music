@@ -10,11 +10,13 @@
   import VideoRight from "./components/VideoRight.vue";
 
   onMounted(() => {
+    window.scrollTo(0, 0);
     const id = Number(route.query.id);
     if(id) {
       getMvDetail(id);
       getSimiMv(id);
       getCommentMv({ ...commentMvParams.value });
+      useVideo.getMvUrl(id);
     }
   });
 
@@ -44,11 +46,11 @@
   // 获取相似MV
   const getSimiMv = async (id: number) => {
     const result: any = await getSimiMvApi(id);
-    // console.log("🚀 ~ file: video.vue:27 ~ getMvDetail ~ result: 相似mv", result)
+    console.log("🚀 ~ file: video.vue:27 ~ getMvDetail ~ result: 相似mv", result)
     mvs.value.length = 0;
     result.mvs.forEach((item: any) => {
-      const { id, artistName, name, cover, playCount, duration } = item;
-      mvs.value.push({ id, artistName, name, cover, playCount, duration });
+      const { id, artistName, artistId, name, cover, playCount, duration } = item;
+      mvs.value.push({ id, artistName, artistId, name, cover, playCount, duration });
     });
   };
 
@@ -59,17 +61,17 @@
     comments.value = [...result.comments];
     paginationProp.value.total = result.total;
   };
-
+  
   // 切换mv
   const switchMv = (id: number) => {
     // console.log('视频id', id);
-    useVideo.getMvUrl(id);
-
-    /**
-     * bug：mv先切换多个，然后路由回退或前进，当前音频是路由跳转前的那个url
-     */
-
+    // useVideo.getMvUrl(id);
     router.push({ path: '/video', query: { id } });
+  };
+
+  // 路由跳转到歌手详情
+  const routerToSingerDetail = (id: number) => {
+    router.push({ path: '/singer-detail', query: { id } })
   };
 
   // MV评论的分页改变
@@ -89,17 +91,19 @@
       :profile="profile"
       @change-pagination="changePagination" 
     />
-    <VideoRight :mv-detail="mvDetail" :mvs="mvs" @switch-mv="switchMv" />
+    <VideoRight :mv-detail="mvDetail" :mvs="mvs" @switch-mv="switchMv" @router-singer-detail="routerToSingerDetail" />
   </div>
 </template>
 
 <style lang="less" scoped>
   .video {
     display: flex;
+
     &-left {
       flex: 1;
       padding: 0 30px;
     }
+    
     &-right {
       // flex: 1;
       width: 550px;

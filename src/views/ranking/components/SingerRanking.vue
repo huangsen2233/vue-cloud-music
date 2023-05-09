@@ -53,15 +53,16 @@
     padding: 30px;
 
     .singer {
-      flex: 25%;
+      flex: 30%;
       display: flex;
       justify-content: space-around;
-      margin: 0 calc(25% / 3) 30px 0;
+      margin: 0 calc(10% / 3) 30px 0;
 
       &-info {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        padding-left: 10px;
 
         h1 {
           color: rgba(221,22,29);

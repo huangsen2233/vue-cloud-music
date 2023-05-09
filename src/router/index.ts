@@ -59,7 +59,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/video',
     component: () => import('@/views/video/video.vue'),
     meta: {
-      keepAlive: true
+      keepAlive: false
+    }
+  },
+  {
+    name: 'search',
+    path: '/search',
+    component: () => import('@/views/search/search.vue'),
+    meta: {
+      keepAlive: false
     }
   },
   { 

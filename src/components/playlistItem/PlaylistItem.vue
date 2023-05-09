@@ -1,8 +1,10 @@
 <script lang="ts" setup>
   import { ref, reactive, computed, inject } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
+  import { count } from '@/utils/count';
 
-  const getPlaylistdetail = inject('router-playlistdetail') as (id: number) => void;
+  const routeToPlaylistDetail = inject('router-playlist-detail') as (id: number) => void;
+  // const routeToSingerDetail = inject('router-singer-detail') as (id: number) => void;
 
   const { url, name, playCount, creatorName, creatorUrl, createTime, signature, tags } = defineProps<{
     id: number
@@ -12,34 +14,23 @@
     creatorName?: string
     creatorUrl?: string
     createTime?: number
+    userId?: number
     signature?: string
     tags?: string[]
   }>();
-
-  // 歌单播放次数
-  const count = computed(() => {
-    return function(value: number) {
-      const str = value.toString();
-      if (str.length > 4) {
-        return str.slice(0,str.length - 4) + 'W';
-      } else {
-        return value + '次';
-      }
-    }
-  });
 </script>
 
 <template>
   <div class="playlist-item">
     <div class="img">
-      <el-image style="width: 100%; height: 200px;" :src="url" :title="name" fit="cover" @click="getPlaylistdetail(id)" />
+      <el-image style="width: 100%; height: 200px;" :src="url" :title="name" fit="cover" @click="routeToPlaylistDetail(id)" />
       <div class="count">
         <el-icon><Headset /></el-icon>
-        <span>{{ count(playCount) }}</span>
-        <el-icon color="#ddd" @click="getPlaylistdetail(id)"><VideoPlay /></el-icon>
+        <span>{{ count(playCount, 'W') }}</span>
+        <el-icon color="#ddd" @click="routeToPlaylistDetail(id)"><VideoPlay /></el-icon>
       </div>
     </div>
-    <a class="content" @click="getPlaylistdetail(id)"><span>{{ name }}</span></a>
+    <a class="content" @click="routeToPlaylistDetail(id)"><span>{{ name }}</span></a>
     <div class="creator" v-if="creatorName">
       by
       <!-- 弹出框-歌单信息 -->

@@ -4,11 +4,10 @@
   import { useMusicStore } from "@/stores/music";
   import { useVideoStore } from "@/stores/video";
   import { 
-    getArtistDetailApi, getArtistSongApi, getArtistApi, 
-    getArtistAlbumApi, getArtistMvApi, getArtistDescApi,
-    getAlbumApi
+    getArtistDetailApi, getArtistAlbumApi, getArtistMvApi, 
+    getArtistDescApi, getAlbumApi
   } from '@/api/singer';
-  import type { ArtistSongType, ArtistAlbumType, PaginationPropType } from "./type";
+  import type { ArtistAlbumType, PaginationPropType } from "./type";
   import SingerDetailHeader from "./components/SingerDetailHeader.vue";
   import SingerDetailBody from "./components/SingerDetailBody.vue";
 
@@ -19,9 +18,6 @@
       getArtistAlbum({ ...artistAlbumParams.value, id });
       getArtistMv(id);
       getArtistDesc(id);
-
-      // getArtist(id);
-      // getArtistSong({ ...artistSongParmas.value, id });
     }
   });
 
@@ -30,7 +26,6 @@
   const useMusic = useMusicStore();
   const useVideo = useVideoStore();
 
-  const artistSongParmas = ref<ArtistSongType>({ id: 0, order: 'hot', limit: 50, offset: 0 });
   const artistAlbumParams = ref<ArtistAlbumType>({ id: 0, limit: 10, offset: 0 });
   const artist = ref<any>({});
   const user = ref<any>({});
@@ -48,7 +43,7 @@
   // 获取歌手详情
   const getArtistDetail = async (id: number) => {
     const result: any = await getArtistDetailApi(id);
-    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手详情", result.data)
+    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手详情", result.data)
     artist.value = result.data.artist;
     user.value = result.data.user ?? {};
     identify.value = result.data.identify;
@@ -57,7 +52,7 @@
   // 获取歌手专辑
   const getArtistAlbum = async (params: ArtistAlbumType) => {
     const result: any = await getArtistAlbumApi(params);
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", result)
+    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", result)
     for(let i = 0; i < result.hotAlbums.length; i++) {
       const albumData: any = await getAlbumApi(result.hotAlbums[i].id);
       result.hotAlbums[i].songs = [...albumData.songs];
@@ -97,21 +92,9 @@
   // 获取MV地址
   const playMv = async (mvid: number) => {
     // console.log('mv的id', mvid);
-    useVideo.getMvUrl(mvid);
+    // useVideo.getMvUrl(mvid);
     router.push({ path: '/video', query: { id: mvid } });
   };
-
-  // 获取歌手单曲
-  // const getArtist = async (id: number) => {
-  //   const result: any = await getArtistApi(id);
-  //   console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手单曲", result)
-  // };
-
-  // 获取歌手的歌曲
-  // const getArtistSong = async (params: ArtistSongType) => {
-  //   const result: any = await getArtistSongApi(params);
-  //   console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手的歌曲", result)
-  // };
 </script>
 
 <template>

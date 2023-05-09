@@ -18,6 +18,7 @@
         :play-count="item.playCount" 
         :creator-name="item.creator.nickname"
         :creator-url="item.creator.avatarUrl"
+        :user-id="item.creator.userId"
         :create-time="item.createTime"
         :signature="item.creator.signature"
         :tags="item.tags"

@@ -13,8 +13,6 @@
 
   const router = useRouter();
 
-  const featurelist = ref<any>([]);
-  const globallist = ref<any>([]);
   const rankinglist = ref<any>([
     { title: '特色榜', list: [] },
     { title: '全球榜', list: [] }

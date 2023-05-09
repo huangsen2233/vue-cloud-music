@@ -10,6 +10,7 @@
 
   const emits = defineEmits<{
     (event: 'switch-mv', id: number): void
+    (event: 'router-singer-detail', id: number): void;
   }>();
 </script>
 
@@ -26,10 +27,15 @@
       <section class="mvs">
         <div class="mvs-item" v-for="i in mvs">
           <el-image style="width: 180px; height: 120px" :src="i.cover" fit="cover" @click="emits('switch-mv', i.id)" />
-          <div class="duration">{{ formatTimestamp(i.duration, 'mm:ss') }}</div>
+          <div class="duration">
+            <el-icon><Clock /></el-icon>
+            <span style="padding-left: 5px;">{{ formatTimestamp(i.duration, 'mm:ss') }}</span>
+          </div>
           <section style="padding-left: 15px;">
             <div>{{ i.name }}</div>
-            <div style="color: #999; padding-top: 10px;">{{ i.artistName }}</div>
+            <div class="author" style="color: #999; padding-top: 10px;">
+              by <a @click="emits('router-singer-detail', i.artistId)">{{ i.artistName }}</a>
+            </div>
           </section>
         </div>
       </section>
@@ -70,14 +76,30 @@
             width: 180px;
             height: 30px;
             line-height: 30px;
-            text-align: right;
             padding-right: 10px;
             color: #fff;
             background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
           }
 
           .el-image:hover {
             cursor: pointer;
+          }
+
+          .author {
+            font-size: 14px;
+            color: #aaa;
+
+            & > a {
+              color: #000;
+            }
+
+            & > a:hover {
+              cursor: pointer;
+              text-decoration: underline;
+            }
           }
         }
 

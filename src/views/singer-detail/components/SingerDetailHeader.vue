@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue';
-  import { formatTimestamp } from "@/utils/dateFormat";
+  import { ref, reactive } from 'vue';
 
   const props = defineProps<{
     artist: any
@@ -8,12 +7,6 @@
     identify: any
     fansCount: number
   }>();
-
-  // 获取歌手单曲
-  const getArtistDetail = async (id: number) => {
-    // const result: any = await getArtistDetailApi(id);
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手详情", result)
-  };
 </script>
 
 <template>
@@ -51,10 +44,14 @@
     .message {
       display: flex;
       flex-flow: column;
-      justify-content: space-between;
+      // justify-content: space-between;
       align-items: flex-start;
       padding-left: 30px;
       // font-size: 20px;
+
+      & > div {
+        padding: 10px 0;
+      }
     }
 
     .el-button .el-icon {

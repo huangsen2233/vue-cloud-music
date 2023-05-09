@@ -2,8 +2,8 @@
   import { ref, reactive, onMounted, provide, nextTick } from 'vue';
   import { useRouter } from 'vue-router';
   import { playlistApi, playlistCatlistApi } from "@/api/playlist";
-  import PlaylistTag from './components/PlaylistTag.vue';
-  import Playlists from "./components/Playlists.vue";
+  import PlaylistHeader from './components/PlaylistHeader.vue';
+  import PlaylistBody from "./components/PlaylistBody.vue";
   import BasePagination from '@/components/common/BasePagination.vue';
   import yzIcon from "@/assets/imgs/yuzhong.png";
   import fgIcon from "@/assets/imgs/fengge.png";
@@ -83,18 +83,24 @@
   };
 
   // 路由跳转到歌单详情
-  const routeToPlaylistdetail = (id: number) => {
+  const routeToPlaylistDetail = (id: number) => {
     router.push({ path: '/playlist-detail', query: { id } });
   };
 
-  provide('router-playlistdetail', routeToPlaylistdetail);
+  // 路由跳转到歌手详情
+  /* const routeToSingerDetail = (id: number) => {
+    router.push({ path: '/singer-detail', query: { id } });
+  } */;
+
+  provide('router-playlist-detail', routeToPlaylistDetail);
+  // provide('router-singer-detail', routeToSingerDetail);
 </script>
 
 <template>
   <!-- 歌单标签 -->
-  <PlaylistTag v-model:showPopover="showPopover" :tags-list="tagsList" :tags-icons="tagsIcons" @on-change="changeTag"/>
+  <PlaylistHeader v-model:showPopover="showPopover" :tags-list="tagsList" :tags-icons="tagsIcons" @on-change="changeTag"/>
   <!-- 歌单列表 -->
-  <Playlists :play-lists="playlists" />
+  <PlaylistBody :play-lists="playlists" />
   <!-- 分页 -->
   <BasePagination
     v-if="visible"

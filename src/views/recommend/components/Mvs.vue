@@ -8,18 +8,19 @@
 
   const emits = defineEmits<{
     (event: 'router-video', mvid: number): void;
+    (event: 'router-singer-detail', id: number): void;
   }>();
 </script>
 
 <template>
   <div class="mvs">
     <section class="mvs-title">
-      <h2>推荐MV</h2>
+      <h2>最新MV</h2>
     </section>
     <section class="mvs-content">
       <div class="mv">
         <section class="mv-item" v-for="i in mvs">
-          <el-image style="width: 300px; height: 180px; border-radius: 20px;" :src="i.cover" fit="cover" />
+          <el-image style="width: 300px; height: 180px; border-radius: 20px;" :src="i.cover" fit="cover" @click="emits('router-video', i.id)" />
           <div class="playcount">
             <div>
               <el-icon><VideoCamera /></el-icon>
@@ -31,7 +32,7 @@
           </div>
           <div>{{ i.name }}</div>
           <div class="author">
-            by <a>{{ i.artists[0].name }}</a>
+            by <a @click="emits('router-singer-detail', i.artists[0].id)">{{ i.artists[0].name }}</a>
           </div>
         </section>
       </div>
@@ -49,7 +50,7 @@
     }
 
     &-content {
-      display: flex;
+      display: flex; 
       flex-wrap: wrap;
 
       .mv {
@@ -78,7 +79,7 @@
             top: 0;
             height: 180px;
             width: 300px;
-            border-radius: 0 0 20px 20px;
+            border-radius: 20px;
             background-color: rgba(0, 0, 0, 0.5);
             opacity: 0;
             cursor: pointer;
@@ -105,7 +106,7 @@
             width: 100%;
             height: 30px;
             line-height: 30px;
-            border-radius: 20px;
+            border-radius: 0 0 20px 20px;
             padding: 0 20px;
             background: rgba(54,48,51,0.4);
             color: #fff;
@@ -121,8 +122,12 @@
             color: #aaa;
             font-size: 14px;
             padding-top: 5px;
+
+            & > a {
+              color: #000;
+            }
           }
-          .author:hover {
+          .author:hover a {
             cursor: pointer;
             text-decoration: underline;
           }

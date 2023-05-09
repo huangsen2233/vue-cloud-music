@@ -70,7 +70,7 @@
   <!-- 登录框 -->
   <LoginDiaLog :dialog-visible="dialogVisible" />
   <!-- 回到顶部 -->
-  <BaseBackTop :right="30" />
+  <BaseBackTop :right="50" />
 </template>
 
 <style lang="less" scoped>

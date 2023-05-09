@@ -35,9 +35,7 @@
           <el-image style="width: 120px; height: 120px" :src="j.coverImgUrl" fit="cover" />
           <div class="item-name">
             <span>{{ j.name }}</span>
-            <el-tooltip popper-class="description" :content="j.description" effect="light" :show-arrow="false" :show-after="500">
-              <div>简介: {{ j.description }}</div>
-            </el-tooltip>
+              <div :title="j.description">简介: {{ j.description }}</div>
             <span style="color: #999">{{ j.updateFrequency }}</span>
           </div>
         </div>

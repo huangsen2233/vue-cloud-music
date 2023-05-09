@@ -16,3 +16,16 @@ export type SongType = {
   artists: any[]
   duration: number
 }
+
+type ArtistsType = {
+  id: number
+  name: string
+}
+
+export type MvsType = {
+  id: number
+  artists: ArtistsType[]
+  cover: string
+  name: string
+  playCount: number
+}

@@ -11,6 +11,7 @@ export type MvDetailType = {
 export type MvsType = {
   id: number
   artistName: string
+  artistId: number
   name: string
   cover: string
   playCount: number

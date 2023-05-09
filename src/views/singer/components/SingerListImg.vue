@@ -18,9 +18,7 @@
       <el-image :src="i.picUrl" style="width: 100%; height: 100%;" fit="cover"></el-image>
       <div class="name">
         <a @click="routerToSingerDetail(i.id, i.fansCount)">{{ i.name }}</a>
-        <el-tooltip effect="light" :content="`${i.name}的个人主页`" placement="top" :show-arrow="false">
-          <el-avatar size="small" :src="i.img1v1Url" @click="routerToSingerDetail(i.id, i.fansCount)" />
-        </el-tooltip>
+        <el-avatar :title="`${i.name}的个人主页`" size="small" :src="i.img1v1Url" @click="routerToSingerDetail(i.id, i.fansCount)" />
       </div>
     </div>
   </div>
