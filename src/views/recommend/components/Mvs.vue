@@ -57,11 +57,11 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        gap: 20px;
 
         &-item {
           position: relative;
           width: 300px;
-          margin: 0 20px 20px 0;
 
           .el-image {
             position: relative;

@@ -46,7 +46,6 @@ request.interceptors.response.use(
     return response.data;
   },
   error => {
-    console.log('响应拦截器error', error);
     if (error.response.data.message === '亲爱的,暂无版权') {
       return error.response.data
     }

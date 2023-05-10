@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-  import { ref, inject, reactive, onMounted, onBeforeMount } from 'vue';
+  import { ref, inject, reactive, onMounted } from 'vue';
   import { useUserStore } from "@/stores/user";
   import { storeToRefs } from "pinia";
   import { useRouter } from "vue-router";
   import { searchHotApi } from "@/api/search";
   import type { IHotDetail } from "./type";
+  import type { ElDropdown } from 'element-plus';
 
   onMounted(() => {
     getHotDetail();
@@ -19,6 +20,7 @@
   const { profile, loginStatus } = storeToRefs(useUser);
   const keywords = ref('');
   const hotDetailList = ref<IHotDetail[]>([]);
+  const dropdownRef = ref<InstanceType<typeof ElDropdown>>();
 
   // 获取热搜详情
   const getHotDetail = async () => {
@@ -29,11 +31,6 @@
   };
 
   // 路由跳转到搜索页
-  
-  /**
-   * bug： 点击搜索图标，下拉框一起出来了
-   */
-
   const routerToSearch = async () => {
     if (keywords.value.length === 0) {
       return ElMessage({ message: '请先输入关键字再搜索!', type: 'warning'});
@@ -43,7 +40,7 @@
 
   // 搜索下拉菜单点击事件
   const searchCommand = (command: any) => {
-    console.log('下拉菜单点击', command);
+    // console.log('下拉菜单点击', command);
     keywords.value = command.searchWord;
     routerToSearch();
   };
@@ -57,10 +54,10 @@
 <template>
   <div class="header-profile">
     <!-- 搜索框 -->
-    <el-dropdown trigger="click" max-height="300px" placement="bottom" @command="searchCommand"> 
-      <el-input v-model="keywords" placeholder="请输入歌曲/歌手/视频" size="large">
-        <template #prefix>
-          <el-icon class="el-input__icon" @click="routerToSearch"><Search /></el-icon>
+    <el-dropdown ref="dropdownRef" trigger="contextmenu" max-height="300px" placement="bottom" @command="searchCommand"> 
+      <el-input v-model="keywords" @keyup.enter.native="routerToSearch" placeholder="请输入歌曲/歌手/视频" size="large">
+        <template #prepend>
+          <el-button icon="Search" @click="routerToSearch" />
         </template>
       </el-input>
       <template #dropdown>
