@@ -54,3 +54,25 @@ export const getCommentMvApi = ({ id, limit = 20, offset = 0, before }: commentM
     params: { id, limit, offset, before }
   })
 }
+
+/**
+ * @description 视频详情
+ * @param {Number} id 必选参数，视频的id
+ * @returns Promise
+ */
+export const getVideoDetailApi = (id: number) => {
+  return request.get('/video/detail', {
+    params: { id }
+  })
+}
+
+/**
+ * @description 视频播放地址
+ * @param {Number} id 必选参数，视频的id
+ * @returns Promise
+ */
+export const getVideoUrlApi = (id: number) => {
+  return request.get('/video/url', {
+    params: { id }
+  })
+}

@@ -46,7 +46,7 @@
   // 获取相似MV
   const getSimiMv = async (id: number) => {
     const result: any = await getSimiMvApi(id);
-    console.log("🚀 ~ file: video.vue:27 ~ getMvDetail ~ result: 相似mv", result)
+    // console.log("🚀 ~ file: video.vue:27 ~ getMvDetail ~ result: 相似mv", result)
     mvs.value.length = 0;
     result.mvs.forEach((item: any) => {
       const { id, artistName, artistId, name, cover, playCount, duration } = item;

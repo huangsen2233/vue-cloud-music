@@ -4,7 +4,6 @@
   import { count } from '@/utils/count';
 
   const routeToPlaylistDetail = inject('router-playlist-detail') as (id: number) => void;
-  // const routeToSingerDetail = inject('router-singer-detail') as (id: number) => void;
 
   const { url, name, playCount, creatorName, creatorUrl, createTime, signature, tags } = defineProps<{
     id: number

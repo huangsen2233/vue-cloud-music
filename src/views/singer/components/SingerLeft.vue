@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-  import { ref, reactive, inject } from 'vue';
+  import { ref, reactive } from 'vue';
   import type { titleType } from "../type";
-
-  const switchType = inject('switch-type') as (params: titleType) => void
+  
+  const emits = defineEmits<{
+    (event: 'switch-type', params: titleType): void
+  }>();
 
   const collapseList = [
     { title: '全部', name: -1 },
@@ -28,7 +30,7 @@
   const changeSinger = (index1: number, index2: number, i: any, j: any) => {
     isActive1.value = index1;
     isActive2.value = index2;
-    switchType({ area: i.name, type: j.name, title: `${i.title}${j.title}` });
+    emits('switch-type', { area: i.name, type: j.name, title: `${i.title}${j.title}` });
   };
 </script>
 

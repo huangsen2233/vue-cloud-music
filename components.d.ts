@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ArtistList: typeof import('./src/components/artistList/ArtistList.vue')['default']
     BaseBackTop: typeof import('./src/components/common/BaseBackTop.vue')['default']
     BasePagination: typeof import('./src/components/common/BasePagination.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -53,9 +54,12 @@ declare module '@vue/runtime-core' {
     HeaderMenu: typeof import('./src/components/layout/header/HeaderMenu.vue')['default']
     HeaderProfile: typeof import('./src/components/layout/header/HeaderProfile.vue')['default']
     LoginDiaLog: typeof import('./src/components/dialog/LoginDiaLog.vue')['default']
+    Mvs: typeof import('./src/components/mvs/Mvs.vue')['default']
     PlaylistItem: typeof import('./src/components/playlistItem/PlaylistItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SongTable: typeof import('./src/components/songTable/SongTable.vue')['default']
+    Video: typeof import('./src/components/videos/Video.vue')['default']
+    Videos: typeof import('./src/components/videos/Videos.vue')['default']
   }
 }

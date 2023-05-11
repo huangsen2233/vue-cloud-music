@@ -3,8 +3,8 @@
   import { useRouter } from 'vue-router';
   import { artistApi } from "@/api/singer";
   import type { artistsType, titleType, offsetType, initialType, paginationType } from "./type";
-  import SingerType from "./components/SingerType.vue";
-  import SingerList from "./components/SingerList.vue";
+  import SingerLeft from "./components/SingerLeft.vue";
+  import SingerRight from "./components/SingerRight.vue";
 
   onMounted(() => {
     getArtist({ ...artistParams.value });
@@ -62,27 +62,26 @@
   };
 
   // 跳转到歌手详情页
-  const routerToSingerDetail = (id: number, fansCount: number) => {
+  const routerToSingerDetail = (id: number, fansCount?: number) => {
     router.push({ path: '/singer-detail', query: { id, fansCount } });
   };
-
-  provide('tagTitle', tagTitle);
-  provide('artists', artists);
-  provide('paginationProp', paginationProp);
-  provide('switch-type', switchType);
-  provide('switch-initial', switchInitial);
-  provide('switch-offset', switchOffset);
-  provide('showPagination', showPagination);
-  provide('showTag', showTag);
-  provide('router-singer-detail', routerToSingerDetail);
 </script>
 
 <template>
   <div class="singer">
     <!-- 歌手类型 -->
-    <SingerType />
+    <SingerLeft @switch-type="switchType" />
     <!-- 歌手列表 -->
-    <SingerList />
+    <SingerRight 
+      :show-tag="showTag"
+      :tag-title="tagTitle" 
+      :artists="artists" 
+      :pagination-prop="paginationProp"
+      :show-pagination="showPagination"
+      @switch-initial="switchInitial"
+      @switch-offset="switchOffset"
+      @router-singerdetail="routerToSingerDetail"
+    />
   </div>
 </template>
 

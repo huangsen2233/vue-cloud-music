@@ -1,63 +1,186 @@
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
-  import { useRoute } from "vue-router";
+  import { ref, onMounted, provide, computed } from 'vue';
+  import { useRoute, useRouter } from "vue-router";
+  import { useMusicStore } from "@/stores/music";
   import { cloudSearchApi } from "@/api/search";
   import type { SearchType } from "./type";
-  import Single from "./components/Single.vue";
+  import type { TabPaneName } from 'element-plus';
+  import SongTable from '@/components/songTable/SongTable.vue';
+  import ArtistList from '@/components/artistList/ArtistList.vue';
+  import PlaylistItem from '@/components/playlistItem/PlaylistItem.vue';
+  import Mvs from '@/components/mvs/Mvs.vue';
+  import Videos from '@/components/videos/Videos.vue';
 
   const route = useRoute();
+  const router = useRouter();
+  const useMusic = useMusicStore();
 
   onMounted(() => {
-    const keywords = route.query.keywords as string;
-    cloudSearch({ ...cloudSearchParams.value, keywords });
+    cloudSearch({ ...cloudSearchParams.value });
   });
 
   const activeName = ref(1);
+  const activeLable = ref('单曲');
   const songs = ref<any>([]);
+  const artists = ref<any>([]);
+  const playlists = ref<any>([]);
+  const mvs = ref<any>([]);
+  const videos = ref<any>([]);
 
-  const cloudSearchParams = ref<SearchType>({ keywords: '', limit: 30, offset: 0, type: 1 });
+  const cloudSearchParams = ref<SearchType>({ keywords: route.query.keywords as string, limit: 30, offset: 0, type: 1 });
+
+  // 搜索结果的数量
+  const searchNumber = computed(() => {
+    let number;
+    switch (activeName.value) {
+      case 1: number = songs.value.length; break;
+      case 100: number = artists.value.length; break;
+      case 1000: number = playlists.value.length; break;
+      case 1004: number = mvs.value.length; break;
+      case 1014: number = videos.value.length; break;
+    };
+    return number;
+  });
 
   // 搜索
   const cloudSearch = async (params: SearchType) => {
-    const result: any = await cloudSearchApi(params);
+    const { result }: any = await cloudSearchApi(params);
     console.log("🚀 ~ file: HeaderProfile.vue:31 ~ searchSuggestApi ~ 搜索结果:", result)
+    switch (activeName.value) {
+      case 1: 
+        songs.value = [...result.songs]; 
+        activeLable.value = '单曲';
+        break;
+      case 100: 
+        artists.value = [...result.artists];
+        activeLable.value = '歌手';
+        break;
+      case 1000: 
+        playlists.value = [...result.playlists]; 
+        activeLable.value = '歌单';
+        break;
+      case 1004: 
+        mvs.value = [...result.mvs];
+        activeLable.value = 'MV';
+        break;
+      case 1014: 
+        videos.value = [...result.videos]; 
+        activeLable.value = '视频';
+        break;
+    };
   };
+
+  // 播放歌曲
+  const playSong = (row: any) => {
+    useMusic.getSongUrl(row);
+  };
+
+  // 路由跳转到歌单详情页
+  const routerToPlaylistDetail = (id: number) => {
+    router.push({ path: '/playlist-detail', query: { id } });
+  };
+
+  // 路由跳转到歌手详情页
+  const routerToSingerDetail = (id: number, fansCount?: number) => {
+    router.push({ path: '/singer-detail', query: { id, fansCount } });
+  };
+
+  // 路由跳转到MV视频
+  const routerToVideo = (id: number) => {
+    router.push({ path: '/video', query: { id } });
+  };
+  // tab的change事件
+  const handleTabChange = (name: TabPaneName) => {
+    cloudSearch({ ...cloudSearchParams.value, type: name as number})
+  };
+
+  const playVideo = (id: string) => {
+    console.log('播放视频---------', id);
+    
+  }
+
+  provide('router-playlist-detail', routerToPlaylistDetail);
 </script>
 
 <template>
-  <div>搜索内容: {{ route.query.keywords }}</div>
-  <el-tabs type="border-card" v-model="activeName">
+  <h3>搜索内容: <span style="color: var(--el-color-primary)">{{ route.query.keywords }}</span> , 找到{{ activeLable }}{{ searchNumber }}条</h3>
+  <el-tabs type="border-card" v-model="activeName" @tab-change="handleTabChange">
     <el-tab-pane label="单曲" :name="1">
       <template #label><b style="font-size: 16px;">单曲</b></template>
-      <!-- 单曲 -->
       <template #default>
-        <Single :songs="songs" />
+        <!-- 单曲 -->
+        <SongTable :songs="songs" @play-song="playSong" />
       </template>
     </el-tab-pane>
-    <el-tab-pane label="歌手" :name="1000">
+    <el-tab-pane label="歌手" :name="100">
       <template #label>
         <b style="font-size: 16px;">歌手</b>
       </template>
-      <!-- 歌手 -->
-      <template #default></template>
+      <template #default>
+        <!-- 歌手 -->
+        <ArtistList :artists="artists" @router-singerdetail="routerToSingerDetail" />
+      </template>
     </el-tab-pane>
-    <el-tab-pane label="歌单" :name="1002">
+    <el-tab-pane label="歌单" :name="1000">
       <template #label>
         <b style="font-size: 16px;">歌单</b>
       </template>
-      <!-- 歌单 -->
-      <template #default></template>
+      <template #default>
+        <!-- 歌单 -->
+        <div class="playlist">
+          <template v-for="item in playlists">
+            <PlaylistItem 
+              :id="item.id"
+              :url="item.coverImgUrl" 
+              :name="item.name" 
+              :play-count="item.playCount" 
+              :creator-name="item.creator.nickname"
+              :creator-url="item.creator.avatarUrl"
+              :user-id="item.creator.userId"
+              :create-time="item.createTime"
+              :signature="item.creator.signature"
+              :tags="item.tags"
+            />
+          </template>
+        </div>
+      </template>
     </el-tab-pane>
-    <el-tab-pane label="视频" :name="1018">
+    <el-tab-pane label="MV" :name="1004">
+      <template #label>
+        <b style="font-size: 16px;">MV</b>
+      </template>
+      <template #default>
+        <!-- MV -->      
+        <Mvs :mvs="mvs" @play-mv="routerToVideo" />
+      </template>
+    </el-tab-pane>
+    <el-tab-pane label="视频" :name="1014">
       <template #label>
         <b style="font-size: 16px;">视频</b>
       </template>
-      <!-- 视频 -->
-      <template #default></template>
+      <template #default>
+        <!-- 视频 -->
+        <Videos :videos="videos" @play-video="playVideo" />
+      </template>
     </el-tab-pane>
   </el-tabs>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
+  .playlist {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 0;
 
+    &-item {
+      flex: 15%;
+      margin: 0 calc(10% / 5) 30px 0;
+    }
+    
+    &-item:nth-child(6n) {
+      margin-right: 0;
+    }
+  }
 </style>

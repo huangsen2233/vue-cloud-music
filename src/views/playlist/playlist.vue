@@ -87,13 +87,7 @@
     router.push({ path: '/playlist-detail', query: { id } });
   };
 
-  // 路由跳转到歌手详情
-  /* const routeToSingerDetail = (id: number) => {
-    router.push({ path: '/singer-detail', query: { id } });
-  } */;
-
   provide('router-playlist-detail', routeToPlaylistDetail);
-  // provide('router-singer-detail', routeToSingerDetail);
 </script>
 
 <template>

@@ -64,7 +64,7 @@
   // 获取歌手MV
   const getArtistMv = async (id: number) => {
     const result: any = await getArtistMvApi(id);
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
+    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
     mvs.value = result.mvs;
   };
 

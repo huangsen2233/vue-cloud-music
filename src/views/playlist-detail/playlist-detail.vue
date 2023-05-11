@@ -35,14 +35,14 @@
     playlistDetail.value = result.playlist;
     let ids = result.playlist.trackIds.map((i: any) => i.id);
     const res: any = await getSongDetailApi(ids);
-    // console.log("🚀 ~ file: playlist-detail.vue:22 ~ getPlaylistDetail ~ 获取歌曲详情:", res.songs);
+    console.log("🚀 ~ file: playlist-detail.vue:22 ~ getPlaylistDetail ~ 获取歌曲详情:", res.songs);
     songs.value = [...res.songs];
   };
 
   // 获取歌单评论
   const getPlaylistComment = async (params: PlaylistCommentType) => {
     const result: any = await playlistCommentApi({ ...params });
-    console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", result);
+    // console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", result);
     commentPagination.value.total = result.total;
     newComments.value = result.comments;
     if (hotComments.value.length === 0) {

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted, watch } from 'vue';
+  import { ref, reactive, watch } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
   import { useMusicStore } from "@/stores/music";
   import { useUserStore } from "@/stores/user";
   import { storeToRefs } from "pinia";
-
   import type { PaginationType, PaginationParamsType } from "../type";
   import dianzanIcon from "@/assets/imgs/dianzan.png"
   import BasePagination from '@/components/common/BasePagination.vue';
+  import SongTable from '@/components/songTable/SongTable.vue';
 
   watch(() => props.newComments, (newVal, oldVal) => {
     currentComment.value = newVal;
@@ -38,8 +38,8 @@
   const currentCommentType = ref('new');
 
   // 表格的双击事件-播放歌曲
-  const handleDbClick = async (row: any) => {
-    console.log('双击播放的歌曲', row);
+  const playSong = async (row: any) => {
+    console.log('播放的歌曲', row);
     useMusic.getSongUrl(row);
   };
 
@@ -78,35 +78,7 @@
       <template #label>歌曲 {{ songs.length }}</template>
       <template #default>
         <!-- 歌曲 -->
-        <el-table 
-          :data="songs" 
-          stripe
-          :cell-style="{'text-align': 'center'}"
-          header-cell-class-name="table-header" 
-          @row-dblclick="handleDbClick"
-        >
-          <el-table-column type="index" label="序号" width="100" align="center" />
-          <el-table-column label="歌曲标题">
-            <template v-slot="{ row }: any">
-              <span style="cursor: pointer;">{{ row.name }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="时长">
-            <template v-slot="{ row }: any">
-              <span style="cursor: pointer;">{{ formatTimestamp(row.dt, 'mm:ss') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="歌手">
-            <template v-slot="{ row }: any">
-              <span style="cursor: pointer;">{{ row.ar[0].name  }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="专辑">
-          <template v-slot="{ row }: any">
-              <span style="cursor: pointer;">{{ row.al.name }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <SongTable :songs="songs" @play-song="playSong" />
       </template>
     </el-tab-pane>
     <el-tab-pane name="comment">
@@ -199,18 +171,6 @@
 </template>
 
 <style lang="less" scoped>
-  .el-table {
-    border: 1px solid #ccc;
-
-    :deep(.table-header) {
-      text-align: center;
-      background: linear-gradient(to bottom, #fff, #eee) !important;
-      font-size: 16px;
-      border-right: 1px solid #ccc !important;
-      border-bottom: 1px solid #ccc !important;
-    }
-  }
-
   .activeComment {
     color: var(--el-color-primary);
   }

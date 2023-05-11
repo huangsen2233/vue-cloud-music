@@ -32,7 +32,8 @@ type SearchType = {
  * @param {string} keywords 必选参数, 关键词
  * @param {number} limit    可选参数, 返回数量，默认30
  * @param {number} offset   可选参数, 偏移数量，用于分页 
- * @param {string} type     必选参数, 搜索类型, 默认1；1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合, 2000:声音
+ * @param {string} type     必选参数, 搜索类型, 默认 1 单曲；
+ * 1:单曲, 10:专辑, 100:歌手, 1000:歌单, 1002:用户, 1004:MV, 1006:歌词, 1009:电台, 1014:视频, 1018:综合, 2000:声音
  * @returns Promise
  */
 export const cloudSearchApi = ({ keywords, limit, offset, type }: SearchType) => {

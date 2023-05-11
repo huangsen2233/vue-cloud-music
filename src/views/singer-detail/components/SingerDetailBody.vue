@@ -132,7 +132,7 @@
         <template #default>
           <div class="mv">
             <section class="mv-item" v-for="i in mvs">
-              <el-image style="width: 280px; height: 150px; border-radius: 20px;" :src="i.imgurl" fit="cover" />
+              <el-image :src="i.imgurl" fit="cover" />
               <div class="playcount">
                 <span>{{ count(i.playCount) }}</span>
                 <span>{{ formatTimestamp(i.duration, 'mm:ss') }}</span>
@@ -204,14 +204,18 @@
     .mv {
       display: flex;
       flex-wrap: wrap;
+      gap: 20px;
 
       &-item {
         position: relative;
-        width: 280px;
-        margin: 0 20px 20px 0;
+        width: 320px;
+        // margin: 0 20px 20px 0;
 
         .el-image {
           position: relative;
+          width: 320px;
+          height: 180px;
+          border-radius: 20px;
         }
 
         .el-image:hover ~ .playicon {
@@ -224,8 +228,8 @@
           position: absolute;
           z-index: -1;
           top: 0;
-          height: 150px;
-          width: 280px;
+          height: 180px;
+          width: 320px;
           border-radius: 20px;
           background-color: rgba(0, 0, 0, 0.5);
           opacity: 0;
@@ -248,12 +252,12 @@
         .playcount {
           box-sizing: border-box;
           position: absolute;
-          top: 120px;
+          top: 150px;
           right: 0px;
           width: 100%;
           height: 30px;
           line-height: 30px;
-          border-radius: 20px;
+          border-radius: 0 0 20px 20px;
           text-align: right;
           padding: 0 20px;
           background: rgba(54,48,51,0.4);

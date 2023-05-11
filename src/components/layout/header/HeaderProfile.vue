@@ -26,7 +26,7 @@
   const getHotDetail = async () => {
     const { data }: any = await searchHotApi();
     hotDetailList.value.length = 0;
-    console.log("🚀 ~ file: HeaderProfile.vue:25 ~ getHotDetail ~ 热搜详情:", data)
+    // console.log("🚀 ~ file: HeaderProfile.vue:25 ~ getHotDetail ~ 热搜详情:", data)
     hotDetailList.value.push(...data);
   };
 
