@@ -1,18 +1,27 @@
 <script lang="ts" setup>
   import { ref, reactive, onMounted } from 'vue';
-  import type { MvDetailType, MvsType, commentMvType } from "./type"
+  import type { MvDetailType, MvsType, CommentMvType, CommentVideoType } from "./type"
   import { useRoute, useRouter } from 'vue-router';
   import { useVideoStore } from "@/stores/video";
   import { useUserStore } from "@/stores/user";
   import { storeToRefs } from "pinia";
-  import { getMvDetailApi, getSimiMvApi, getCommentMvApi } from "@/api/video";
+  import { 
+    getMvDetailApi, getSimiMvApi, getCommentMvApi, 
+    getVideoDetailApi, getCommentVideoApi
+  } from "@/api/video";
   import VideoLeft from "./components/VideoLeft.vue";
   import VideoRight from "./components/VideoRight.vue";
 
   onMounted(() => {
     window.scrollTo(0, 0);
-    const id = Number(route.query.id);
-    if(id) {
+    const reg = /\D/;
+    if (reg.test(route.query.id as string)) {
+      const id = String(route.query.id);
+      getVideoDetail(id);
+      getCommentVideo({ ...commentVideoParams.value });
+      useVideo.getVideoUrl(id);
+    } else {
+      const id = Number(route.query.id);
       getMvDetail(id);
       getSimiMv(id);
       getCommentMv({ ...commentMvParams.value });
@@ -25,8 +34,9 @@
   const useVideo = useVideoStore();
   const useUser = useUserStore();
   const { profile } = storeToRefs(useUser);
-  const { videoUrl } = storeToRefs(useVideo);
-  const commentMvParams = ref<commentMvType>({ id: Number(route.query.id), limit: 20, offset: 0 });
+  const { videoUrl, isMv } = storeToRefs(useVideo);
+  const commentMvParams = ref<CommentMvType>({ id: Number(route.query.id), limit: 20, offset: 0 });
+  const commentVideoParams = ref<CommentVideoType>({ id: String(route.query.id), limit: 20, offset: 0 });
   const comments: any = ref([]);
   const paginationProp = ref({ total: 0, currentPage: 1, pageSize: 20 });
 
@@ -55,9 +65,9 @@
   };
 
   // 获取MV评论
-  const getCommentMv = async (params: commentMvType) => {
+  const getCommentMv = async (params: CommentMvType) => {
     const result: any = await getCommentMvApi(params);
-    // console.log("🚀 ~ file: video.vue:53 ~ getCommentMv ~ 获取MV评论:", result)
+    console.log("🚀 ~ file: video.vue:53 ~ getCommentMv ~ 获取MV评论:", result)
     comments.value = [...result.comments];
     paginationProp.value.total = result.total;
   };
@@ -65,8 +75,25 @@
   // 切换mv
   const switchMv = (id: number) => {
     // console.log('视频id', id);
-    // useVideo.getMvUrl(id);
     router.push({ path: '/video', query: { id } });
+  };
+
+  // 获取视频详情 
+  const getVideoDetail = async (id: string) => {
+    const result: any = await getVideoDetailApi(id);
+    // console.log("🚀 ~ file: video.vue:27 ~ getMvDetail ~ result: 视频的详情", result)
+    const { creator: { nickname }, title, description, playTime, publishTime, shareCount, subscribeCount } = result.data;
+    mvDetail.value = { 
+      artistName: nickname, name: title, desc: description, playCount: playTime, publishTime, shareCount, subCount: subscribeCount
+    };
+  };
+
+  // 获取视频评论
+  const getCommentVideo = async (params: CommentVideoType) => {
+    const result: any = await getCommentVideoApi(params);
+    console.log("🚀 ~ file: video.vue:53 ~ getCommentMv ~ 获取视频的评论:", result)
+    comments.value = [...result.comments];
+    paginationProp.value.total = result.total;
   };
 
   // 路由跳转到歌手详情
@@ -84,7 +111,8 @@
 <template>
   <div class="video">
     <VideoLeft 
-      :video-url="videoUrl" 
+      :video-url="videoUrl"
+      :is-mv="isMv"
       :mv-detail="mvDetail" 
       :comments="comments" 
       :pagination-prop="paginationProp" 

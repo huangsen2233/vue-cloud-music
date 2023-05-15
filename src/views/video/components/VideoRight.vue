@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue';
+  import { ref, reactive, computed } from 'vue';
   import type { MvDetailType, MvsType } from "../type";
   import { formatTimestamp } from "@/utils/dateFormat";
 
@@ -12,13 +12,21 @@
     (event: 'switch-mv', id: number): void
     (event: 'router-singer-detail', id: number): void;
   }>();
+
+  const publishTime = computed(() => (time: string | number) => {
+    if (typeof(time) === 'string') {
+      return time;
+    } else {
+      return formatTimestamp(time)
+    }
+  })
 </script>
 
 <template>
   <div class="video-right">
     <section class="detail">
       <h3>MV简介</h3>
-      <div>发布时间: {{ mvDetail.publishTime }}</div>
+      <div>发布时间: {{ publishTime(mvDetail.publishTime) }}</div>
       <div>播放次数: {{ mvDetail.playCount }}</div>
       <div>{{ mvDetail.desc }}</div>
     </section>

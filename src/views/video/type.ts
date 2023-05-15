@@ -18,8 +18,15 @@ export type MvsType = {
   duration: number
 }
 
-export type commentMvType = {
+export type CommentMvType = {
   id: number
+  limit: number
+  offset: number
+  before?: string
+}
+
+export type CommentVideoType = {
+  id: string
   limit: number
   offset: number
   before?: string

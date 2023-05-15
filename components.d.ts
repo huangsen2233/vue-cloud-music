@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     ArtistList: typeof import('./src/components/artistList/ArtistList.vue')['default']
     BaseBackTop: typeof import('./src/components/common/BaseBackTop.vue')['default']
     BasePagination: typeof import('./src/components/common/BasePagination.vue')['default']
+    Comment: typeof import('./src/components/comment/Comment.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']

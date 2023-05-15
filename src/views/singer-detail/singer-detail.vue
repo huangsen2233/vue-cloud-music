@@ -2,12 +2,11 @@
   import { ref, reactive, onActivated, onMounted } from 'vue';
   import { useRoute, useRouter } from "vue-router";
   import { useMusicStore } from "@/stores/music";
-  import { useVideoStore } from "@/stores/video";
   import { 
     getArtistDetailApi, getArtistAlbumApi, getArtistMvApi, 
     getArtistDescApi, getAlbumApi
   } from '@/api/singer';
-  import type { ArtistAlbumType, PaginationPropType } from "./type";
+  import type { ArtistAlbumType, PaginationPropType, MvType } from "./type";
   import SingerDetailHeader from "./components/SingerDetailHeader.vue";
   import SingerDetailBody from "./components/SingerDetailBody.vue";
 
@@ -24,7 +23,6 @@
   const route = useRoute();
   const router = useRouter();
   const useMusic = useMusicStore();
-  const useVideo = useVideoStore();
 
   const artistAlbumParams = ref<ArtistAlbumType>({ id: 0, limit: 10, offset: 0 });
   const artist = ref<any>({});
@@ -35,7 +33,7 @@
   const activeCollapse = ref(0);
   const hotAlbums = ref<any[]>([]);
   const paginationProp = ref<PaginationPropType>({ total: 0, currentPage: 1, pageSize: 10 });
-  const mvs = ref<any[]>([]);
+  const mvs = ref<MvType[]>([]);
 
   const briefDesc = ref('');
   const introduction = ref<any[]>([]);
@@ -52,7 +50,7 @@
   // 获取歌手专辑
   const getArtistAlbum = async (params: ArtistAlbumType) => {
     const result: any = await getArtistAlbumApi(params);
-    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", result)
+    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", result)
     for(let i = 0; i < result.hotAlbums.length; i++) {
       const albumData: any = await getAlbumApi(result.hotAlbums[i].id);
       result.hotAlbums[i].songs = [...albumData.songs];
@@ -65,7 +63,11 @@
   const getArtistMv = async (id: number) => {
     const result: any = await getArtistMvApi(id);
     console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
-    mvs.value = result.mvs;
+    mvs.value.length = 0;
+    for (let i of result.mvs) {
+      const { imgurl, playCount, duration, id, name, publishTime, artist: { id: artistId, name: artistName } } = i;
+      mvs.value.push({ playCount, duration, id, name, publishTime, artistId, artistName, cover: imgurl });
+    }
   };
 
   // 获取歌手描述
@@ -92,7 +94,6 @@
   // 获取MV地址
   const playMv = async (mvid: number) => {
     // console.log('mv的id', mvid);
-    // useVideo.getMvUrl(mvid);
     router.push({ path: '/video', query: { id: mvid } });
   };
 </script>

@@ -3,13 +3,13 @@
   import { useRoute, useRouter } from "vue-router";
   import { useMusicStore } from "@/stores/music";
   import { cloudSearchApi } from "@/api/search";
-  import type { SearchType } from "./type";
+  import { getVideoDetailApi, getVideoUrlApi } from "@/api/video";
+  import type { SearchType, MvType } from "./type";
   import type { TabPaneName } from 'element-plus';
   import SongTable from '@/components/songTable/SongTable.vue';
   import ArtistList from '@/components/artistList/ArtistList.vue';
   import PlaylistItem from '@/components/playlistItem/PlaylistItem.vue';
   import Mvs from '@/components/mvs/Mvs.vue';
-  import Videos from '@/components/videos/Videos.vue';
 
   const route = useRoute();
   const router = useRouter();
@@ -24,7 +24,7 @@
   const songs = ref<any>([]);
   const artists = ref<any>([]);
   const playlists = ref<any>([]);
-  const mvs = ref<any>([]);
+  const mvs = ref<MvType[]>([]);
   const videos = ref<any>([]);
 
   const cloudSearchParams = ref<SearchType>({ keywords: route.query.keywords as string, limit: 30, offset: 0, type: 1 });
@@ -60,11 +60,22 @@
         activeLable.value = '歌单';
         break;
       case 1004: 
-        mvs.value = [...result.mvs];
+        mvs.value.length = 0;
+        for (let i of result.mvs) {
+          const { cover, playCount, duration, id, name, artistId, artistName, publishTime } = i;
+          mvs.value.push({ cover, playCount, duration, id, name, artistId, artistName, publishTime })
+        }
         activeLable.value = 'MV';
         break;
       case 1014: 
-        videos.value = [...result.videos]; 
+        mvs.value.length = 0;
+        for (let i of result.videos) {
+          const { coverUrl, playTime, durationms, vid, title, creator } = i;
+          mvs.value.push({ 
+            cover: coverUrl, playCount: playTime, duration: durationms, id: vid, 
+            name: title, artistId: creator[0].userId, artistName: creator[0].userName
+          });
+        }
         activeLable.value = '视频';
         break;
     };
@@ -86,18 +97,14 @@
   };
 
   // 路由跳转到MV视频
-  const routerToVideo = (id: number) => {
+  const routerToVideo = (id: number | string) => {
     router.push({ path: '/video', query: { id } });
   };
+  
   // tab的change事件
   const handleTabChange = (name: TabPaneName) => {
     cloudSearch({ ...cloudSearchParams.value, type: name as number})
   };
-
-  const playVideo = (id: string) => {
-    console.log('播放视频---------', id);
-    
-  }
 
   provide('router-playlist-detail', routerToPlaylistDetail);
 </script>
@@ -118,7 +125,7 @@
       </template>
       <template #default>
         <!-- 歌手 -->
-        <ArtistList :artists="artists" @router-singerdetail="routerToSingerDetail" />
+        <ArtistList :artists="artists" @router-singer-detail="routerToSingerDetail" />
       </template>
     </el-tab-pane>
     <el-tab-pane label="歌单" :name="1000">
@@ -139,7 +146,7 @@
               :user-id="item.creator.userId"
               :create-time="item.createTime"
               :signature="item.creator.signature"
-              :tags="item.tags"
+              :tags="item.creator.expertTags"
             />
           </template>
         </div>
@@ -151,7 +158,7 @@
       </template>
       <template #default>
         <!-- MV -->      
-        <Mvs :mvs="mvs" @play-mv="routerToVideo" />
+        <Mvs :mvs="mvs" @play-mv="routerToVideo" @router-singer-detail="routerToSingerDetail" />
       </template>
     </el-tab-pane>
     <el-tab-pane label="视频" :name="1014">
@@ -160,7 +167,7 @@
       </template>
       <template #default>
         <!-- 视频 -->
-        <Videos :videos="videos" @play-video="playVideo" />
+        <Mvs :mvs="mvs" @play-mv="routerToVideo" @router-singer-detail="routerToSingerDetail" />
       </template>
     </el-tab-pane>
   </el-tabs>

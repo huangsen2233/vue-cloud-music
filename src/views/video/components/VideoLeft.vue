@@ -7,6 +7,7 @@
 
   const props = defineProps<{
     videoUrl: string
+    isMv: boolean
     mvDetail: MvDetailType
     comments: any[]
     paginationProp: PaginationPropType
@@ -27,7 +28,7 @@
 <template>
   <div class="video-left">
     <h3>
-      <el-tag type="danger" size="large">MV</el-tag>
+      <el-tag type="danger" size="large">{{ isMv ? 'MV' : '视频' }}</el-tag>
       {{ mvDetail.name }}
       <span class="author">{{ mvDetail.artistName }}</span>
     </h3>

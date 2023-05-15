@@ -3,7 +3,7 @@ import request from '@/utils/request';
 /**
  * @description MV地址
  * @param {Number} id 必选参数，mv的id
- * @param {Number} r: 分辨率,默认 1080,可从 /mv/detail 接口获取分辨率列表
+ * @param {Number} r  分辨率,默认 1080,可从 /mv/detail 接口获取分辨率列表
  * @returns Promise
  */
 export const getMvUrlApi = (id: number) => {
@@ -34,7 +34,7 @@ export const getSimiMvApi = (mvid: number) => {
   })
 }
 
-type commentMvType = {
+type CommentMvType = {
   id: number
   limit: number
   offset: number
@@ -43,13 +43,13 @@ type commentMvType = {
 
 /**
  * @description 获取MV评论
-* @param {number} - id 必选参数,mv的id
-* @param {number} - limit 可选参数，取出评论数量 , 默认为 20
-* @param {number} - offset: 可选参数，偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
-* @param {number} - before: 可选参数，分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+* @param {number} id     必选参数,mv的id
+* @param {number} limit  可选参数，取出评论数量 , 默认为 20
+* @param {number} offset 可选参数，偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+* @param {number} before 可选参数，分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
 * @returns Promise
 */
-export const getCommentMvApi = ({ id, limit = 20, offset = 0, before }: commentMvType) => {
+export const getCommentMvApi = ({ id, limit = 20, offset = 0, before }: CommentMvType) => {
   return request.get('/comment/mv', {
     params: { id, limit, offset, before }
   })
@@ -57,10 +57,10 @@ export const getCommentMvApi = ({ id, limit = 20, offset = 0, before }: commentM
 
 /**
  * @description 视频详情
- * @param {Number} id 必选参数，视频的id
+ * @param {string} id 必选参数，视频的id
  * @returns Promise
  */
-export const getVideoDetailApi = (id: number) => {
+export const getVideoDetailApi = (id: string) => {
   return request.get('/video/detail', {
     params: { id }
   })
@@ -68,11 +68,31 @@ export const getVideoDetailApi = (id: number) => {
 
 /**
  * @description 视频播放地址
- * @param {Number} id 必选参数，视频的id
+ * @param {string} id 必选参数，视频的id
  * @returns Promise
  */
-export const getVideoUrlApi = (id: number) => {
+export const getVideoUrlApi = (id: string) => {
   return request.get('/video/url', {
     params: { id }
+  })
+}
+
+type CommentVideoType = {
+  id: string
+  limit: number
+  offset: number
+  before?: string
+}
+/**
+ * @description 获取视频评论
+* @param {string} id     必选参数,视频的id
+* @param {number} limit  可选参数，取出评论数量 , 默认为 20
+* @param {number} offset 可选参数，偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+* @param {number} before 可选参数，分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+* @returns Promise
+*/
+export const getCommentVideoApi = ({ id, limit = 20, offset = 0, before }: CommentVideoType) => {
+  return request.get('/comment/video', {
+    params: { id, limit, offset, before }
   })
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive} from 'vue';
+  import { ref, reactive } from 'vue';
   import { formatTimestamp } from '@/utils/dateFormat';
   import { count } from '@/utils/count';
 
@@ -24,7 +24,9 @@
         <el-icon><VideoPlay /></el-icon>
       </div>
       <div>{{ i.title }}</div>
-      <div class="author">by <span>{{ i.creator[0].userName }}</span></div>
+      <div class="author">
+        by <span>{{ i.creator[0].userName }}</span>
+      </div>
     </section>
   </div>
 </template>

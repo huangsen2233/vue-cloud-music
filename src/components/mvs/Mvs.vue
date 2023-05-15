@@ -1,21 +1,40 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted} from 'vue';
+  import { ref, reactive, computed } from 'vue';
   import { formatTimestamp } from '@/utils/dateFormat';
   import { count } from '@/utils/count';
 
+  type MvType = {
+    cover: string
+    playCount: number 
+    duration: number 
+    id: number | string, 
+    name: string 
+    artistId: number 
+    artistName: string 
+    publishTime?: string
+  }
+
   const props = defineProps<{
-    mvs: any[]
+    mvs: MvType[]
   }>();
 
   const emits = defineEmits<{
-    (event: 'play-mv', id: number): void
+    (event: 'play-mv', id: number | string): void
+    (event: 'router-singer-detail', id: number): void
   }>();
+
+  const showMvTag = computed(() => {
+    return (id: number | string) => {
+      const reg = /\D/;
+      return reg.test(String(id)) ? false : true;
+    }
+  });
 </script>
 
 <template>
   <div class="mv">
     <section class="mv-item" v-for="i in mvs">
-      <el-image :src="i.imgurl ?? i.cover" fit="cover" />
+      <el-image :src="i.cover" fit="cover" />
       <div class="playcount">
         <span>{{ count(i.playCount) }}</span>
         <span>{{ formatTimestamp(i.duration, 'mm:ss') }}</span>
@@ -23,11 +42,15 @@
       <div class="playicon" @click="emits('play-mv', i.id)">
         <el-icon><VideoPlay /></el-icon>
       </div>
-      <div>
-        <el-tag>MV</el-tag>
+      <div class="name">
+        <el-tag v-if="showMvTag(i.id)">MV</el-tag>
         {{ i.name }}
       </div>
-      <div>{{ i.publishTime }}</div>
+      <div class="author name">
+        by
+        <a @click="emits('router-singer-detail', i.artistId)">{{ i.artistName }}</a>
+        <span>{{ i.publishTime }}</span>
+      </div>
     </section>
   </div>
 </template>
@@ -96,6 +119,29 @@
         color: #fff;
         display: flex;
         justify-content: space-between;
+      }
+
+      .author {
+        font-size: 14px;
+        color: #aaa;
+
+        & > a {
+          color: #000;
+        }
+
+        & > a:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+
+        & > span {
+          color: #000;
+          padding-left: 20px;
+        }
+      }
+
+      .name {
+        padding: 5px 0;
       }
     }
   }

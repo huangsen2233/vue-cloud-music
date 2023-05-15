@@ -2,7 +2,6 @@
   import { ref, provide, onMounted } from 'vue';
   import { useUserStore } from "@/stores/user";
   import { loginStatusApi, logoutApi } from "@/api/login";
-  import Login from "../login/login.vue"
   import Header from "@/components/layout/header/Header.vue";
   import Footer from "@/components/layout/footer/Footer.vue";
   import LoginDiaLog from "@/components/dialog/LoginDiaLog.vue";

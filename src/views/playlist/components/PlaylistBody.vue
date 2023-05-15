@@ -9,8 +9,8 @@
 </script>
 
 <template>
-  <div class="playlists">
-    <div class="playlists-item" v-for="item in playLists" :key="item"> 
+  <div class="playlist">
+    <template v-for="item in playLists" :key="item"> 
       <PlaylistItem 
         :id="item.id"
         :url="item.coverImgUrl" 
@@ -23,12 +23,12 @@
         :signature="item.creator.signature"
         :tags="item.tags"
       />
-    </div>
+    </template>
   </div>
 </template>
 
 <style lang="less" scoped>
-  .playlists {
+  .playlist {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

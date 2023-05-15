@@ -1,15 +1,16 @@
 <script lang="ts" setup>
   import { ref, reactive, computed } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
-  import type { PaginationPropType } from "../type";
+  import type { PaginationPropType, MvType } from "../type";
   import BasePagination from '@/components/common/BasePagination.vue';
+  import Mvs from '@/components/mvs/Mvs.vue';
 
   const props = defineProps<{
     activeName: number
     activeCollapse: number
     hotAlbums: any[]
     paginationProp: PaginationPropType
-    mvs: any[]
+    mvs: MvType[]
     briefDesc: string
     introduction: any[]
   }>();
@@ -55,10 +56,9 @@
     emits('change-pagination', params)
   };
 
-  // 播放mv
-  const playVideo = () => {
-    console.log('播放mv');
-    
+  // 路由跳转到MV视频
+  const routerToVideo = (mvid: number) => {
+    emits('play-mv', mvid)
   };
 </script>
 
@@ -128,22 +128,9 @@
       </el-tab-pane>
       <el-tab-pane label="MV" :name="2">
         <template #label>MV {{ mvs.length }}</template>
-        <!-- mv视频 -->
+        <!-- mv -->
         <template #default>
-          <div class="mv">
-            <section class="mv-item" v-for="i in mvs">
-              <el-image :src="i.imgurl" fit="cover" />
-              <div class="playcount">
-                <span>{{ count(i.playCount) }}</span>
-                <span>{{ formatTimestamp(i.duration, 'mm:ss') }}</span>
-              </div>
-              <div class="playicon" @click="emits('play-mv', i.id)">
-                <el-icon><VideoPlay /></el-icon>
-              </div>
-              <div>{{ i.name }}</div>
-              <div>{{ i.publishTime }}</div>
-            </section>
-          </div>
+          <Mvs :mvs="mvs" @play-mv="routerToVideo" />
         </template>
       </el-tab-pane>
       <el-tab-pane label="个人介绍" :name="3">
@@ -199,73 +186,6 @@
 
     .el-pagination {
       padding: 20px 0;
-    }
-
-    .mv {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-
-      &-item {
-        position: relative;
-        width: 320px;
-        // margin: 0 20px 20px 0;
-
-        .el-image {
-          position: relative;
-          width: 320px;
-          height: 180px;
-          border-radius: 20px;
-        }
-
-        .el-image:hover ~ .playicon {
-          opacity: 1;
-          z-index: 1;
-        }
-
-        .playicon {
-          box-sizing: border-box;
-          position: absolute;
-          z-index: -1;
-          top: 0;
-          height: 180px;
-          width: 320px;
-          border-radius: 20px;
-          background-color: rgba(0, 0, 0, 0.5);
-          opacity: 0;
-          cursor: pointer;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-
-          &:hover {
-            opacity: 1;
-            z-index: 1;
-          }
-
-          .el-icon {
-            font-size: 80px;
-            color: #fff;
-          }
-        }
-
-        .playcount {
-          box-sizing: border-box;
-          position: absolute;
-          top: 150px;
-          right: 0px;
-          width: 100%;
-          height: 30px;
-          line-height: 30px;
-          border-radius: 0 0 20px 20px;
-          text-align: right;
-          padding: 0 20px;
-          background: rgba(54,48,51,0.4);
-          color: #fff;
-          display: flex;
-          justify-content: space-between;
-        }
-      }
     }
 
     .introduce {

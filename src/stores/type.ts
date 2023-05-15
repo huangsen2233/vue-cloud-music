@@ -12,4 +12,5 @@ export interface IMusic {
 
 export interface IVideo {
   videoUrl: string
+  isMv: boolean
 }
