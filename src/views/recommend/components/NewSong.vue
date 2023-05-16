@@ -29,8 +29,12 @@
         </div>
         <div class="item-name">
           <h4 style="margin: 0 0 20px;">{{ i.name }}</h4>
-          <div class="author" v-for="j in i.song.artists">
-            by <a @click="emits('router-singer-detail', j.id)">{{ j.name }}</a>
+          <div class="author">
+            by 
+            <template v-for="(j, index) in i.song.artists">
+              <a @click="emits('router-singer-detail', j.id)">{{ j.name }}</a>
+              <span v-if="index !== i.song.artists.length - 1"> / </span>
+            </template>
           </div>
         </div>
       </div>

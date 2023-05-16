@@ -1,28 +1,45 @@
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue';
-  import type { MvDetailType, PaginationPropType } from "../type";
-  import { formatTimestamp } from "@/utils/dateFormat";
+  import { ref, watch } from 'vue';
+  import type { MvDetailType, PaginationPropType, PaginationParamsType } from "../type";
   import dianzanIcon from "@/assets/imgs/dianzan.png";
-  import BasePagination from '@/components/common/BasePagination.vue';
+  import Comment from '@/components/comment/Comment.vue';
 
   const props = defineProps<{
     videoUrl: string
     isMv: boolean
     mvDetail: MvDetailType
-    comments: any[]
-    paginationProp: PaginationPropType
     profile: any
+    hotComments: any[]
+    newComments: any[]
+    commentPagination: PaginationPropType
   }>();
 
   const emits = defineEmits<{
-    (event: 'change-pagination', params: any): void
+    (event: 'change-comment-pagination', params: PaginationParamsType): void
   }>();
 
-  const changePagination = (params: any) => {
-    emits('change-pagination', params);
+  watch(() => props.newComments, (newVal, oldVal) => {
+    currentComment.value = newVal;
+  });
+
+  const currentComment = ref<any[]>([]);
+  const currentCommentType = ref('new');
+
+  // 切换评论类型
+  const changeCommentType = (type: string) => {
+    if (type === 'hot') {
+      currentComment.value = [...props.hotComments];
+      currentCommentType.value = type;
+    } else {
+      currentComment.value = [...props.newComments];
+      currentCommentType.value = type;
+    }
   };
 
-  const inputVal = ref('');
+  // 评论的分页事件
+  const changeCommentPagination = (params: PaginationParamsType) => {
+    emits('change-comment-pagination', params);
+  };
 </script>
 
 <template>
@@ -34,57 +51,23 @@
     </h3>
     <video controls :src="videoUrl" width="960" height="540"></video>
     <section style="padding-top: 30px">
-      <el-button round size="large" type="primary" plain icon="Select">点赞</el-button>
+      <el-button round size="large" type="primary" plain icon="Select">点赞 ({{ mvDetail.likedCount }})</el-button>
       <el-button round size="large" type="primary" plain icon="FolderAdd">收藏 ({{ mvDetail.subCount }})</el-button>
       <el-button round size="large" type="primary" plain icon="Share">分享 ({{ mvDetail.shareCount }})</el-button>
     </section>
     <section style="margin: 30px 0; border-bottom: 5px solid var(--el-color-primary);">
       <h2>
-        评论<span style="font-size: 16px; font-weight: normal; padding-left: 15px;">共{{ paginationProp.total }}条评论</span>
+        评论<span style="font-size: 16px; font-weight: normal; padding-left: 15px;">共{{ commentPagination.total }}条评论</span>
       </h2>
     </section>
-    <section style="display: flex; padding: 10px 0 20px;">
-      <el-image :src="profile?.avatarUrl" style="width: 100px; height: 100px; border: 1px solid #fff;" fit="contain" />
-      <div style="flex: 1; padding-left: 10px;">
-        <el-input style="100%" type="textarea" :rows="3" placeholder="评论一下~~~" v-model="inputVal"></el-input>
-        <el-button style="margin-top: 10px;;" type="primary">评论</el-button>
-      </div>
-    </section>
-    <template v-for="i in comments">
-      <div class="comment-item">
-        <el-avatar style="width: 80px; height: 80px;" fit="scale-down" :src="i.user.avatarUrl" />
-        <div class="contents">
-          <div class="user">
-            <a style="color: var(--el-color-primary)">{{ i.user.nickname }}</a> :
-            <span style="padding-left: 5px;">{{ i.content }}</span>
-          </div>
-          <div v-if="i.beReplied.length > 0" style="margin: 15px 0;">
-            <template v-for="j in i.beReplied as any[]">
-              <div class="replied">
-                <a style="color: var(--el-color-primary)">{{ j.user.nickname }}</a> :
-                <span style="padding-left: 5px;">{{ j.content }}</span>
-              </div>
-            </template>
-          </div>
-          <div class="time">
-            <span>{{ formatTimestamp(i.time, 'YYYY-MM-DD') }}</span>  
-            <span style="display: flex; align-items: center;">
-              <el-image style="width: 18px; height: 18px; cursor: pointer; padding: 0 5px;" :src="dianzanIcon"></el-image>
-              <a>{{ i.likedCount }}</a>
-              <el-icon style="cursor: pointer; padding: 0 5px 0 15px;"><ChatDotSquare /></el-icon>
-              <a>回复</a>
-            </span>
-          </div>
-        </div>
-      </div>
-    </template>
-    <BasePagination 
-      :total="paginationProp.total"
-      :current-page="paginationProp.currentPage"
-      :page-size="paginationProp.pageSize"
-      :page-sizes="[20, 30, 40, 50]"
-      @on-page="changePagination"
-      @on-size="changePagination"
+    <Comment 
+      :profile="profile" 
+      :current-comment-type="currentCommentType" 
+      :current-comment="currentComment" 
+      :comment-pagination="commentPagination"
+      :dianzan-icon="dianzanIcon"
+      @change-comment-type="changeCommentType"
+      @change-comment-pagination="changeCommentPagination"
     />
   </div>
 </template>
@@ -104,7 +87,7 @@
       padding-left: 10px;
     }
 
-    .comment-item {
+    /* .comment-item {
       display: flex;
       padding: 15px 0;
       border-bottom: 1px solid #ccc;
@@ -136,10 +119,6 @@
           text-decoration: underline;
         }
       }
-    }
-
-    .el-pagination {
-      padding: 40px 0 30px;
-    }
+    } */
   }
 </style>

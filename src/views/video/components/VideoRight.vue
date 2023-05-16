@@ -6,6 +6,7 @@
   const props = defineProps<{
     mvDetail: MvDetailType
     mvs: MvsType[]
+    isMv: boolean
   }>();
 
   const emits = defineEmits<{
@@ -17,7 +18,7 @@
     if (typeof(time) === 'string') {
       return time;
     } else {
-      return formatTimestamp(time)
+      return formatTimestamp(time);
     }
   })
 </script>
@@ -25,7 +26,7 @@
 <template>
   <div class="video-right">
     <section class="detail">
-      <h3>MV简介</h3>
+      <h3>{{ isMv ? 'MV' : '视频' }}简介</h3>
       <div>发布时间: {{ publishTime(mvDetail.publishTime) }}</div>
       <div>播放次数: {{ mvDetail.playCount }}</div>
       <div>{{ mvDetail.desc }}</div>
@@ -42,20 +43,19 @@
           <section style="padding-left: 15px;">
             <div>{{ i.name }}</div>
             <div class="author" style="color: #999; padding-top: 10px;">
-              by <a @click="emits('router-singer-detail', i.artistId)">{{ i.artistName }}</a>
+              <span>by</span> 
+              <a v-if="i.artistId" @click="emits('router-singer-detail', i.artistId)">{{ i.artistName }}</a>
+              <a v-else>{{ i.userName }}</a>
             </div>
           </section>
         </div>
       </section>
     </section>
-
-    <!-- {{ mvDetail }} -->
   </div>
 </template>
 
 <style lang="less" scoped>
   .video-right {
-    padding: 0 20px;
 
     .detail {
       h3 {
@@ -102,6 +102,7 @@
 
             & > a {
               color: #000;
+              padding-left: 5px;
             }
 
             & > a:hover {

@@ -1,22 +1,27 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue'
   import { useMusicStore } from "@/stores/music";
-  import { storeToRefs } from 'pinia';
-
-  const useMusic = useMusicStore();
-  const { allSong } = storeToRefs(useMusic);
-  // console.log('音乐数组', allSong);
+  import FooterLeft from './FooterLeft.vue';
+  import FooterCenter from './FooterCenter.vue';
+  import FooterRight from './FooterRight.vue';
   
 </script>
 
 <template>
   <div class="audio">
-    <audio :src="allSong?.[0]?.url" autoplay loop controls></audio>
+    <FooterLeft />
+    <FooterCenter />
+    <FooterRight />
   </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
   .audio {
-    width: 60%;
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 </style>

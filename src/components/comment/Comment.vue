@@ -1,8 +1,33 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
+  import { formatTimestamp } from "@/utils/dateFormat";
+  import BasePagination from '@/components/common/BasePagination.vue';
 
-  const props = defineProps<{name: string}>();
-  const emits = defineEmits<{(event: 'on-click', params: number): void}>();
+  type PaginationType = {
+    currentPage: number
+    pageSize: number
+    total: number
+  }
+
+  type PaginationParamsType = {
+    currentPage: number
+    pageSize: number
+  }
+
+  const props = defineProps<{
+    profile: any
+    currentCommentType: string
+    currentComment: any[]
+    commentPagination: PaginationType
+    dianzanIcon: any
+  }>();
+
+  const emits = defineEmits<{
+    (event: 'change-comment-type', type: string): void
+    (event: 'change-comment-pagination', params: PaginationParamsType): void
+  }>();
+
+  const myComment = ref('');
 </script>
 
 <template>
@@ -15,8 +40,8 @@
   </section>
   <section>
     <div class="comment-type" style="display: flex;">
-      <h4 :class="[currentCommentType === 'new' ? 'activeComment' : '', 'normalComment']" style="padding-right: 20px;" @click="changeCommentType('new')">最新评论</h4>
-      <h4 :class="[currentCommentType === 'hot' ? 'activeComment' : '', 'normalComment']" @click="changeCommentType('hot')">热门评论</h4>
+      <h4 :class="[currentCommentType === 'new' ? 'activeComment' : '', 'normalComment']" style="padding-right: 20px;" @click="emits('change-comment-type', 'new')">最新评论</h4>
+      <h4 :class="[currentCommentType === 'hot' ? 'activeComment' : '', 'normalComment']" @click="emits('change-comment-type', 'hot')">热门评论</h4>
     </div>
     <template v-for="i in currentComment">
       <div class="comment-item">
@@ -53,8 +78,8 @@
       :current-page="commentPagination.currentPage"
       :page-size="commentPagination.pageSize"
       :page-sizes="[20, 30, 40, 50]"
-      @on-page="changeCommentPagination"
-      @on-size="changeCommentPagination"
+      @on-page="(params) => emits('change-comment-pagination', params)"
+      @on-size="(params) => emits('change-comment-pagination', params)"
     />
   </section>
 </template>
@@ -87,6 +112,10 @@
       justify-content: space-around;
       padding-left: 10px;
 
+      .user > span {
+        word-break: break-all;
+      }
+
       .time {
         display: flex;
         justify-content: space-between;
@@ -103,5 +132,9 @@
         text-decoration: underline;
       }
     }
+  }
+
+  .el-pagination {
+    padding: 40px 0 30px;
   }
 </style>

@@ -50,7 +50,7 @@
     .list {
       .item {
         display: flex;
-        padding: 15px;
+        padding: 15px 0;
         cursor: pointer;
 
         &-name {
@@ -59,7 +59,7 @@
           flex-direction: column;
           justify-content: space-around;
           width: calc(100% - 120px);
-          padding-left: 30px;
+          padding-left: 20px;
 
           & > div {
             overflow: hidden;

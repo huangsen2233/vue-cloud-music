@@ -35,11 +35,9 @@
 
 <template>
   <el-container>
-    <!-- 导航区 -->
     <el-header>
       <Header />
     </el-header>
-    <!-- 路由页面 -->
     <el-main>
       <el-card>      
         <router-view v-slot="{ Component }">
@@ -54,7 +52,6 @@
         </router-view>
       </el-card>
     </el-main>
-    <!-- 音乐栏 -->
     <el-footer>
       <Footer />
     </el-footer>
@@ -67,7 +64,7 @@
 
 <style lang="less" scoped>
   .el-container {
-    // background-color: rgba(245,245,245);
+    background-color: rgba(245,245,245);
     // height: 100vw;
     position: relative;
   }
@@ -84,12 +81,17 @@
     width: 70%;
     height: 100%;
     margin: 0 auto;
+
+    .el-card {
+      margin-bottom: 30px;
+    }
   }
 
   .el-footer {
     position: fixed;
     z-index: 999;
-    bottom: -90px;
+    // bottom: -90px;
+    bottom: 0;
     width: 100%;
     height: 100px;
     background: #ccc;

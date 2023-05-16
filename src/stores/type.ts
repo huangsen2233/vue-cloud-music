@@ -4,9 +4,20 @@ export interface IUser {
   profile: any
 }
 
+export type CurrentSongInfoType = {
+  id: number
+  picUrl: string
+  name: string
+  song: SongType
+}
+
+type SongType = {
+  artists: any[]
+  duration: number
+}
 export interface IMusic {
-  currentSong: any[]
-  allSong: any[]
+  currentSongInfo: CurrentSongInfoType
+  songData: any[]
   fee: number
 }
 

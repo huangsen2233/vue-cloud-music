@@ -5,8 +5,10 @@
   const props = defineProps<{
     songs: any[]
   }>();
+
   const emits = defineEmits<{
     (event: 'play-song', params: any): void
+    (event: 'router-singer-detail', id: number): void
   }>();
 </script>
 
@@ -42,7 +44,7 @@
       <el-table-column label="歌手">
         <template v-slot="{ row }: any">
           <div class="singer" v-for="(j, index) in row.ar">
-            <a>{{ j.name  }}</a>
+            <a @click="emits('router-singer-detail', j.id)">{{ j.name }}</a>
             <span v-if="index !== row.ar.length - 1"> / </span>
           </div>
         </template>

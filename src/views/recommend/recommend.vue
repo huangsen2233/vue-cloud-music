@@ -75,6 +75,7 @@
 
   // 播放新音乐
   const playMusic = (songInfo: NewSonglistType) => {
+    // console.log('播放音乐的信息', songInfo);
     useMusic.getSongUrl(songInfo);
   };
 

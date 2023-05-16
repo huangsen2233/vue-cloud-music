@@ -32,7 +32,7 @@
         </template>
         <template #default>
           <div class="singer" v-for="(j, index) in (i.list as any[])">
-            <el-image style="width: 200px; height: 200px" :src="j.img1v1Url" fit="cover" />
+            <el-image style="width: 180px; height: 180px" :src="j.img1v1Url" fit="cover" />
             <div class="singer-info">
               <h1>{{ index + 1 }}</h1>
               <b>{{ j.name }}</b>
@@ -50,13 +50,14 @@
   .el-tab-pane {
     display: flex;
     flex-wrap: wrap;
-    padding: 30px;
+    justify-content: space-around;
+    padding: 30px 0;
 
     .singer {
-      flex: 30%;
+      flex: 0 1 30%;
       display: flex;
       justify-content: space-around;
-      margin: 0 calc(10% / 3) 30px 0;
+      margin: 0 30px 30px 0;
 
       &-info {
         display: flex;

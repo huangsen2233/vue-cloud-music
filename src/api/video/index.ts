@@ -56,6 +56,17 @@ export const getCommentMvApi = ({ id, limit = 20, offset = 0, before }: CommentM
 }
 
 /**
+ * @description 获取MV点赞评论转发
+ * @param {Number} id 必选参数，mv的id
+ * @returns Promise
+ */
+export const getMvDetailInfoApi = (mvid: number) => {
+  return request.get('/mv/detail/info', {
+    params: { mvid }
+  })
+}
+
+/**
  * @description 视频详情
  * @param {string} id 必选参数，视频的id
  * @returns Promise
@@ -96,3 +107,26 @@ export const getCommentVideoApi = ({ id, limit = 20, offset = 0, before }: Comme
     params: { id, limit, offset, before }
   })
 }
+
+/**
+ * @description 相关视频
+ * @param {string} id 必选参数，视频的id
+ * @returns Promise
+ */
+export const getRelatedVideoApi = (id: string) => {
+  return request.get('/related/allvideo', {
+    params: { id }
+  })
+}
+
+/**
+ * @description 获取视频的点赞评论转发
+ * @param {string} vid 必选参数，mv的id
+ * @returns Promise
+ */
+export const getVideoDetailInfoApi = (vid: string) => {
+  return request.get('/video/detail/info', {
+    params: { vid }
+  })
+}
+

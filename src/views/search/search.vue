@@ -37,7 +37,7 @@
       case 100: number = artists.value.length; break;
       case 1000: number = playlists.value.length; break;
       case 1004: number = mvs.value.length; break;
-      case 1014: number = videos.value.length; break;
+      case 1014: number = mvs.value.length; break;
     };
     return number;
   });
@@ -116,7 +116,7 @@
       <template #label><b style="font-size: 16px;">单曲</b></template>
       <template #default>
         <!-- 单曲 -->
-        <SongTable :songs="songs" @play-song="playSong" />
+        <SongTable :songs="songs" @play-song="playSong" @router-singer-detail="routerToSingerDetail" />
       </template>
     </el-tab-pane>
     <el-tab-pane label="歌手" :name="100">

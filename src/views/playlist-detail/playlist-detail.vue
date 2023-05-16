@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import { ref, reactive, onActivated, onMounted } from 'vue';
-  import { useRoute } from "vue-router";
+  import { ref, reactive, onMounted } from 'vue';
+  import { useRoute, useRouter } from "vue-router";
   import { playlistDetailApi, playlistCommentApi, playlistSubscribersApi } from "@/api/playlist";
   import { getSongDetailApi } from "@/api/music";
   import type { PlaylistCommentType, PaginationType, PaginationParamsType, PlaylistSubscribersType } from "./type";
@@ -17,6 +17,7 @@
   });
 
   const route = useRoute();
+  const router = useRouter();
   const playlistDetail: any = ref({});
   const songs: any = ref([]);
   const activeName = ref('song'); 
@@ -76,6 +77,11 @@
     // console.log('当前的分页参数', { ...subscriberPagination.value, limit: params.pageSize, offset: params.currentPage - 1 });
     getPlaylistSubscribers({ ...subscriberPagination.value, id: Number(route.query.id), limit: params.pageSize, offset: (params.currentPage - 1) * params.pageSize });
   };
+
+  // 路由跳转到歌手详情
+  const routerToSingerDetail = (id: number) => {
+    router.push({ path: '/singer-detail', query: { id } })
+  };
 </script>
 
 <template>
@@ -91,6 +97,7 @@
     @tab-click="handleTabClick"
     @comment-pagination="commentChangePagination"
     @subscribers-pagination="collentChangePagination"
+    @router-singer-detail="routerToSingerDetail"
   />
 </template>
 

@@ -1,19 +1,20 @@
 import { defineStore } from "pinia";
-import type { IMusic } from "./type";
+import type { IMusic, CurrentSongInfoType } from "./type";
 import { checkSongApi, getSongUrlApi } from "@/api/music";
 
 export const useMusicStore = defineStore('music', {
   state: (): IMusic => ({
-    currentSong: [],
-    allSong: [],
+    currentSongInfo: { id: 0, picUrl: '', name: '', song: { artists: [], duration: 0 } },
+    songData: [],
     fee: 0  // 0 8是普通用户，1是vip用户
   }),
   actions: {
     // 获取歌曲url
-    async getSongUrl (songInfo: any) {
+    async getSongUrl (songInfo: CurrentSongInfoType) {
+      this.currentSongInfo = songInfo;
       const result: any = await getSongUrlApi([songInfo.id]);
       console.log("🚀 ~ file: music.ts:14 ~ getSongUrl ~ result: 音乐url", result)
-      this.allSong = result.data;
+      this.songData = result.data;
       this.fee = result.data[0].fee;
       if (!result.data[0].url) {
         return ElNotification({ title: 'Warning', message: `${songInfo.name} 暂无音源.`, type: 'warning', duration: 2000});
