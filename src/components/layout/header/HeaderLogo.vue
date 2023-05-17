@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
-  import logoPng from '@/assets/imgs/logo.png';
+  import logoPng from '@/assets/imgs/音乐logo.png';
 
 </script>
 

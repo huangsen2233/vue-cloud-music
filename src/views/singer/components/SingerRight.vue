@@ -66,16 +66,6 @@
     <section class="body">
       <!-- 歌手列表 -->
       <ArtistList :artists="artists" @router-singerdetail="(id, fansCount) => emits('router-singerdetail', id, fansCount)" />
-      <!-- <div class="img-list">
-        <div class="img-item" v-for="i in artists">
-          <el-image :src="i.picUrl" style="width: 100%; height: 100%;" fit="cover"></el-image>
-          <div class="name">
-            <a @click="emits('router-singerdetail', i.id, i.fansCount)">{{ i.name }}</a>
-            <el-avatar :title="`${i.name}的个人主页`" size="small" :src="i.img1v1Url" @click="emits('router-singerdetail', i.id, i.fansCount)" />
-          </div>
-        </div>
-      </div> -->
-      <!-- 分页组件 -->
       <BasePagination
         v-if="showPagination"
         :total="paginationProp.total"

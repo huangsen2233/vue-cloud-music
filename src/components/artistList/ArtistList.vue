@@ -12,7 +12,7 @@
 <template>
   <div class="img-list">
     <div class="img-item" v-for="i in artists">
-      <el-image :src="i.picUrl" style="width: 200px; height: 200px;" fit="cover"></el-image>
+      <el-image :src="i.picUrl" style="width: 200px; height: 200px;" fit="cover" loading="lazy"></el-image>
       <div class="name">
         <a @click="emits('router-singerdetail', i.id, i.fansCount)">{{ i.name }}</a>
         <el-avatar :title="`${i.name}的个人主页`" size="small" :src="i.img1v1Url" @click="emits('router-singerdetail', i.id, i.fansCount)" />

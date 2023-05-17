@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { ref, provide, onMounted } from 'vue';
   import { useUserStore } from "@/stores/user";
+  import { useMusicStore } from "@/stores/music";
+  import { storeToRefs } from 'pinia';
   import { loginStatusApi, logoutApi } from "@/api/login";
   import Header from "@/components/layout/header/Header.vue";
   import Footer from "@/components/layout/footer/Footer.vue";
@@ -12,6 +14,8 @@
   });
 
   const useUser = useUserStore();
+  const useMusic = useMusicStore();
+  const { currentSongInfo } = storeToRefs(useMusic);
 
   const dialogVisible = ref(false);
 
@@ -94,7 +98,8 @@
     bottom: 0;
     width: 100%;
     height: 100px;
-    background: #ccc;
+    // background-color: #ddd;
+    background: rgba(230, 230, 230);
     transition: all 0.5s;
   }
 

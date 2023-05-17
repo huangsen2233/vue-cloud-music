@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue'
-  import { useMusicStore } from "@/stores/music";
   import FooterLeft from './FooterLeft.vue';
   import FooterCenter from './FooterCenter.vue';
   import FooterRight from './FooterRight.vue';
@@ -20,6 +19,7 @@
     width: 80%;
     height: 100%;
     margin: 0 auto;
+    // padding: 0 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
