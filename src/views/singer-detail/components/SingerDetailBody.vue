@@ -25,18 +25,6 @@
 
   };
 
-  // mv播放次数
-  const count = computed(() => {
-    return function(value: number) {
-      if (String(value).length > 4) {
-        const str = value.toString();
-        return str.slice(0, str.length - 4) + '万';
-      } else {
-        return value + '次';
-      }
-    }
-  });
-
   // 个人介绍的文字换行
   const _introduction = computed(() => {
     return props.introduction.map(item => {

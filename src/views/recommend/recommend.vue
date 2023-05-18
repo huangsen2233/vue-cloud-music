@@ -74,8 +74,9 @@
   };
 
   // 播放新音乐
-  const playMusic = (songInfo: NewSonglistType) => {
-    // console.log('播放音乐的信息', songInfo);
+  const playMusic = (params: NewSonglistType) => {
+    const { id, name, picUrl, song: { artists, duration } } = params;
+    const songInfo = { picUrl, duration, songId: id, songName: name, artists };
     useMusic.getSongUrl(songInfo);
   };
 

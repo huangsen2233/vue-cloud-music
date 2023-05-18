@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4007692 */
-  src: url('iconfont.woff2?t=1684314545420') format('woff2'),
-       url('iconfont.woff?t=1684314545420') format('woff'),
-       url('iconfont.ttf?t=1684314545420') format('truetype');
+  src: url('iconfont.woff2?t=1684390863256') format('woff2'),
+       url('iconfont.woff?t=1684390863256') format('woff'),
+       url('iconfont.ttf?t=1684390863256') format('truetype');
 }
 
 .iconfont {
@@ -13,12 +13,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-24gl-playCircle:before {
-  content: "\ea6e";
+.icon-yinlebofang:before {
+  content: "\e60a";
 }
 
-.icon-shengyin:before {
-  content: "\e64d";
+.icon-shengyinguanbi:before {
+  content: "\e8b9";
+}
+
+.icon-shengyin1:before {
+  content: "\e8b8";
+}
+
+.icon-zantingbofang:before {
+  content: "\e694";
 }
 
 .icon-xiayigexiayishou:before {
@@ -33,16 +41,8 @@
   content: "\ea72";
 }
 
-.icon-icon_zanting:before {
-  content: "\e61a";
-}
-
 .icon-bofanglan-geci:before {
   content: "\e613";
-}
-
-.icon-shengyin_jingyin:before {
-  content: "\e60f";
 }
 
 .icon-shunxubofang:before {

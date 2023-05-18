@@ -6,18 +6,32 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "7594051",
-      "name": "24gl-playCircle",
-      "font_class": "24gl-playCircle",
-      "unicode": "ea6e",
-      "unicode_decimal": 60014
+      "icon_id": "14008241",
+      "name": "音乐播放 (3)",
+      "font_class": "yinlebofang",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
     },
     {
-      "icon_id": "629337",
+      "icon_id": "11372697",
+      "name": "声音关闭",
+      "font_class": "shengyinguanbi",
+      "unicode": "e8b9",
+      "unicode_decimal": 59577
+    },
+    {
+      "icon_id": "11372700",
       "name": "声音",
-      "font_class": "shengyin",
-      "unicode": "e64d",
-      "unicode_decimal": 58957
+      "font_class": "shengyin1",
+      "unicode": "e8b8",
+      "unicode_decimal": 59576
+    },
+    {
+      "icon_id": "1481347",
+      "name": "暂停播放",
+      "font_class": "zantingbofang",
+      "unicode": "e694",
+      "unicode_decimal": 59028
     },
     {
       "icon_id": "4508363",
@@ -41,25 +55,11 @@
       "unicode_decimal": 60018
     },
     {
-      "icon_id": "9220274",
-      "name": "icon_暂停",
-      "font_class": "icon_zanting",
-      "unicode": "e61a",
-      "unicode_decimal": 58906
-    },
-    {
       "icon_id": "25485114",
       "name": "播放栏-歌词",
       "font_class": "bofanglan-geci",
       "unicode": "e613",
       "unicode_decimal": 58899
-    },
-    {
-      "icon_id": "29743678",
-      "name": "声音_静音",
-      "font_class": "shengyin_jingyin",
-      "unicode": "e60f",
-      "unicode_decimal": 58895
     },
     {
       "icon_id": "1825146",

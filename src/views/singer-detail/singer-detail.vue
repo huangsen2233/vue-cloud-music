@@ -80,7 +80,10 @@
 
   // 播放专辑歌曲
   const playAlbum = (row: any) => {
-    useMusic.getSongUrl(row);
+    // console.log('当前的歌曲信息', row);
+    const { dt, al, ar } = row;
+    const songInfo = { songId: al.id, songName: al.name, picUrl: al.picUrl, duration: dt, artists: ar };
+    useMusic.getSongUrl(songInfo);
   };
 
   // 专辑的分页改变

@@ -41,8 +41,10 @@
 
   // 表格的双击事件-播放歌曲
   const playSong = async (row: any) => {
-    // console.log('播放的歌曲', row);
-    useMusic.getSongUrl(row);
+    // console.log('当前播放的歌曲行---', row);
+    const { dt, al, ar } = row;
+    const songInfo = { songId: al.id, songName: al.name, picUrl: al.picUrl, duration: dt, artists: ar };
+    useMusic.getSongUrl(songInfo);
   };
 
   // 切换评论类型

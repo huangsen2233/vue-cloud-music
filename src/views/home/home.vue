@@ -68,7 +68,7 @@
 
 <style lang="less" scoped>
   .el-container {
-    background-color: rgba(245,245,245);
+    background-color: rgba(240,240,240);
     // height: 100vw;
     position: relative;
   }
@@ -98,8 +98,8 @@
     bottom: 0;
     width: 100%;
     height: 100px;
-    // background-color: #ddd;
-    background: rgba(230, 230, 230);
+    background: rgba(250, 250, 250, 0.95);
+    box-shadow: -5px 0 8px 3px #ddd;
     transition: all 0.5s;
   }
 

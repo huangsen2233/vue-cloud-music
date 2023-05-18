@@ -5,19 +5,17 @@ export interface IUser {
 }
 
 export type CurrentSongInfoType = {
-  id: number
+  songId: number
+  songName: string
   picUrl: string
-  name: string
-  song: SongType
+  duration: number
+  artists: any[]
 }
 
-type SongType = {
-  artists: any[]
-  duration: number
-}
 export interface IMusic {
   currentSongInfo: CurrentSongInfoType
-  songData: any[]
+  currentSongData: any[]
+  songList: CurrentSongInfoType[]
   fee: number
 }
 

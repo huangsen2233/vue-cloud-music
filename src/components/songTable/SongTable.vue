@@ -17,6 +17,7 @@
     <el-table 
       :data="songs" 
       stripe
+      highlight-current-row
       :cell-style="{'text-align': 'center'}"
       header-cell-class-name="table-header" 
       @row-dblclick="(row: any) => emits('play-song', row)"

@@ -19,9 +19,9 @@
     width: 80%;
     height: 100%;
     margin: 0 auto;
-    // padding: 0 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: #111;
   }
 </style>

@@ -15,8 +15,10 @@
   <div class="audio-left">
     <el-image :src="currentSongInfo.picUrl || yinyueIcon" fit="cover" />
     <section class="author">
-      <b>{{ currentSongInfo.name }}</b>
-      <a>{{ currentSongInfo.song.artists[0].name }}</a>
+      <b>{{ currentSongInfo.songName }}</b>
+      <template v-for="i in currentSongInfo.artists">
+        <a>{{ i.name }}</a>
+      </template>
       <section class="icon">
         <div class="iconfont icon-woxihuan" title="喜欢"></div>
         <div class="iconfont icon-xiazai" title="下载该歌曲"></div>
