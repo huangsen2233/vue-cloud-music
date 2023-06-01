@@ -1,3 +1,20 @@
+export interface IMusic {
+  currentSongInfo: CurrentSongInfoType
+  currentSongData: any[]
+  songList: CurrentSongInfoType[]
+  fee: number
+  audio: any
+  src: string 
+  isPlay: boolean
+  volume: number
+  isMuted: boolean
+  loopType: number
+  currentTime: number
+  duration: number
+  timer: any
+  isEnded: false
+}
+
 export interface IUser {
   loginStatus: boolean
   account: any
@@ -10,13 +27,6 @@ export type CurrentSongInfoType = {
   picUrl: string
   duration: number
   artists: any[]
-}
-
-export interface IMusic {
-  currentSongInfo: CurrentSongInfoType
-  currentSongData: any[]
-  songList: CurrentSongInfoType[]
-  fee: number
 }
 
 export interface IVideo {

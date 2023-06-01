@@ -63,7 +63,7 @@
   <!-- 登录框 -->
   <LoginDiaLog :dialog-visible="dialogVisible" />
   <!-- 回到顶部 -->
-  <BaseBackTop :right="50" />
+  <BaseBackTop :right="50" :bottom="110" />
 </template>
 
 <style lang="less" scoped>
@@ -85,6 +85,7 @@
     width: 70%;
     height: 100%;
     margin: 0 auto;
+    padding-bottom: 100px;
 
     .el-card {
       margin-bottom: 30px;

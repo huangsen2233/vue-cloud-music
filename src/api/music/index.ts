@@ -16,7 +16,7 @@ export const getSongDetailApi = (ids: [number]) => {
 * @returns Promise
 */
 export const getSongUrlApi = (id: number[]) => {
-  return request.get(`/song/url?id=${id}`)
+  return request.get(`/song/url?id=${id}&br=320000`)
 }
 
 /**

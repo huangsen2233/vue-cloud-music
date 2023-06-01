@@ -19,7 +19,7 @@
     </section>
     <section class="newsong-content">
       <div class="item" v-for="i in newSonglist">
-        <el-image style="width: 200px; height: 200px;" :src="i.picUrl" fit="cover" @click="emits('play-music', i)"/>
+        <el-image style="width: 250px; height: 250px;" :src="i.picUrl" fit="cover" @click="emits('play-music', i)"/>
         <div class="item-duration">
           <el-icon><Clock /></el-icon>
           <span style="padding-left: 5px;">{{ formatTimestamp(i.song.duration, 'mm:ss') }}</span>
@@ -28,7 +28,7 @@
           <el-icon><VideoPlay /></el-icon>
         </div>
         <div class="item-name">
-          <h4 style="margin: 0 0 20px;">{{ i.name }}</h4>
+          <h4 class="songname">{{ i.name }}</h4>
           <div class="author">
             by 
             <template v-for="(j, index) in i.song.artists">
@@ -53,25 +53,24 @@
 
     &-content {
       display: flex;
+      justify-content: space-between;
       flex-wrap: wrap;
 
       .item {
-        flex: 30%;
+        flex: 0 1 250px;
         display: flex;
-        margin: 0 calc(10% / 2) 20px 0;
+        flex-direction: column;
         position: relative;
-
-        .el-image {
-          flex-shrink: 0;
-        }
+        padding-bottom: 30px;
 
         .el-image:hover {
           cursor: pointer;
         }
 
         &-name {
-          padding-left: 20px;
-
+          .songname {
+            margin: 10px 0;
+          }
           .author {
             font-size: 14px;
             color: #aaa;
@@ -89,7 +88,7 @@
 
         &-duration {
           position: absolute;
-          top: 170px;
+          top: 220px;
           left: 0;
           height: 30px;
           line-height: 30px;
@@ -103,8 +102,9 @@
         &-play {
           position: absolute;
           z-index: 9;
-          top: 60px;
-          left: 60px;
+          top: 40%;
+          left: 50%;
+          transform: translate(-50%, -50%);
           font-size: 80px;
           color: #eee;
           display: none;
@@ -118,10 +118,6 @@
         .el-image:hover ~ .item-play {
           display: block;
         }
-      }
-
-      .item:nth-child(3n) {
-        margin-right: 0;
       }
     }
   }

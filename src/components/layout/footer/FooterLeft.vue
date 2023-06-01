@@ -23,7 +23,9 @@
         <div class="iconfont icon-woxihuan" title="喜欢"></div>
         <div class="iconfont icon-xiazai" title="下载该歌曲"></div>
         <div class="iconfont icon-gengduo" title="更多"></div>
-        <div class="iconfont icon-pinglun" title="查看评论"></div>
+        <el-badge :value="1000" :max="999" type="primary">
+          <div class="iconfont icon-pinglun" title="查看评论"></div>
+        </el-badge>
       </section>
     </section>
   </div>

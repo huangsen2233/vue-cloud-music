@@ -79,11 +79,16 @@
         activeLable.value = '视频';
         break;
     };
+
+    console.log('单曲------', songs);
+    
   };
 
   // 播放歌曲
   const playSong = (row: any) => {
-    useMusic.getSongUrl(row);
+    const { dt, al, ar, name, id } = row;
+    const songInfo = { songId: id, songName: name, picUrl: al.picUrl, duration: dt, artists: ar };
+    useMusic.getSongUrl(songInfo);
   };
 
   // 路由跳转到歌单详情页

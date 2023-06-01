@@ -45,7 +45,7 @@
   const getNewsong = async () => {
     const { result } = await newsongApi();
     newSonglist.value.length = 0;
-    for (let i of result.slice(0, 9)) {
+    for (let i of result) {
       const { id, picUrl, name, song } = i;
       newSonglist.value.push({ id, picUrl, name, song });
     }

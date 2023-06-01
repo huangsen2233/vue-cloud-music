@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2433292",
+      "name": "清空",
+      "font_class": "trash",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "9464636",
+      "name": "文件夹添加",
+      "font_class": "wenjianjiatianjia",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "24209734",
+      "name": "清空缓存",
+      "font_class": "qingkonghuancun",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "27946249",
+      "name": "批量操作",
+      "font_class": "piliangcaozuo",
+      "unicode": "e704",
+      "unicode_decimal": 59140
+    },
+    {
       "icon_id": "14008241",
       "name": "音乐播放 (3)",
       "font_class": "yinlebofang",

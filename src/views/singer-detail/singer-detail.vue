@@ -81,8 +81,8 @@
   // 播放专辑歌曲
   const playAlbum = (row: any) => {
     // console.log('当前的歌曲信息', row);
-    const { dt, al, ar } = row;
-    const songInfo = { songId: al.id, songName: al.name, picUrl: al.picUrl, duration: dt, artists: ar };
+    const { dt, al, ar, name, id } = row;
+    const songInfo = { songId: id, songName: name, picUrl: al.picUrl, duration: dt, artists: ar };
     useMusic.getSongUrl(songInfo);
   };
 

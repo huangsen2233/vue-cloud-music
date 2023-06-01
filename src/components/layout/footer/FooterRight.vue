@@ -1,38 +1,35 @@
 <script lang="ts" setup>
-  import { ref, reactive} from 'vue';
+  import { ref, reactive, onMounted } from 'vue';
   import { useMusicStore } from "@/stores/music";
   import { storeToRefs } from 'pinia';
-  import { formatTimestamp } from '@/utils/dateFormat';
+  import { formatTimestamp, formatDuration } from '@/utils/dateFormat';
 
   // const props = defineProps<{}>();
   // const emits = defineEmits<{}>();
 
-  const useMusic = useMusicStore();
-  const { currentSongInfo, currentSongData, songList } = storeToRefs(useMusic);
+  const { clearList, changeTime } = useMusicStore();
+  const { songList, currentTime, duration } = storeToRefs(useMusicStore());
 
-  const songTime = ref(0)
-  const nowTime = ref(0)
-  const allTime = ref('03:50')
-  const songNumber = ref(25)
+  const openDrawer = ref(false);
 
-  const drawer = ref(false);
+  const audioRef = ref<HTMLAudioElement>()
 </script>
 
 <template>
-  <audio :src="currentSongData?.[0]?.url" autoplay loop controls style="display: inline-block;"></audio>
-
+  <audio ref="audioRef" src="" autoplay loop controls style="display: none;"></audio>
   <div class="audio-right">
-    <div class="song-time"><el-slider v-model="songTime" :show-tooltip="false" :min="0" :max="currentSongInfo.duration" /></div>
-    <div class="duration">{{ nowTime }} / {{ formatTimestamp(currentSongInfo.duration, "mm:ss") || allTime }}</div>
+    <div class="song-time"><el-slider v-model="currentTime" :show-tooltip="false" :min="0" :max="duration" @change="changeTime" /></div>
+    <div class="duration">{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</div>
     <div class="iconfont icon-bofanglan-geci" title="展示歌词"></div>
-    <div class="iconfont icon-24gl-playlistMusic4" title="展示播放列表" @click="drawer = !drawer">
+    <div class="iconfont icon-24gl-playlistMusic4" title="展示播放列表" @click="openDrawer = !openDrawer">
       <span v-if="songList.length > 0" style="font-size: 16px;">{{ songList.length }}</span>
     </div>
   </div>
-
-  <el-drawer v-model="drawer" direction="rtl">
+  <!-- 播放列表 -->
+  <el-drawer v-model="openDrawer" direction="rtl">
     <template #header>
-      <h3>播放列表({{ songList.length }})</h3>
+      <h2>播放列表({{ songList.length }})</h2>
+      <span class="iconfont icon-qingkonghuancun" @click="clearList">清空列表</span>
     </template>
     <template #default>
       <el-table 
@@ -44,20 +41,19 @@
         :cell-style="{'text-align': 'center'}"
         header-cell-class-name="table-header" 
       >
-        <el-table-column type="index" label="序号" width="80" align="center" />
-        <el-table-column label="歌曲" min-width="300">
+        <el-table-column label="歌曲">
           <template v-slot="{ row }: any">
-            <div class="song">
-              <span>{{ row.songName }}</span>
-              <span class="icon">
-                <el-icon class="icon" title="播放"><CaretRight /></el-icon>
-                <el-icon class="icon" title="添加到播放列表"><FolderAdd /></el-icon>
-                <el-icon class="icon" title="下载"><Download /></el-icon>
-                <el-icon class="icon" title="分享"><Share /></el-icon>
-                <el-icon class="icon" title="更多"><MoreFilled /></el-icon>
-              </span>
-            </div>
+            <span>{{ row.songName }}</span>
           </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template #default>
+            <el-icon class="icon" title="暂停" v-if="false"><VideoPause /></el-icon>
+            <el-icon class="icon" title="播放"><VideoPlay /></el-icon>
+            <el-icon class="icon" title="下载"><Download /></el-icon>
+            <el-icon class="icon" title="分享"><Share /></el-icon>
+            <el-icon class="icon" title="删除"><Delete /></el-icon>
+          </template> 
         </el-table-column>
         <el-table-column label="时长">
           <template v-slot="{ row }: any">
@@ -101,6 +97,27 @@
   }
 
   .el-drawer.rtl {
-    width: 50% !important;
+    width: 40% !important;
+  }
+
+  .iconfont {
+    font-size: 20px;
+  }
+  .iconfont:hover {
+    cursor: pointer;
+    color: var(--el-color-primary);
+  }
+
+  .el-table {
+    .el-icon {
+      cursor: pointer;
+      font-size: 20px;
+      padding-left: 10px;
+      transition: all 0.2s;
+    }
+    .el-icon:hover {
+      transform: scale(1.1);
+      color: var(--el-color-primary);
+    }
   }
 </style>
