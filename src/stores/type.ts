@@ -15,18 +15,18 @@ export interface IMusic {
   isEnded: false
 }
 
-export interface IUser {
-  loginStatus: boolean
-  account: any
-  profile: any
-}
-
 export type CurrentSongInfoType = {
   songId: number
   songName: string
   picUrl: string
   duration: number
   artists: any[]
+}
+
+export interface IUser {
+  loginStatus: boolean
+  account: any
+  profile: any
 }
 
 export interface IVideo {

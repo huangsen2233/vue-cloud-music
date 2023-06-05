@@ -1,22 +1,39 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue';
-  import { useMusicStore } from "@/stores/music";
+  import { ref } from 'vue';
   import { storeToRefs } from 'pinia';
+  import { useMusicStore } from "@/stores/music";
   import { formatTimestamp, formatDuration } from '@/utils/dateFormat';
+  import type { CurrentSongInfoType } from "./type"
 
-  // const props = defineProps<{}>();
-  // const emits = defineEmits<{}>();
-
-  const { clearList, changeTime } = useMusicStore();
-  const { songList, currentTime, duration } = storeToRefs(useMusicStore());
+  const { clearList, changeTime, restoreState, deleteSong, play, getSongUrl } = useMusicStore();
+  const { songList, currentTime, duration, currentSongInfo, isPlay } = storeToRefs(useMusicStore());
 
   const openDrawer = ref(false);
 
-  const audioRef = ref<HTMLAudioElement>()
+  // 播放歌曲高亮效果
+  const rowStyle = ({ row }: any) => {
+    return row.songId ===  currentSongInfo.value.songId ? 'background: rgba(160,207,255,0.3)' : ''
+  }
+
+  const playSong = (row: CurrentSongInfoType) => {
+    if (row.songId === currentSongInfo.value.songId) {
+      play();  // 继续播放当前歌曲
+    } else {
+      getSongUrl(row);  // 播放其它歌曲
+    }
+  }
+
+  const handleDeleteSong = (id: number) => {
+    if (id === currentSongInfo.value.songId) {
+      restoreState() 
+    }
+    // 删除后的消息提示
+    deleteSong(id) // 删除歌曲
+  }
 </script>
 
 <template>
-  <audio ref="audioRef" src="" autoplay loop controls style="display: none;"></audio>
+  <audio src="" autoplay loop controls style="display: none;"></audio>
   <div class="audio-right">
     <div class="song-time"><el-slider v-model="currentTime" :show-tooltip="false" :min="0" :max="duration" @change="changeTime" /></div>
     <div class="duration">{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</div>
@@ -34,38 +51,34 @@
     <template #default>
       <el-table 
         :data="songList" 
-        stripe
-        highlight-current-row
         empty-text="暂无歌曲~"
         :show-header="false"
-        :cell-style="{'text-align': 'center'}"
         header-cell-class-name="table-header" 
+        :row-style="rowStyle"
       >
         <el-table-column label="歌曲">
           <template v-slot="{ row }: any">
-            <span>{{ row.songName }}</span>
+            <b style="font-size: 16px;">{{ row.songName }}</b>
+            <div>
+              <template v-for="(j, index) in row.artists">
+                <a>{{ j.name }}</a>
+                <span v-if="index !== row.artists.length - 1"> / </span>
+              </template>
+            </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
-          <template #default>
-            <el-icon class="icon" title="暂停" v-if="false"><VideoPause /></el-icon>
-            <el-icon class="icon" title="播放"><VideoPlay /></el-icon>
+        <el-table-column label="操作" width="150px">
+          <template v-slot="{ row }">
+            <el-icon v-show="isPlay && row.songId === currentSongInfo.songId" class="icon" title="暂停" @click="play"><VideoPause /></el-icon>
+            <el-icon v-show="!isPlay || row.songId !== currentSongInfo.songId" class="icon" title="播放" @click="playSong(row)"><VideoPlay /></el-icon>
             <el-icon class="icon" title="下载"><Download /></el-icon>
             <el-icon class="icon" title="分享"><Share /></el-icon>
-            <el-icon class="icon" title="删除"><Delete /></el-icon>
+            <el-icon class="icon" title="删除" @click="handleDeleteSong(row.songId)"><Delete /></el-icon>
           </template> 
         </el-table-column>
-        <el-table-column label="时长">
+        <el-table-column label="时长" width="100px">
           <template v-slot="{ row }: any">
             <span>{{ formatTimestamp(row.duration, 'mm:ss') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="歌手">
-          <template v-slot="{ row }: any">
-            <div class="singer" v-for="(j, index) in row.artists">
-              <a>{{ j.name }}</a>
-              <span v-if="index !== row.artists.length - 1"> / </span>
-            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -97,7 +110,16 @@
   }
 
   .el-drawer.rtl {
-    width: 40% !important;
+    width: 30% !important;
+
+    .el-drawer__header {
+      margin-bottom: 0;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .icon-qingkonghuancun {
+      padding-right: 20px;
+    }
   }
 
   .iconfont {

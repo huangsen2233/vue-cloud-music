@@ -22,5 +22,9 @@
     justify-content: space-between;
     align-items: center;
     color: #111;
+
+    &-left {
+      flex-basis: 500px;
+    }
   }
 </style>

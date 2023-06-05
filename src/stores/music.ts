@@ -1,10 +1,11 @@
+import { nextTick } from "vue";
 import { defineStore } from "pinia";
 import type { IMusic, CurrentSongInfoType } from "./type";
 import { getSongUrlApi } from "@/api/music";
 
 export const useMusicStore = defineStore('music', {
   state: (): IMusic => ({
-    currentSongInfo: { songId: 0, songName: 'i want to know you ever', picUrl: '', duration: 0, artists: [] },
+    currentSongInfo: { songId: 0, songName: '', picUrl: '', duration: 0, artists: [] },
     currentSongData: [],
     songList: [], // 歌单列表
     fee: 0,  // 0 8是普通用户，1是vip用户
@@ -19,57 +20,108 @@ export const useMusicStore = defineStore('music', {
     timer: null, // 定时器
     isEnded: false, // 当前音频是否播放结束
   }),
+  getters: {
+    // 当前歌曲索引
+    currentIndex: state => {
+      const index = state.songList.findIndex(i => i.songId === state.currentSongInfo.songId)
+      return index
+    },
+    // 随机数
+    randomIndex(): number {
+      let index;
+      const randomIndex = Math.floor(Math.random() * this.songList.length)
+      if (randomIndex === this.currentIndex) {
+        index = Math.floor(Math.random() * this.songList.length)
+      } else {
+        index = randomIndex
+      }
+      return index;
+    },
+    // 上一首歌曲的索引值
+    previousIndex(): number {
+      let index: number = 0
+      switch (this.loopType) {
+        case 0:  // 顺序播放
+          if (this.currentIndex === 0) {
+            index = this.songList.length - 1
+          } else {
+            index = this.currentIndex - 1
+          }
+          break;
+        case 1:  // 随机播放
+          index = this.randomIndex
+          break;
+        case 2:  // 单曲循环
+          index = this.currentIndex
+          break;
+      }
+      return index
+    },
+    // 下一首歌曲得索引值
+    nextIndex(): number {
+      let index: number = 0
+      switch (this.loopType) {
+        case 0:
+          if (this.currentIndex === this.songList.length - 1) {
+            index = 0
+          } else {
+            index = this.currentIndex + 1
+          }
+          break;
+        case 1:  
+          index = this.randomIndex
+          break;
+        case 2:  
+          index = this.currentIndex
+          break;
+      }
+      return index
+    },
+  },
   actions: {
+    // 获取歌曲url
+    async getSongUrl (songInfo: CurrentSongInfoType) {
+      console.log('当前播放歌曲的信息------', songInfo);
+      this.currentSongInfo = songInfo;
+      const { data }: any = await getSongUrlApi([songInfo.songId]);
+      console.log("当前音乐url接口的数据------", data)
+      this.currentSongData = data;
+      if (!data[0].url) {
+        return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000});
+      } else if (data[0].fee === 1) {
+        ElNotification({ title: 'Warning', message: `<${songInfo.songName}>歌曲为VIP专享, 正在播放试听部分`, type: 'warning', duration: 2000});
+      } else {
+        ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000});
+      }
+      this.init()
+    },
+
     // 初始化
     init () {
+      this.currentIndex === -1 && this.songList.push(this.currentSongInfo);
       this.audio.volume = this.volume / 100
       this.audio.src = this.currentSongData[0].url
-      this.audio.play()
+      // this.currentTime = 0
       this.isPlay = true
-      if (this.isPlay) {
-        this.openTimer()
-      }
+      this.openTimer()
       // 音频可能未完全加载，使用定时器去获取音频时长
       setTimeout(() => {
         this.duration = Math.floor(this.audio.duration)
-      }, 500)
+        this.audio.play()
+      }, 1000)
     },
 
     // 开启定时器: 增加当前播放时间
     openTimer () {
       this.timer = setInterval(() => {
-        this.currentTime += 1
-        if (this.currentTime === this.duration) {
-          // 根据播放模式播放其它歌曲
-
+        this.currentTime = Math.round(this.audio.currentTime)
+        // 当前歌曲播放结束
+        if (this.audio.ended) {      
+          this.isPlay = false
+          clearInterval(this.timer)
+          this.playNext()
         }
       }, 1000)
-    },
-
-    // 清除定时器：停止增加当前播放时间
-    clearTimer () {
-      clearInterval(this.timer)
-    },
-
-    // 获取歌曲url
-    async getSongUrl (songInfo: CurrentSongInfoType) {
-      console.log('当前播放歌曲的信息------', songInfo);
-      this.currentSongInfo = songInfo;
-      const result: any = await getSongUrlApi([songInfo.songId]);
-      console.log("🚀 ~ file: music.ts:14 ~ getSongUrl ~ result: 音乐url", result)
-      this.currentSongData = result.data;
-      this.fee = result.data[0].fee;  
-      if (!result.data[0].url) {
-        return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000});
-      } else if (this.fee === 1) {
-        ElNotification({ title: 'Warning', message: `该歌曲为VIP专享, 正在播放<${songInfo.songName}>试听部分`, type: 'warning', duration: 2000});
-      } else {
-        ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000});
-        const index = this.songList.findIndex(i => i.songId === songInfo.songId)
-        index === -1 && this.songList.push(songInfo);
-      }
-
-      this.init()
     },
 
     // 播放、暂停
@@ -83,65 +135,26 @@ export const useMusicStore = defineStore('music', {
         this.openTimer()
       } else {
         this.audio.pause()
-        this.clearTimer()
+        clearInterval(this.timer)
       }
     },
 
     // 播放上一首
     playPrevious () {
-      console.log('播放上一首');
-      if (this.loopType === 0) {
-        const findIndex = this.songList.findIndex(i => i.songId === this.currentSongInfo.songId)
-        if (findIndex === 0) {
-          this.getSongUrl(this.songList[this.songList.length - 1])
-        } else {
-          this.getSongUrl(this.songList[findIndex - 1])
-        }
-      } else if (this.loopType === 1) {
-        this.randomPlay()
-      } else {
-        // 单曲循环
-        // audio的属性loop
+      if (this.songList.length === 0) {
+        return ElNotification({ title: 'Warning', message: '播放列表暂无歌曲!', type: 'warning', duration: 2000});
       }
+      const previousSongInfo = this.songList[this.previousIndex]
+      this.getSongUrl(previousSongInfo)
     },
 
     // 播放下一首
     playNext () {
-      console.log('播放下一首');
-      if (this.loopType === 0) {
-        const findIndex = this.songList.findIndex(i => i.songId === this.currentSongInfo.songId)
-        if (findIndex === this.songList.length - 1) {
-          this.getSongUrl(this.songList[0])
-        } else {
-          this.getSongUrl(this.songList[findIndex + 1])
-        }
-      } else if (this.loopType === 1) {
-        this.randomPlay()
-      } else {
-        // 单曲循环
-        
+      if (this.songList.length === 0) {
+        return ElNotification({ title: 'Warning', message: '播放列表暂无歌曲!', type: 'warning', duration: 2000});
       }
-    },
-
-    // 随机播放
-    randomPlay () {
-      const randomIndex = Math.floor(Math.random() * this.songList.length)
-      const findIndex = this.songList.findIndex(i => i.songId === this.currentSongInfo.songId)
-      if (randomIndex === findIndex) {
-        this.randomPlay()
-      } else {
-        this.getSongUrl(this.songList[randomIndex])
-      }
-    },
-
-    // 顺序播放
-    sequencePlay () {
-      const findIndex = this.songList.findIndex(i => i.songId === this.currentSongInfo.songId)
-      if (findIndex === 0) {
-        this.getSongUrl(this.songList[this.songList.length - 1])
-      } else {
-        this.getSongUrl(this.songList[findIndex - 1])
-      }
+      const nextSongInfo = this.songList[this.nextIndex]
+      this.getSongUrl(nextSongInfo)
     },
 
     // 改变播放类型
@@ -163,7 +176,6 @@ export const useMusicStore = defineStore('music', {
 
     // 改变当前歌曲播放时间
     changeTime (time: number) {
-      console.log("当前时长", time)
       this.currentTime = time
       this.audio.currentTime = time
     },
@@ -172,5 +184,25 @@ export const useMusicStore = defineStore('music', {
     clearList () {
       this.songList.length = 0;
     },
+
+    // 删除歌曲
+    deleteSong (id: number) {
+      this.songList = this.songList.filter(i => i.songId !== id)
+    },
+
+    // 还原state的数据
+    restoreState () {
+      this.audio.src = ''
+      this.currentSongInfo = { songId: 0, songName: '', picUrl: '', duration: 0, artists: [] }
+      this.currentSongData = []
+      this.src =  ''
+      this.isPlay =  false
+      this.currentTime = 0
+      // 解决音乐时长滑块没回到初始位置的问题
+      nextTick(() => {
+        this.duration = 0
+      })
+      clearInterval(this.timer)
+    }
   }
 });

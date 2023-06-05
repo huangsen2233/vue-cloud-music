@@ -1,11 +1,8 @@
 <script lang="ts" setup>
   import { ref, reactive} from 'vue';
-  import { useMusicStore } from "@/stores/music";
   import { storeToRefs } from 'pinia';
+  import { useMusicStore } from "@/stores/music";
   import yinyueIcon from "@/assets/imgs/音乐封面.png";
-
-  // const props = defineProps<{}>();
-  // const emits = defineEmits<{}>();
 
   const useMusic = useMusicStore();
   const { currentSongInfo } = storeToRefs(useMusic);
@@ -15,7 +12,7 @@
   <div class="audio-left">
     <el-image :src="currentSongInfo.picUrl || yinyueIcon" fit="cover" />
     <section class="author">
-      <b>{{ currentSongInfo.songName }}</b>
+      <b>{{ currentSongInfo.songName || '暂无歌曲' }}</b>
       <template v-for="i in currentSongInfo.artists">
         <a>{{ i.name }}</a>
       </template>
@@ -34,7 +31,7 @@
 <style lang="less" scoped>
   .audio-left {
     display: flex;
-    // align-items: center;
+    align-items: center;
 
     .el-image {
       width: 70px;
