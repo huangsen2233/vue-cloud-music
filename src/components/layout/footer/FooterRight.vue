@@ -23,19 +23,21 @@
     }
   }
 
-  const handleDeleteSong = (id: number) => {
-    if (id === currentSongInfo.value.songId) {
+  const handleDeleteSong = (row: CurrentSongInfoType) => {
+    if (row.songId === currentSongInfo.value.songId) {
       restoreState() 
     }
-    // 删除后的消息提示
-    deleteSong(id) // 删除歌曲
+    ElMessage({ message: `成功删除${row.songName}>`, type: 'success' })
+    deleteSong(row.songId) // 删除歌曲
   }
 </script>
 
 <template>
   <audio src="" autoplay loop controls style="display: none;"></audio>
   <div class="audio-right">
-    <div class="song-time"><el-slider v-model="currentTime" :show-tooltip="false" :min="0" :max="duration" @change="changeTime" /></div>
+    <div class="song-time">
+      <el-slider v-model="currentTime" :show-tooltip="false" :min="0" :max="duration" @change="changeTime" :disabled="duration === 0 ? true : false" />
+    </div>
     <div class="duration">{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</div>
     <div class="iconfont icon-bofanglan-geci" title="展示歌词"></div>
     <div class="iconfont icon-24gl-playlistMusic4" title="展示播放列表" @click="openDrawer = !openDrawer">
@@ -73,7 +75,7 @@
             <el-icon v-show="!isPlay || row.songId !== currentSongInfo.songId" class="icon" title="播放" @click="playSong(row)"><VideoPlay /></el-icon>
             <el-icon class="icon" title="下载"><Download /></el-icon>
             <el-icon class="icon" title="分享"><Share /></el-icon>
-            <el-icon class="icon" title="删除" @click="handleDeleteSong(row.songId)"><Delete /></el-icon>
+            <el-icon class="icon" title="删除" @click="handleDeleteSong(row)"><Delete /></el-icon>
           </template> 
         </el-table-column>
         <el-table-column label="时长" width="100px">

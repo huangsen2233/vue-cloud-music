@@ -51,3 +51,19 @@ export const getMusicCommentApi = ({ id, limit = 20, offset = 0, before }: Music
     params: { id, limit, offset, before }
   })
 }
+
+type LikeMusiceType = {
+  id: number
+  like: boolean
+}
+/**
+* 喜欢音乐
+* @param {number} - id 必选参数,音乐id 
+* @param {number} - like 可选参数，默认true喜欢 , false不喜欢
+* @returns Promise
+*/
+export const likeMusicApi = ({ id, like }: LikeMusiceType) => {
+  return request.get('/like', {
+    params: { id, like }
+  })
+}

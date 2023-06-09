@@ -1,23 +1,31 @@
 <script lang="ts" setup>
-  import { ref, reactive} from 'vue';
+  import { ref, reactive } from 'vue';
   import { storeToRefs } from 'pinia';
   import { useMusicStore } from "@/stores/music";
+  import { likeMusicApi } from "@/api/music";
   import yinyueIcon from "@/assets/imgs/音乐封面.png";
 
-  const useMusic = useMusicStore();
-  const { currentSongInfo } = storeToRefs(useMusic);
+  const { currentSongInfo } = storeToRefs(useMusicStore());
+
+  const likeMusic = (id: number) => {
+    console.log('喜欢');
+    /**
+     * 喜欢 接口
+     * 
+     */
+  }
 </script>
 
 <template>
   <div class="audio-left">
     <el-image :src="currentSongInfo.picUrl || yinyueIcon" fit="cover" />
-    <section class="author">
+    <section class="audio-left_author">
       <b>{{ currentSongInfo.songName || '暂无歌曲' }}</b>
       <template v-for="i in currentSongInfo.artists">
         <a>{{ i.name }}</a>
       </template>
-      <section class="icon">
-        <div class="iconfont icon-woxihuan" title="喜欢"></div>
+      <section class="audio-left_author_icon">
+        <div class="iconfont icon-woxihuan" title="喜欢" @click="likeMusic(currentSongInfo.songId)"></div>
         <div class="iconfont icon-xiazai" title="下载该歌曲"></div>
         <div class="iconfont icon-gengduo" title="更多"></div>
         <el-badge :value="1000" :max="999" type="primary">
@@ -39,7 +47,7 @@
       border-radius: 8px;
     }
 
-    .author {
+    &_author {
       padding-left: 10px;
 
       & > b {
@@ -50,7 +58,7 @@
         padding-left: 10px;
       }
 
-      .icon {
+      &_icon {
         display: flex;
         padding-top: 15px;
 
@@ -60,7 +68,7 @@
           width: 30px;
           line-height: 30px;
           transition: all 0.2s;
-          padding-right: 10px;
+          // padding-right: 10px;
         }
         .iconfont:hover {
           transform: scale(1.1);

@@ -4,6 +4,9 @@ import type { IMusic, CurrentSongInfoType } from "./type";
 import { getSongUrlApi } from "@/api/music";
 
 export const useMusicStore = defineStore('music', {
+  /* persist: {
+    enabled: true
+  }, */
   state: (): IMusic => ({
     currentSongInfo: { songId: 0, songName: '', picUrl: '', duration: 0, artists: [] },
     currentSongData: [],
@@ -84,7 +87,7 @@ export const useMusicStore = defineStore('music', {
       console.log('当前播放歌曲的信息------', songInfo);
       this.currentSongInfo = songInfo;
       const { data }: any = await getSongUrlApi([songInfo.songId]);
-      console.log("当前音乐url接口的数据------", data)
+      console.log("当前播放歌曲url接口的数据------", data)
       this.currentSongData = data;
       if (!data[0].url) {
         return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000});
@@ -182,7 +185,8 @@ export const useMusicStore = defineStore('music', {
 
     // 清空歌单列表
     clearList () {
-      this.songList.length = 0;
+      this.restoreState()
+      this.songList.length = 0
     },
 
     // 删除歌曲
