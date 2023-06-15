@@ -44,9 +44,8 @@
       </el-table-column>
       <el-table-column label="歌手">
         <template v-slot="{ row }: any">
-          <div class="singer" v-for="(j, index) in row.ar">
-            <a @click="emits('router-singer-detail', j.id)">{{ j.name }}</a>
-            <span v-if="index !== row.ar.length - 1"> / </span>
+          <div class="singer">
+            <a @click="emits('router-singer-detail', row.ar[0].id)">{{ row.ar[0].name }}</a>
           </div>
         </template>
       </el-table-column>

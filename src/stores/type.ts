@@ -13,6 +13,21 @@ export interface IMusic {
   duration: number
   timer: any
   isEnded: false
+  likeIds: number[]
+  comments: any[]
+  hotComments: any[]
+  total: number
+}
+
+export type PaginationType = {
+  id: number
+  limit: number
+  offset: number
+}
+
+export type PaginationParamsType = {
+  currentPage: number
+  pageSize: number
 }
 
 export type CurrentSongInfoType = {

@@ -78,8 +78,8 @@
       :current-page="commentPagination.currentPage"
       :page-size="commentPagination.pageSize"
       :page-sizes="[20, 30, 40, 50]"
-      @on-page="(params) => emits('change-comment-pagination', params)"
-      @on-size="(params) => emits('change-comment-pagination', params)"
+      @on-page="(params: PaginationParamsType) => emits('change-comment-pagination', params)"
+      @on-size="(params: PaginationParamsType) => emits('change-comment-pagination', params)"
     />
   </section>
 </template>

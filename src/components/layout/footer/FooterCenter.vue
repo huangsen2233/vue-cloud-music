@@ -86,7 +86,6 @@
       }
       .iconfont:hover {
         cursor: pointer;
-        // color: var(--el-color-primary);
       }
 
       .icon-yinlebofang, .icon-zantingbofang {

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue';
   import FooterLeft from './FooterLeft.vue';
   import FooterCenter from './FooterCenter.vue';
   import FooterRight from './FooterRight.vue';

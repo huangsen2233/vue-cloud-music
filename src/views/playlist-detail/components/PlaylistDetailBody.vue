@@ -1,9 +1,8 @@
 <script lang="ts" setup>
   import { ref, reactive, watch } from 'vue';
-  import { formatTimestamp } from "@/utils/dateFormat";
+  import { storeToRefs } from "pinia";
   import { useMusicStore } from "@/stores/music";
   import { useUserStore } from "@/stores/user";
-  import { storeToRefs } from "pinia";
   import type { PaginationType, PaginationParamsType } from "../type";
   import dianzanIcon from "@/assets/imgs/dianzan.png"
   import BasePagination from '@/components/common/BasePagination.vue';
@@ -15,9 +14,7 @@
   });
 
   const useMusic = useMusicStore();
-  const useUser = useUserStore();
-
-  const { profile } = storeToRefs(useUser);
+  const { profile } = storeToRefs(useUserStore());
 
   const props = defineProps<{
     activeName: string
@@ -71,7 +68,7 @@
   const changSubscribersPagination = (params: PaginationParamsType) => {
     emits('subscribers-pagination', params);
   };
-
+ 
   const myComment = ref(''); // 我的评论
 </script>
 
@@ -81,7 +78,7 @@
       <template #label>歌曲 {{ songs.length }}</template>
       <template #default>
         <!-- 歌曲 -->
-        <SongTable :songs="songs" @play-song="playSong" @router-singer-detail="(id) => emits('router-singer-detail', id)" />
+        <SongTable :songs="songs" @play-song="playSong" @router-singer-detail="(id: number) => emits('router-singer-detail', id)" />
       </template>
     </el-tab-pane>
     <el-tab-pane name="comment">

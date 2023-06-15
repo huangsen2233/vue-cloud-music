@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "14508183",
+      "name": "我喜欢-红色桃心",
+      "font_class": "woxihuan-hongsetaoxin",
+      "unicode": "e693",
+      "unicode_decimal": 59027
+    },
+    {
+      "icon_id": "14508185",
+      "name": "我喜欢-默认桃心",
+      "font_class": "woxihuan-morentaoxin",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    },
+    {
+      "icon_id": "9958799",
+      "name": "我喜欢的_on",
+      "font_class": "woxihuande_on",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
       "icon_id": "2433292",
       "name": "清空",
       "font_class": "trash",

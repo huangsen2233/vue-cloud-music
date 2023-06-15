@@ -1,13 +1,14 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { storeToRefs } from 'pinia';
+  import { useRouter } from "vue-router";
   import { useMusicStore } from "@/stores/music";
   import { formatTimestamp, formatDuration } from '@/utils/dateFormat';
-  import type { CurrentSongInfoType } from "./type"
+  import type { CurrentSongInfoType } from "./type";
 
+  const router = useRouter()
   const { clearList, changeTime, restoreState, deleteSong, play, getSongUrl } = useMusicStore();
   const { songList, currentTime, duration, currentSongInfo, isPlay } = storeToRefs(useMusicStore());
-
   const openDrawer = ref(false);
 
   // 播放歌曲高亮效果
@@ -30,6 +31,11 @@
     ElMessage({ message: `成功删除${row.songName}>`, type: 'success' })
     deleteSong(row.songId) // 删除歌曲
   }
+
+  // 路由跳转到歌曲详情页
+  const routerToSongDetail = (id: number) => {
+    router.push({ path: '/song-detail', query: { id } })
+  }
 </script>
 
 <template>
@@ -39,7 +45,7 @@
       <el-slider v-model="currentTime" :show-tooltip="false" :min="0" :max="duration" @change="changeTime" :disabled="duration === 0 ? true : false" />
     </div>
     <div class="duration">{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</div>
-    <div class="iconfont icon-bofanglan-geci" title="展示歌词"></div>
+    <div class="iconfont icon-bofanglan-geci" title="展示歌词" @click="routerToSongDetail(currentSongInfo.songId)"></div>
     <div class="iconfont icon-24gl-playlistMusic4" title="展示播放列表" @click="openDrawer = !openDrawer">
       <span v-if="songList.length > 0" style="font-size: 16px;">{{ songList.length }}</span>
     </div>
@@ -129,7 +135,6 @@
   }
   .iconfont:hover {
     cursor: pointer;
-    color: var(--el-color-primary);
   }
 
   .el-table {

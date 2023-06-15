@@ -1,18 +1,16 @@
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue';
   import { storeToRefs } from 'pinia';
+  import { useRouter } from "vue-router";
   import { useMusicStore } from "@/stores/music";
-  import { likeMusicApi } from "@/api/music";
   import yinyueIcon from "@/assets/imgs/音乐封面.png";
 
-  const { currentSongInfo } = storeToRefs(useMusicStore());
+  const router = useRouter()
+  const { likeMusic } = useMusicStore();
+  const { currentSongInfo, isLike, total } = storeToRefs(useMusicStore());
 
-  const likeMusic = (id: number) => {
-    console.log('喜欢');
-    /**
-     * 喜欢 接口
-     * 
-     */
+  // 路由跳转到歌曲详情页
+  const routerToSongDetail = (id: number) => {
+    router.push({ path: '/song-detail', query: { id } })
   }
 </script>
 
@@ -21,15 +19,13 @@
     <el-image :src="currentSongInfo.picUrl || yinyueIcon" fit="cover" />
     <section class="audio-left_author">
       <b>{{ currentSongInfo.songName || '暂无歌曲' }}</b>
-      <template v-for="i in currentSongInfo.artists">
-        <a>{{ i.name }}</a>
-      </template>
+      <a>{{ currentSongInfo.artists?.[0]?.name }}</a>
       <section class="audio-left_author_icon">
-        <div class="iconfont icon-woxihuan" title="喜欢" @click="likeMusic(currentSongInfo.songId)"></div>
+        <div :class="['iconfont', isLike ? 'icon-woxihuan-hongsetaoxin likeColor' : 'icon-woxihuan-morentaoxin']" :title="isLike ? '取消喜欢' : '喜欢'" @click="likeMusic"></div>
         <div class="iconfont icon-xiazai" title="下载该歌曲"></div>
         <div class="iconfont icon-gengduo" title="更多"></div>
-        <el-badge :value="1000" :max="999" type="primary">
-          <div class="iconfont icon-pinglun" title="查看评论"></div>
+        <el-badge :value="total" :max="999999" :hidden="total === 0 ? true : false">
+          <div class="iconfont icon-pinglun" title="查看评论" @click="routerToSongDetail(currentSongInfo.songId)"></div>
         </el-badge>
       </section>
     </section>
@@ -73,9 +69,16 @@
         .iconfont:hover {
           transform: scale(1.1);
           cursor: pointer;
-          color: var(--el-color-primary);
+        }
+
+        .icon-woxihuan-hongsetaoxin, .icon-woxihuan-morentaoxin {
+          font-size: 16px;
         }
       }
     }
+  }
+
+  .likeColor {
+    color: rgba(255,106,106);
   }
 </style>

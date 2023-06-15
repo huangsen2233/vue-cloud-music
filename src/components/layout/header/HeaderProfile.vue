@@ -1,74 +1,116 @@
 <script lang="ts" setup>
-  import { ref, inject, reactive, onMounted } from 'vue';
-  import { useUserStore } from "@/stores/user";
+  import { ref, inject, computed, nextTick } from 'vue';
   import { storeToRefs } from "pinia";
   import { useRouter } from "vue-router";
-  import { searchHotApi } from "@/api/search";
-  import type { IHotDetail } from "./type";
-  import type { ElDropdown } from 'element-plus';
-
-  onMounted(() => {
-    getHotDetail();
-  });
+  import { useUserStore } from "@/stores/user";
+  import { useMusicStore } from "@/stores/music"
+  import { searchSuggestApi } from "@/api/search";
+  import { getSongDetailApi } from "@/api/music";
+  import type { ElInput } from 'element-plus';
 
   // 打开登录框
   const openLoginDialog = inject('on-login') as () => void;
-
   const router = useRouter();
-  const useUser = useUserStore();
-  // storeToRefs解构数据时不会失去响应式
-  const { profile, loginStatus } = storeToRefs(useUser);
+  const { getSongUrl } = useMusicStore();
+  const { profile, loginStatus } = storeToRefs(useUserStore());
   const keywords = ref('');
-  const hotDetailList = ref<IHotDetail[]>([]);
-  const dropdownRef = ref<InstanceType<typeof ElDropdown>>();
+  const visible = ref(false);
+  let timer: NodeJS.Timer;
+  const suggestlist = ref<any>();
+  const inputRef = ref<InstanceType<typeof ElInput>>()
 
-  // 获取热搜详情
-  const getHotDetail = async () => {
-    const { data }: any = await searchHotApi();
-    hotDetailList.value.length = 0;
-    // console.log("🚀 ~ file: HeaderProfile.vue:25 ~ getHotDetail ~ 热搜详情:", data)
-    hotDetailList.value.push(...data);
-  };
+  const _title = computed(() => (value: string) => {
+    let _value;
+    switch (value) {
+      case 'songs': _value = '歌曲'; break;
+      case 'playlists': _value = '歌单'; break;
+    }
+    return _value;
+  })
+
+  // 搜索建议
+  const searchSuggest = async () => {
+    const { result }: any = await searchSuggestApi(keywords.value)
+    console.log("🚀 ~ file: HeaderProfile.vue:36 ~ searchSuggest ~ 搜索建议:", result)
+    if (!result) return;
+    result.order = result.order.filter((i: string) => i !== 'albums' && i !== 'artists')
+    suggestlist.value = result
+  }
 
   // 路由跳转到搜索页
   const routerToSearch = async () => {
     if (keywords.value.length === 0) {
       return ElMessage({ message: '请先输入关键字再搜索!', type: 'warning'});
     }
+    visible.value = false
     router.push({ path: '/search', query: { keywords: keywords.value.trim() } })
   };
 
-  // 搜索下拉菜单点击事件
-  const searchCommand = (command: any) => {
-    // console.log('下拉菜单点击', command);
-    keywords.value = command.searchWord;
-    routerToSearch();
+  // 搜索框的input事件
+  const handleInput = () => {
+    timer && clearTimeout(timer)
+    timer = setTimeout(() => {
+      searchSuggest().then(() => {
+        visible.value = true
+      })
+    }, 500)
   };
 
-  // 登录下拉菜单点击事件
-  const handleCommand = () => {
+  // 使用focus事件会有问题: 弹框关闭后又触发focus事件打开
+  /* const handleFoucs = () => {
+    console.log('handleFoucs');
+    if (keywords.value.length > 0) {
+      searchSuggest().then(() => {
+        visible.value = true
+      })
+    }
+  }; */
 
+  // 点击搜索建议列表
+  const clickSuggestlist = async (title: string, title_id: number) => {
+    if (title === 'songs') {
+      const { songs }: any = await getSongDetailApi([title_id])
+      const { dt, al, ar, name, id } = songs[0]
+      const songInfo = { songId: id, songName: name, picUrl: al.picUrl, duration: dt, artists: ar };
+      await getSongUrl(songInfo)
+    } else if (title === 'playlists') {
+      router.push({ path: '/playlist-detail', query: { id: title_id } });
+    }
+    visible.value = false;
   };
+
+  const handleCommand = () => {};
 </script>
 
 <template>
   <div class="header-profile">
-    <!-- 搜索框 -->
-    <el-dropdown ref="dropdownRef" trigger="contextmenu" max-height="300px" placement="bottom" @command="searchCommand"> 
-      <el-input v-model="keywords" @keyup.enter.native="routerToSearch" placeholder="请输入歌曲/歌手/视频" size="large">
-        <template #prepend>
-          <el-button icon="Search" @click="routerToSearch" />
-        </template>
-      </el-input>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item :command="i" v-for="(i,index) in hotDetailList" :key="index">
-            {{ i.searchWord }}
-            <el-image v-if="i.iconUrl" style="width:20px; height:20px; marginLeft:5px;" :src="i.iconUrl" fit="contain" />
-          </el-dropdown-item>
-        </el-dropdown-menu>
+    <!-- 搜索建议弹框 -->
+    <el-popover :visible="visible" placement="bottom-start" :width="300">
+      <template #reference>
+        <el-input
+          ref="inputRef"
+          v-model="keywords"
+          placeholder="请输入歌曲/歌手/视频" 
+          size="large" 
+          @keyup.enter.native="routerToSearch" 
+          @input="handleInput">
+          <template #prepend><el-button icon="Search" @click="routerToSearch" /></template>
+        </el-input>
       </template>
-    </el-dropdown>
+      <div class="suggest" v-if="visible">
+        <template v-for="title in suggestlist.order">
+          <section class="suggest-item">
+            <b class="suggest-item_title">{{ _title(title) }}</b>
+            <div class="suggest-item_content">
+              <section v-for="{ id, name, artists } in suggestlist[title]" @click="clickSuggestlist(title, id)">
+                <span>{{ name }}</span>
+                <span v-if="artists">- {{ artists[0].name }}</span>
+              </section>
+            </div>
+          </section>
+        </template>
+      </div>
+    </el-popover>
     <!-- 个人信息 -->
     <div v-if="!loginStatus" class="profile">
       <el-icon><Avatar /></el-icon>
@@ -95,11 +137,10 @@
     font-size: 16px;
 
     :deep(.el-input__prefix) {
-      cursor: pointer;
+      // cursor: pointer;
     }
-
     .el-input__icon {
-      font-size: 20px;
+      // font-size: 20px;
     }
 
     .profile{
@@ -124,6 +165,29 @@
   
   .el-dropdown-menu {
     width: 160px;
+  }
+
+  .suggest {
+    .suggest-item {
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+
+      &_title {
+        font-size: 16px;
+      }
+
+      &_content section {
+        padding: 5px 0;
+
+        &:hover {
+          background-color: #eee;
+          cursor: pointer;
+        }
+      }
+    }
+    .suggest-item:not(:last-child) {
+      border-bottom: 1px solid #ccc;
+    }
   }
 
 </style>

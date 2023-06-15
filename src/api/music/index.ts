@@ -37,7 +37,6 @@ type MusicCommentType = {
   offset?: number
   before?: number
 }
-
 /**
 * 获取歌曲评论
 * @param {number} - id 必选参数,音乐id 
@@ -59,11 +58,33 @@ type LikeMusiceType = {
 /**
 * 喜欢音乐
 * @param {number} - id 必选参数,音乐id 
-* @param {number} - like 可选参数，默认true喜欢 , false不喜欢
+* @param {boolean} - like 可选参数，默认true喜欢 , false不喜欢
 * @returns Promise
 */
 export const likeMusicApi = ({ id, like }: LikeMusiceType) => {
   return request.get('/like', {
     params: { id, like }
+  })
+}
+
+/**
+* 喜欢音乐列表
+* @param {number} - id 必选参数,用户id 
+* @returns Promise
+*/
+export const likeListApi = (uid: number) => {
+  return request.get('/likelist', {
+    params: { uid }
+  })
+}
+
+/**
+* 获取音乐歌词
+* @param {number} - id 必选参数,音乐id 
+* @returns Promise
+*/
+export const getLyricApi = (id: number) => {
+  return request.get('/lyric', {
+    params: { id }
   })
 }

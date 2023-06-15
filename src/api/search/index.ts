@@ -14,9 +14,9 @@ export const searchHotApi = () => {
  * @param {string} type     可选参数, 传 'mobile' 则返回移动端数据
  * @returns Promise
  */
-export const searchSuggestApi = (keywords: string) => {
+export const searchSuggestApi = (keywords: string, type?: string) => {
   return request.get('/search/suggest', {
-    params: { keywords }
+    params: { keywords, type }
   })
 }
 
@@ -26,7 +26,6 @@ type SearchType = {
   offset: number
   type: number
 }
-
 /**
  * @description 搜索，传入搜索关键词可以搜索该音乐/专辑/歌手/歌单/用户,关键词可以多个,以空格隔开, 可通过 /song/url 接口传入歌曲 id 获取具体的播放链接
  * @param {string} keywords 必选参数, 关键词

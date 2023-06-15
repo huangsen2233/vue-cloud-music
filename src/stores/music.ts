@@ -1,7 +1,8 @@
 import { nextTick } from "vue";
-import { defineStore } from "pinia";
-import type { IMusic, CurrentSongInfoType } from "./type";
-import { getSongUrlApi } from "@/api/music";
+import { defineStore, storeToRefs } from "pinia";
+import type { IMusic, CurrentSongInfoType, PaginationType } from "./type";
+import { getSongUrlApi, likeMusicApi, likeListApi, getMusicCommentApi, getLyricApi } from "@/api/music";
+import { useUserStore } from "@/stores/user";
 
 export const useMusicStore = defineStore('music', {
   /* persist: {
@@ -22,6 +23,10 @@ export const useMusicStore = defineStore('music', {
     duration: 0, // 总时长
     timer: null, // 定时器
     isEnded: false, // 当前音频是否播放结束
+    likeIds: [], // 喜欢的歌曲列表
+    comments: [], // 最新评论
+    hotComments: [], // 热门评论
+    total: 0, // 评论总数量
   }),
   getters: {
     // 当前歌曲索引
@@ -80,14 +85,23 @@ export const useMusicStore = defineStore('music', {
       }
       return index
     },
+    // 当前歌曲是否喜欢
+    isLike (): boolean {
+      const findItem = this.likeIds.find((id: number) => id === this.currentSongInfo.songId)
+      if (findItem) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   actions: {
     // 获取歌曲url
     async getSongUrl (songInfo: CurrentSongInfoType) {
-      console.log('当前播放歌曲的信息------', songInfo);
+      // console.log('当前播放歌曲的信息------', songInfo);
       this.currentSongInfo = songInfo;
       const { data }: any = await getSongUrlApi([songInfo.songId]);
-      console.log("当前播放歌曲url接口的数据------", data)
+      console.log("播放歌曲url数据------", data)
       this.currentSongData = data;
       if (!data[0].url) {
         return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000});
@@ -97,9 +111,12 @@ export const useMusicStore = defineStore('music', {
         ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000});
       }
       this.init()
+      this.likeIds.length === 0 && this.likeList()
+      this.getMusicComment({ id: this.currentSongInfo.songId, limit: 20, offset: 0})
+      this.getLyric(this.currentSongInfo.songId)
     },
 
-    // 初始化
+    // 初始化音乐栏
     init () {
       this.currentIndex === -1 && this.songList.push(this.currentSongInfo);
       this.audio.volume = this.volume / 100
@@ -207,6 +224,45 @@ export const useMusicStore = defineStore('music', {
         this.duration = 0
       })
       clearInterval(this.timer)
-    }
+    },
+
+    // 获取喜欢的歌曲列表
+    async likeList () {
+      const { account } = storeToRefs(useUserStore())
+      const { ids }: any = await likeListApi(account.value.id)
+      this.likeIds = ids
+      // console.log("🚀 ~ file: music.ts:217 ~  ~ 喜欢歌曲列表:", ids)
+    },
+
+    // 是否喜欢歌曲
+    async likeMusic () {
+      if (!this.currentSongInfo.songId) return
+      if (this.isLike) {
+        ElMessage({ message: '取消喜欢!', type: 'success' })
+        const index = this.likeIds.findIndex(id => id === this.currentSongInfo.songId)
+        this.likeIds.splice(index, 1)
+      } else {
+        ElMessage({ message: '成功添加喜欢!', type: 'success' })
+        this.likeIds.push(this.currentSongInfo.songId)
+      }
+      likeMusicApi({ id: this.currentSongInfo.songId, like: this.isLike })
+    },
+
+    // 获取歌曲的评论
+    async getMusicComment (params: PaginationType) {
+      const { comments, hotComments, total }: any = await getMusicCommentApi(params)
+      this.comments = comments
+      hotComments && this.hotComments.push(...hotComments)
+      this.total = total
+      // console.log("🚀 ~ file: music.ts:254 ~  ~ 当前歌曲的最新评论:", comments)
+      // console.log("🚀 ~ file: music.ts:254 ~  ~ 当前歌曲的热门评论:", hotComments)
+      // console.log("🚀 ~ file: music.ts:254 ~  ~ 总数:", total)      
+    },
+
+    // 获取音乐歌词
+    async getLyric (id: number) {
+      const result = await getLyricApi(id)
+      // console.log("🚀 ~ file: music.ts:264 ~ getLyric ~ 获取音乐歌词:", result)
+    },
   }
 });

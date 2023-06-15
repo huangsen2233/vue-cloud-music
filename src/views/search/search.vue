@@ -25,8 +25,6 @@
   const artists = ref<any>([]);
   const playlists = ref<any>([]);
   const mvs = ref<MvType[]>([]);
-  const videos = ref<any>([]);
-
   const cloudSearchParams = ref<SearchType>({ keywords: route.query.keywords as string, limit: 30, offset: 0, type: 1 });
 
   // 搜索结果的数量
@@ -79,9 +77,6 @@
         activeLable.value = '视频';
         break;
     };
-
-    console.log('单曲------', songs);
-    
   };
 
   // 播放歌曲

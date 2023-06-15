@@ -70,6 +70,14 @@ const routes: Array<RouteRecordRaw> = [
       keepAlive: false
     }
   },
+  {
+    name: 'song-detail',
+    path: '/song-detail',
+    component: () => import('@/views/song-detail/song-detail.vue'),
+    meta: {
+      keepAlive: false
+    }
+  },
   { 
     name: 'NotFound', 
     path: '/:pathMatch(.*)*', 
@@ -80,6 +88,12 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach((to, from) => {
+  // 解决路由跳转后会滚动到上一页面的位置
+  document.documentElement.scrollTop = 0
+  return true
 })
 
 export default router

@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4007692 */
-  src: url('iconfont.woff2?t=1684719145689') format('woff2'),
-       url('iconfont.woff?t=1684719145689') format('woff'),
-       url('iconfont.ttf?t=1684719145689') format('truetype');
+  src: url('iconfont.woff2?t=1686536931771') format('woff2'),
+       url('iconfont.woff?t=1686536931771') format('woff'),
+       url('iconfont.ttf?t=1686536931771') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-woxihuan-hongsetaoxin:before {
+  content: "\e693";
+}
+
+.icon-woxihuan-morentaoxin:before {
+  content: "\e695";
+}
+
+.icon-woxihuande_on:before {
+  content: "\e675";
 }
 
 .icon-trash:before {

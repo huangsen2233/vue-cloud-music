@@ -13,16 +13,15 @@
   import VideoRight from "./components/VideoRight.vue";
 
   onMounted(() => {
-    window.scrollTo(0, 0);
     const reg = /\D/;
-    if (reg.test(route.query.id as string)) {
+    if (reg.test(route.query.id as string)) { // MV
       const id = String(route.query.id);
       getVideoDetail(id);
       getRelatedVideo(id);
       getVideoDetailInfo(id);
       getCommentVideo({ ...commentVideoParams.value });
       useVideo.getVideoUrl(id);
-    } else {
+    } else { // 视频
       const id = Number(route.query.id);
       getMvDetail(id);
       getSimiMv(id);
