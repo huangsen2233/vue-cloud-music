@@ -18,6 +18,7 @@
   let timer: NodeJS.Timer;
   const suggestlist = ref<any>();
   const inputRef = ref<InstanceType<typeof ElInput>>()
+  const popoverRef = ref()
 
   const _title = computed(() => (value: string) => {
     let _value;
@@ -31,7 +32,7 @@
   // 搜索建议
   const searchSuggest = async () => {
     const { result }: any = await searchSuggestApi(keywords.value)
-    console.log("🚀 ~ file: HeaderProfile.vue:36 ~ searchSuggest ~ 搜索建议:", result)
+    // console.log("🚀 ~ file: HeaderProfile.vue:36 ~ searchSuggest ~ 搜索建议:", result)
     if (!result) return;
     result.order = result.order.filter((i: string) => i !== 'albums' && i !== 'artists')
     suggestlist.value = result
@@ -56,15 +57,21 @@
     }, 500)
   };
 
-  // 使用focus事件会有问题: 弹框关闭后又触发focus事件打开
-  /* const handleFoucs = () => {
-    console.log('handleFoucs');
+  /**
+   * 提取el-popover的class样式
+   * force、blur的bug问题
+   */
+  const handleBlur = () => {
+    // visible.value = false
+  };
+
+  const handleFocus = () => {
     if (keywords.value.length > 0) {
       searchSuggest().then(() => {
         visible.value = true
       })
     }
-  }; */
+  };
 
   // 点击搜索建议列表
   const clickSuggestlist = async (title: string, title_id: number) => {
@@ -85,15 +92,17 @@
 <template>
   <div class="header-profile">
     <!-- 搜索建议弹框 -->
-    <el-popover :visible="visible" placement="bottom-start" :width="300">
+    <el-popover ref="popoverRef" :visible="visible" placement="bottom-start" :width="300">
       <template #reference>
         <el-input
           ref="inputRef"
           v-model="keywords"
           placeholder="请输入歌曲/歌手/视频" 
           size="large" 
-          @keyup.enter.native="routerToSearch" 
-          @input="handleInput">
+          @keyup.enter.native="routerToSearch"
+          @focus="handleFocus" 
+          @input="handleInput"
+          @blur="handleBlur">
           <template #prepend><el-button icon="Search" @click="routerToSearch" /></template>
         </el-input>
       </template>
@@ -136,13 +145,6 @@
     display: flex;
     font-size: 16px;
 
-    :deep(.el-input__prefix) {
-      // cursor: pointer;
-    }
-    .el-input__icon {
-      // font-size: 20px;
-    }
-
     .profile{
       display: flex;
       align-items: center;
@@ -159,18 +161,12 @@
         white-space: nowrap;
         cursor: pointer;
       }
-      
     }
   }
-  
-  .el-dropdown-menu {
-    width: 160px;
-  }
+
 
   .suggest {
     .suggest-item {
-      padding-bottom: 10px;
-      margin-bottom: 10px;
 
       &_title {
         font-size: 16px;
@@ -180,12 +176,15 @@
         padding: 5px 0;
 
         &:hover {
-          background-color: #eee;
+          color: var(--el-color-primary);
+          background-color: var(--el-color-primary-light-9);
           cursor: pointer;
         }
       }
     }
     .suggest-item:not(:last-child) {
+      padding-bottom: 10px;
+      margin-bottom: 10px;
       border-bottom: 1px solid #ccc;
     }
   }

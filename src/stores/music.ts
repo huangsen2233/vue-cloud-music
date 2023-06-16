@@ -1,8 +1,8 @@
-import { nextTick } from "vue";
+import { nextTick, watch } from "vue";
 import { defineStore, storeToRefs } from "pinia";
-import type { IMusic, CurrentSongInfoType, PaginationType } from "./type";
 import { getSongUrlApi, likeMusicApi, likeListApi, getMusicCommentApi, getLyricApi } from "@/api/music";
 import { useUserStore } from "@/stores/user";
+import type { IMusic, CurrentSongInfoType, PaginationType } from "./type";
 
 export const useMusicStore = defineStore('music', {
   /* persist: {
@@ -27,6 +27,7 @@ export const useMusicStore = defineStore('music', {
     comments: [], // 最新评论
     hotComments: [], // 热门评论
     total: 0, // 评论总数量
+    lyric: '', // 歌词
   }),
   getters: {
     // 当前歌曲索引
@@ -98,11 +99,10 @@ export const useMusicStore = defineStore('music', {
   actions: {
     // 获取歌曲url
     async getSongUrl (songInfo: CurrentSongInfoType) {
-      // console.log('当前播放歌曲的信息------', songInfo);
-      this.currentSongInfo = songInfo;
       const { data }: any = await getSongUrlApi([songInfo.songId]);
-      console.log("播放歌曲url数据------", data)
+      console.log("🚀 ~ file: music.ts:101 ~ getSongUrl ~ 音乐的url:", data)
       this.currentSongData = data;
+      this.currentSongInfo = songInfo;
       if (!data[0].url) {
         return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000});
       } else if (data[0].fee === 1) {
@@ -110,10 +110,6 @@ export const useMusicStore = defineStore('music', {
       } else {
         ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000});
       }
-      this.init()
-      this.likeIds.length === 0 && this.likeList()
-      this.getMusicComment({ id: this.currentSongInfo.songId, limit: 20, offset: 0})
-      this.getLyric(this.currentSongInfo.songId)
     },
 
     // 初始化音乐栏
@@ -261,8 +257,26 @@ export const useMusicStore = defineStore('music', {
 
     // 获取音乐歌词
     async getLyric (id: number) {
-      const result = await getLyricApi(id)
-      // console.log("🚀 ~ file: music.ts:264 ~ getLyric ~ 获取音乐歌词:", result)
+      const { lrc: { lyric } }: any = await getLyricApi(id)
+      this.lyric = lyric
+      console.log('歌词------------------', lyric);
+      const arr = lyric.split('[')
+      console.log('分割的歌词', arr);
+      // const index = lyric.charAt('[') 
+      // console.log('索引', index);
+      
     },
   }
 });
+
+export const watchMusicInit = () => {
+  const { init, likeList, getMusicComment, getLyric } = useMusicStore()
+  const { currentSongInfo, likeIds } = storeToRefs(useMusicStore())
+  // 音乐切换后的初始化相关数据
+  watch(currentSongInfo, (newSongInfo, oldSongInfo) => {
+    init()
+    likeIds.value.length === 0 && likeList()
+    getMusicComment({ id: newSongInfo.songId, limit: 20, offset: 0})
+    getLyric(newSongInfo.songId)
+  }, { deep: true })
+}

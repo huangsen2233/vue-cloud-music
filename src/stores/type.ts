@@ -17,6 +17,7 @@ export interface IMusic {
   comments: any[]
   hotComments: any[]
   total: number
+  lyric: string
 }
 
 export type PaginationType = {

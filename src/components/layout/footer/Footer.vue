@@ -1,7 +1,14 @@
 <script lang="ts" setup>
+  import { onMounted } from "vue"
+  import { watchMusicInit } from "@/stores/music";
   import FooterLeft from './FooterLeft.vue';
   import FooterCenter from './FooterCenter.vue';
   import FooterRight from './FooterRight.vue';
+
+  onMounted(() => {
+    // 音乐切换后的初始化相关数据
+    watchMusicInit()
+  })
 </script>
 
 <template>

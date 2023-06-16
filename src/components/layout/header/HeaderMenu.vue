@@ -83,11 +83,11 @@
 
     .el-menu {
       height: 80px;
-      // width: 500px;
+      border: none; // 清除自带的border
 
       &-item {
         width: 80px;
-        border-bottom: 8px solid rgba(36,36,36,0.9);
+        box-sizing: border-box;
         color: #ccc;
         font-size: 18px;
       }

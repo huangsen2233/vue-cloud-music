@@ -24,7 +24,7 @@
         <div :class="['iconfont', isLike ? 'icon-woxihuan-hongsetaoxin likeColor' : 'icon-woxihuan-morentaoxin']" :title="isLike ? '取消喜欢' : '喜欢'" @click="likeMusic"></div>
         <div class="iconfont icon-xiazai" title="下载该歌曲"></div>
         <div class="iconfont icon-gengduo" title="更多"></div>
-        <el-badge :value="total" :max="999999" :hidden="total === 0 ? true : false">
+        <el-badge :value="total" :max="999999" :hidden="total === 0 ? true : false" type="primary">
           <div class="iconfont icon-pinglun" title="查看评论" @click="routerToSongDetail(currentSongInfo.songId)"></div>
         </el-badge>
       </section>

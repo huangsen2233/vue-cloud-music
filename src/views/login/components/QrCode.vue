@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, inject, defineExpose } from 'vue';
+  import { ref, inject } from 'vue';
   import { loginQrKeyApi, createQrApi, checkQrApi } from '@/api/login';
   import { getUserAccountApi } from '@/api/user';
   import { useUserStore } from '@/stores/user';

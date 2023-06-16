@@ -5,9 +5,7 @@
   import { useMusicStore } from "@/stores/music";
   import SongDetailLyric from "./components/SongDetailLyric.vue";
   import SongDetailComment from "./components/SongDetailComment.vue";
-  
-  const route = useRoute()
-  const { comments, hotComments, total } = storeToRefs(useMusicStore())
+
 </script>
 
 <template>
