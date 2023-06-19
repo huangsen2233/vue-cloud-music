@@ -16,7 +16,7 @@ export const useMusicStore = defineStore('music', {
     audio: new Audio(),
     src: '', // 音频地址
     isPlay: false, // 是否播放
-    volume: 60, // 音量
+    volume: 50, // 音量
     isMuted: false, // 是否静音
     loopType: 0, // 0顺序播放、1随机播放、2单曲循环
     currentTime: 0, // 当前时长
@@ -259,12 +259,6 @@ export const useMusicStore = defineStore('music', {
     async getLyric (id: number) {
       const { lrc: { lyric } }: any = await getLyricApi(id)
       this.lyric = lyric
-      console.log('歌词------------------', lyric);
-      const arr = lyric.split('[')
-      console.log('分割的歌词', arr);
-      // const index = lyric.charAt('[') 
-      // console.log('索引', index);
-      
     },
   }
 });

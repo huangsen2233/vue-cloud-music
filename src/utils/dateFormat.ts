@@ -11,3 +11,9 @@ export function formatDuration (duration: number) {
   const ss = s.toString().padStart(2, '0')
   return `${mm}:${ss}`
 }
+
+export function transformDuration (duration: string): number {
+  let arr = duration.split(':')
+  let totalDuration: number = parseInt(arr[0]) * 60 + parseInt(arr[1]) * 1
+  return totalDuration || 0
+}
