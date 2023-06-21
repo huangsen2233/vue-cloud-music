@@ -32,8 +32,8 @@
     <a class="content" @click="routeToPlaylistDetail(id)"><span>{{ name }}</span></a>
     <div class="creator" v-if="creatorName">
       by
-      <!-- 弹出框-歌单信息 -->
-      <el-popover placement="bottom" width="auto" trigger="click" popper-class="elpopover">
+      <!-- 弹框: 歌单信息 -->
+      <el-popover placement="bottom" width="auto" trigger="click">
         <template #reference>
           <a style="color:#000;">{{ creatorName }}</a>
         </template>

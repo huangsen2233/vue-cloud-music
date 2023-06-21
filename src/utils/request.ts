@@ -46,9 +46,9 @@ request.interceptors.response.use(
     return response.data;
   },
   error => {
-    if (error.response.data.message === '亲爱的,暂无版权') {
-      return error.response.data
-    }
+    // if (error.response.data.message === '亲爱的,暂无版权') {
+    //   return error.response.data
+    // }
     // endLoading();
     return Promise.reject(error);
   }

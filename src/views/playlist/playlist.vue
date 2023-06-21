@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted, provide, nextTick } from 'vue';
+  import { ref, onMounted, provide, nextTick } from 'vue';
   import { useRouter } from 'vue-router';
   import { playlistApi, playlistCatlistApi } from "@/api/playlist";
   import PlaylistHeader from './components/PlaylistHeader.vue';
@@ -64,7 +64,7 @@
     paginationProp.value.total = result.total; 
   };
 
-  // 标签改变
+  // 切换歌单标签
   const changeTag = (params: any) => {
     visible.value = false;
     nextTick(() => {

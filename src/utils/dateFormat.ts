@@ -14,6 +14,6 @@ export function formatDuration (duration: number) {
 
 export function transformDuration (duration: string): number {
   let arr = duration.split(':')
-  let totalDuration: number = parseInt(arr[0]) * 60 + parseInt(arr[1]) * 1
+  let totalDuration: number = parseFloat(arr[0]) * 60 + parseFloat(arr[1]) * 1
   return totalDuration || 0
 }

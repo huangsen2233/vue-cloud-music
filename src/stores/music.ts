@@ -2,6 +2,7 @@ import { nextTick, watch } from "vue";
 import { defineStore, storeToRefs } from "pinia";
 import { getSongUrlApi, likeMusicApi, likeListApi, getMusicCommentApi, getLyricApi } from "@/api/music";
 import { useUserStore } from "@/stores/user";
+import localCache from "@/utils/cache";
 import type { IMusic, CurrentSongInfoType, PaginationType } from "./type";
 
 export const useMusicStore = defineStore('music', {
@@ -16,7 +17,7 @@ export const useMusicStore = defineStore('music', {
     audio: new Audio(),
     src: '', // 音频地址
     isPlay: false, // 是否播放
-    volume: 50, // 音量
+    volume: 30, // 音量
     isMuted: false, // 是否静音
     loopType: 0, // 0顺序播放、1随机播放、2单曲循环
     currentTime: 0, // 当前时长
@@ -117,33 +118,34 @@ export const useMusicStore = defineStore('music', {
       this.currentIndex === -1 && this.songList.push(this.currentSongInfo);
       this.audio.volume = this.volume / 100
       this.audio.src = this.currentSongData[0].url
-      // this.currentTime = 0
-      this.isPlay = true
       this.openTimer()
       // 音频可能未完全加载，使用定时器去获取音频时长
       setTimeout(() => {
         this.duration = Math.floor(this.audio.duration)
         this.audio.play()
+        this.isPlay = true
       }, 1000)
     },
 
     // 开启定时器: 增加当前播放时间
     openTimer () {
       this.timer = setInterval(() => {
-        this.currentTime = Math.round(this.audio.currentTime)
+        this.currentTime = this.audio.currentTime
         // 当前歌曲播放结束
         if (this.audio.ended) {      
           this.isPlay = false
           clearInterval(this.timer)
           this.playNext()
         }
-      }, 1000)
+      }, 200)
     },
 
     // 播放、暂停
     play () {
       if (this.songList.length === 0) {
-        return ElNotification({ title: 'Warning', message: '播放列表暂无歌曲!', type: 'warning', duration: 2000});
+        return ElNotification({ title: 'Warning', message: '播放列表暂无歌曲!', type: 'warning', duration: 2000 });
+      } else if (this.currentSongInfo.songId === 0) {
+        return ElNotification({ title: 'Warning', message: '请先选择需要播放的歌曲!', type: 'warning', duration: 2000 });
       }
       this.isPlay = !this.isPlay
       if (this.isPlay) {
@@ -265,12 +267,17 @@ export const useMusicStore = defineStore('music', {
 
 export const watchMusicInit = () => {
   const { init, likeList, getMusicComment, getLyric } = useMusicStore()
-  const { currentSongInfo, likeIds } = storeToRefs(useMusicStore())
+  const { currentSongInfo, likeIds, songList } = storeToRefs(useMusicStore())
   // 音乐切换后的初始化相关数据
   watch(currentSongInfo, (newSongInfo, oldSongInfo) => {
+    if (newSongInfo.songId === 0) return
     init()
     likeIds.value.length === 0 && likeList()
     getMusicComment({ id: newSongInfo.songId, limit: 20, offset: 0})
     getLyric(newSongInfo.songId)
   }, { deep: true })
+  // 本地缓存的歌单列表
+  watch(() => songList.value.length, (newLength, oldLength) => {
+    localCache.setCache('songList', songList.value)
+  })
 }

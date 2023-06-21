@@ -9,8 +9,12 @@
   const { currentSongInfo, isLike, total } = storeToRefs(useMusicStore());
 
   // 路由跳转到歌曲详情页
-  const routerToSongDetail = (id: number) => {
-    router.push({ path: '/song-detail', query: { id } })
+  const routerToSongDetail = () => {
+    if (currentSongInfo.value.songId === 0) {
+      ElNotification({ title: 'Warning', message: '请先选择歌曲再查看评论!', type: 'warning', duration: 2000 });
+    } else {
+      router.push({ path: '/song-detail', query: { id: currentSongInfo.value.songId, isScroll: 'true' } })
+    }
   }
 </script>
 
@@ -25,7 +29,7 @@
         <div class="iconfont icon-xiazai" title="下载该歌曲"></div>
         <div class="iconfont icon-gengduo" title="更多"></div>
         <el-badge :value="total" :max="999999" :hidden="total === 0 ? true : false" type="primary">
-          <div class="iconfont icon-pinglun" title="查看评论" @click="routerToSongDetail(currentSongInfo.songId)"></div>
+          <div class="iconfont icon-pinglun" title="查看评论" @click="routerToSongDetail"></div>
         </el-badge>
       </section>
     </section>

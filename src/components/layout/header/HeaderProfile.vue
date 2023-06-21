@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, inject, computed, nextTick } from 'vue';
+  import { ref, inject, computed } from 'vue';
   import { storeToRefs } from "pinia";
   import { useRouter } from "vue-router";
   import { useUserStore } from "@/stores/user";
@@ -58,7 +58,6 @@
   };
 
   /**
-   * 提取el-popover的class样式
    * force、blur的bug问题
    */
   const handleBlur = () => {
@@ -86,7 +85,15 @@
     visible.value = false;
   };
 
-  const handleCommand = () => {};
+  const handleCommand = (command: string) => {
+    console.log('handleCommand', command);
+    if (command === 'profile') {
+      /**
+       * 个人主页
+       */
+      router.push({ path: '/playlist-detail' });
+    }
+  };
 </script>
 
 <template>
@@ -131,8 +138,8 @@
         <span class="text">{{ profile?.nickname }}</span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item icon="User">个人主页</el-dropdown-item>
-            <el-dropdown-item icon="SwitchButton">退出登录</el-dropdown-item>
+            <el-dropdown-item icon="User" command="profile">个人主页</el-dropdown-item>
+            <el-dropdown-item icon="SwitchButton" command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

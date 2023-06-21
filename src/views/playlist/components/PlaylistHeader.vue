@@ -2,7 +2,7 @@
   import { ref, reactive, computed } from 'vue';
   import type { playlistType } from "../playlist.vue";
 
-  const { tagsList, tagsIcons, showPopover } = defineProps<{
+  const props = defineProps<{
     showPopover: boolean
     tagsList: any
     tagsIcons: any
@@ -17,16 +17,16 @@
 
   let cat = ref('全部');
 
-  // 切换歌单
+  // 切换歌单标签
   const switchPlaylist = (tag: string) => {
     cat.value = tag;
     emits('on-change', { cat: tag });
     emits('update:showPopover', false);
   };
 
-  // 显示弹出框
+  // 显示歌单标签弹框
   const popoverClick = () => {
-    emits('update:showPopover', true);
+    emits('update:showPopover', !props.showPopover);
   }
 </script>
 
@@ -34,15 +34,15 @@
   <div class="playlist-tag">
     <section class="playlist-tag-select">
       <span>{{ cat }}</span>
-      <!-- 弹出框-歌单标签 -->
-      <el-popover :visible="showPopover" placement="bottom-end" :width="700" popper-class="elpopover">
+      <!-- 弹出框: 歌单标签 -->
+      <el-popover :visible="showPopover" placement="bottom-end" :width="700" popper-class="playlist-popover">
         <template #reference>
-          <el-button type="primary" size="large" plain @click="popoverClick">
+          <el-button type="primary" size="large" @click="popoverClick">
             选择分类<el-icon style="padding-left: 5px;"><ArrowDown /></el-icon>
           </el-button>
         </template>
         <template v-for="(value,key,index) in tagsList">
-          <div class="elpopover-content">
+          <div class="playlist-popover-content">
             <el-image :src="tagsIcons[key]" style="width: 28px; height: 28px;"></el-image>
             <el-tag size="large" type="success"  style="margin: 0 10px; font-size: 16px;">{{ key }}</el-tag>
             <div class="tag">
@@ -81,42 +81,4 @@
       }
     }
   }
-
-  .elpopover {
-    &-content {
-      display: flex;
-      align-items: center;
-      padding-bottom: 20px;
-
-      .el-image, .el-tag {
-        flex-shrink: 0; // 不缩小
-      }
-
-      .tag {
-        display: flex;
-        flex-wrap: wrap;
-
-        a::after {
-          content: '|';
-          padding: 0 10px;
-          color: #d8d8d8;
-        }
-
-        a {
-          padding-bottom: 10px;
-        }
-
-        a:hover {
-          cursor: pointer;
-          text-decoration: underline;
-        }
-        
-      }
-    }
-
-    &-content:last-of-type {
-      padding-bottom: 0;
-    }
-  }
-
 </style>

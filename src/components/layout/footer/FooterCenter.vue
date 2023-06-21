@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, computed} from 'vue';
+  import { ref } from 'vue';
   import { useMusicStore } from "@/stores/music";
   import { storeToRefs } from "pinia";
 
@@ -8,8 +8,6 @@
     title: string
     type: number
   }
-  // const props = defineProps<{}>();
-  // const emits = defineEmits<{}>();
 
   const { play, playPrevious, playNext, changeLoopType, muted, changeVolume } = useMusicStore()
   const { isPlay, volume, isMuted } = storeToRefs(useMusicStore())
@@ -72,7 +70,7 @@
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
   .audio-center {
 
     .icon {
@@ -90,32 +88,6 @@
 
       .icon-yinlebofang, .icon-zantingbofang {
         font-size: 60px;
-      }
-    }
-  }
-
-  .el-popover.volume-popover {
-    height: 320px;
-    width: 80px !important;
-    min-width: 80px;
-
-    .slider-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      height: 100%;
-
-      .volume {
-        font-size: 16px;
-      }
-
-      .iconfont {
-        font-size: 26px;
-      }
-      .iconfont:hover {
-        color: var(--el-color-primary);
-        cursor: pointer;
       }
     }
   }

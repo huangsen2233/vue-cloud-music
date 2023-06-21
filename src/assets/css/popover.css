@@ -1,0 +1,64 @@
+/* 音量 */
+.el-popover.volume-popover {
+  height: 320px;
+  width: 80px !important;
+  min-width: 80px;
+
+  .slider-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+
+    .volume {
+      font-size: 16px;
+    }
+
+    .iconfont {
+      font-size: 26px;
+    }
+    .iconfont:hover {
+      color: var(--el-color-primary);
+      cursor: pointer;
+    }
+  }
+}
+
+/* 歌单标签 */
+.el-popover.playlist-popover {
+
+  .playlist-popover-content {
+    display: flex;
+    align-items: center;
+
+    .el-image, .el-tag {
+      flex-shrink: 0;
+    }
+
+    .tag {
+      display: flex;
+      flex-wrap: wrap;
+
+      & > a {
+        padding-bottom: 10px;
+      }
+
+      & > a::after {
+        content: '|';
+        padding: 0 10px;
+        color: #d8d8d8;
+      }
+
+      & > a:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      
+    }
+  }
+
+  .playlist-popover-content:not(:last-of-type) {
+    padding-bottom: 20px;
+  }
+}
