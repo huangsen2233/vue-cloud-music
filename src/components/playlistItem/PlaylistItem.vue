@@ -54,82 +54,85 @@
   </div>
 </template>
 
-<style lang="less">
-  .img {
-    position: relative;
-    width: 200px;
-    height: 200px;
+<style lang="less" scoped>
+  .playlist-item {
 
-    .el-image {
-      border-radius: 10px;
-      width: 100%;
-      height: 100%;
+    .img {
+      position: relative;
+      width: 200px;
+      height: 200px;
+
+      .el-image {
+        border-radius: 10px;
+        width: 100%;
+        height: 100%;
+      }
+
+      .el-image:hover {
+        cursor: pointer;
+      }
+
+      .count {
+        box-sizing: border-box;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        font-size: 20px;
+        padding: 0 20px;
+        border-radius: 0 0 10px 10px;
+        color: #eee;
+        background: rgba(54,48,51,0.4);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & > span {
+          flex: 1;
+          padding-left: 10px;
+          font-size: 14px;
+        }
+
+        & > .el-icon:nth-of-type(2) {
+          transition: all 0.3s;
+        }
+
+        & > .el-icon:nth-of-type(2):hover {
+          cursor: pointer;
+          color: #fff;
+          transform: scale(1.2);
+        }
+      }
     }
 
-    .el-image:hover {
-      cursor: pointer;
-    }
-
-    .count {
-      box-sizing: border-box;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 30px;
-      line-height: 30px;
-      font-size: 20px;
-      padding: 0 20px;
-      border-radius: 0 0 10px 10px;
-      color: #eee;
-      background: rgba(54,48,51,0.4);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .content {
+      display: block;
+      font-weight: 600;
+      padding-top: 10px;
 
       & > span {
-        flex: 1;
-        padding-left: 10px;
-        font-size: 14px;
-      }
-
-      & > .el-icon:nth-of-type(2) {
-        transition: all 0.3s;
-      }
-
-      & > .el-icon:nth-of-type(2):hover {
-        cursor: pointer;
-        color: #fff;
-        transform: scale(1.2);
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
       }
     }
-  }
 
-  .content {
-    display: block;
-    font-weight: 600;
-    padding-top: 10px;
-
-    & > span {
-      display: -webkit-box;
-      overflow: hidden;
-      -webkit-box-orient: vertical;
-      line-clamp: 1;
-      -webkit-line-clamp: 1;
+    .content:hover {
+      cursor: pointer;
+      text-decoration: underline;
     }
-  }
 
-  .content:hover {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-
-  .creator {
-    padding-top: 10px;
-    color: rgba(0,0,0,0.6);
-    font-size: 14px;
-  }
-  .creator:hover a{
-    cursor: pointer;
-    text-decoration: underline;
+    .creator {
+      padding-top: 10px;
+      color: rgba(0,0,0,0.6);
+      font-size: 14px;
+    }
+    .creator:hover a{
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
 </style>

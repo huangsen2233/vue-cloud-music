@@ -6,9 +6,6 @@ import localCache from "@/utils/cache";
 import type { IMusic, CurrentSongInfoType, PaginationType } from "./type";
 
 export const useMusicStore = defineStore('music', {
-  /* persist: {
-    enabled: true
-  }, */
   state: (): IMusic => ({
     currentSongInfo: { songId: 0, songName: '', picUrl: '', duration: 0, artists: [] },
     currentSongData: [],
@@ -262,12 +259,24 @@ export const useMusicStore = defineStore('music', {
       const { lrc: { lyric } }: any = await getLyricApi(id)
       this.lyric = lyric
     },
+
+    // 添加歌曲列表
+    addToPlaylist (songInfo: CurrentSongInfoType) {
+      const index = this.songList.findIndex(i => i.songId === songInfo.songId)
+      if (index === -1) {
+        ElMessage({ message: `<${songInfo.songName}>成功添加到播放列表`, type: 'success' })
+        this.songList.push(songInfo);
+      } else {
+        ElMessage({ message: `播放列表已有<${songInfo.songName}>, 请勿重复添加`, type: 'warning' })
+      }
+    },
   }
 });
 
 export const watchMusicInit = () => {
   const { init, likeList, getMusicComment, getLyric } = useMusicStore()
   const { currentSongInfo, likeIds, songList } = storeToRefs(useMusicStore())
+  
   // 音乐切换后的初始化相关数据
   watch(currentSongInfo, (newSongInfo, oldSongInfo) => {
     if (newSongInfo.songId === 0) return
@@ -275,9 +284,10 @@ export const watchMusicInit = () => {
     likeIds.value.length === 0 && likeList()
     getMusicComment({ id: newSongInfo.songId, limit: 20, offset: 0})
     getLyric(newSongInfo.songId)
-  }, { deep: true })
+  }, { deep: true });
+
   // 本地缓存的歌单列表
   watch(() => songList.value.length, (newLength, oldLength) => {
     localCache.setCache('songList', songList.value)
-  })
+  });
 }

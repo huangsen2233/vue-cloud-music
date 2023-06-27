@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onActivated, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRoute, useRouter } from "vue-router";
   import { useMusicStore } from "@/stores/music";
   import { 

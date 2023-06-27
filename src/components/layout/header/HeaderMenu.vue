@@ -96,7 +96,7 @@
         background-color: rgba(0, 0, 0);
       }
       &-item.is-active {
-        border-bottom: 8px solid var(--el-color-primary);
+        border-bottom: 6px solid var(--el-color-primary);
       }
     }
   }

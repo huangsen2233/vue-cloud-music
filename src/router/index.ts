@@ -78,6 +78,14 @@ const routes: Array<RouteRecordRaw> = [
       keepAlive: false
     }
   },
+  {
+    name: 'profile',
+    path: '/profile',
+    component: () => import('@/views/profile/profile.vue'),
+    meta: {
+      keepAlive: false
+    }
+  },
   { 
     name: 'NotFound', 
     path: '/:pathMatch(.*)*', 

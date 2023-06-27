@@ -3,14 +3,12 @@
   import { loginQrKeyApi, createQrApi, checkQrApi } from '@/api/login';
   import { getUserAccountApi } from '@/api/user';
   import { useUserStore } from '@/stores/user';
-  // import { useRouter } from "vue-router";
   import localCache from '@/utils/cache';
 
+  const useUser = useUserStore();
+  const closeDialog: any = inject('on-login');
   let qrUrl = ref();
   let timer = ref();
-  const useUser = useUserStore();
-  // const router = useRouter();
-  const closeDialog: any = inject('on-login');
 
   // 生成一个二维码的key
   const createQr = async () => {
@@ -38,15 +36,11 @@
         useUser.loginStatus = true;
         useUser.account = account;
         useUser.profile = profile;
-        ElMessage({
-          message,
-          showClose: true,
-          type: 'success',
-        });
+        ElMessage({ message, showClose: true, type: 'success' });
         closeDialog();
       }
     }
-  }
+  };
 
   defineExpose({ createQr });
 </script>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { ref } from "vue";
+  import { useRouter } from "vue-router";
+  import type { TabPaneName } from 'element-plus';
   import Account from "./components/Account.vue";
   import Phone from "./components/Phone.vue";
   import QrCode from "./components/QrCode.vue";
-  import { useRouter } from "vue-router";
-  import type { TabPaneName } from 'element-plus';
 
   const router = useRouter();
   const activeTabName = ref('account');

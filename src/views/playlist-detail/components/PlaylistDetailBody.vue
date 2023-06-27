@@ -13,7 +13,7 @@
     currentComment.value = newVal;
   });
 
-  const useMusic = useMusicStore();
+  const { getSongUrl, addToPlaylist } = useMusicStore();
   const { profile } = storeToRefs(useUserStore());
 
   const props = defineProps<{
@@ -40,7 +40,12 @@
   const playSong = async (row: any) => {
     const { dt, al, ar, name, id } = row;
     const songInfo = { songId: id, songName: name, picUrl: al.picUrl, duration: dt, artists: ar };
-    useMusic.getSongUrl(songInfo);
+    getSongUrl(songInfo);
+  };
+
+  // 添加到播放列表
+  const addPlaylist = (songInfo: any) => {
+    addToPlaylist(songInfo)
   };
 
   // 切换评论类型
@@ -68,7 +73,7 @@
   const changSubscribersPagination = (params: PaginationParamsType) => {
     emits('subscribers-pagination', params);
   };
- 
+
   const myComment = ref(''); // 我的评论
 </script>
 
@@ -78,7 +83,7 @@
       <template #label>歌曲 {{ songs.length }}</template>
       <template #default>
         <!-- 歌曲 -->
-        <SongTable :songs="songs" @play-song="playSong" @router-singer-detail="(id: number) => emits('router-singer-detail', id)" />
+        <SongTable :songs="songs" @play-song="playSong"  @add-playlist="addPlaylist" @router-singer-detail="(id: number) => emits('router-singer-detail', id)" />
       </template>
     </el-tab-pane>
     <el-tab-pane name="comment">
@@ -145,7 +150,8 @@
 
   .collector-item:hover {
     cursor: pointer;
-    background: #E6E6E6;
+    color: var(--el-color-primary);
+    background-color: var(--el-color-primary-light-9);
   }
 
   .el-pagination {

@@ -7,7 +7,7 @@
   import type { CurrentSongInfoType } from "./type";
 
   const router = useRouter()
-  const { clearList, changeTime, restoreState, deleteSong, play, getSongUrl } = useMusicStore();
+  const { clearList, restoreState, deleteSong, play, getSongUrl } = useMusicStore();
   const { songList, currentTime, duration, currentSongInfo, isPlay } = storeToRefs(useMusicStore());
   const openDrawer = ref(false);
 
@@ -24,12 +24,13 @@
     }
   }
 
+  // 删除列表的歌曲
   const handleDeleteSong = (row: CurrentSongInfoType) => {
     if (row.songId === currentSongInfo.value.songId) {
       restoreState() 
     }
     ElMessage({ message: `成功删除<${row.songName}>`, type: 'success' })
-    deleteSong(row.songId) // 删除歌曲
+    deleteSong(row.songId)
   }
 
   // 路由跳转到歌曲详情页
@@ -45,9 +46,6 @@
 <template>
   <audio src="" autoplay loop controls style="display: none;"></audio>
   <div class="audio-right">
-    <div class="song-time">
-      <el-slider v-model="currentTime" :show-tooltip="false" :min="0" :max="duration" @change="changeTime" :disabled="duration === 0 ? true : false" />
-    </div>
     <div class="duration">{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</div>
     <div class="iconfont icon-bofanglan-geci" title="展示歌词" @click="routerToSongDetail"></div>
     <div class="iconfont icon-24gl-playlistMusic4" title="展示播放列表" @click="openDrawer = !openDrawer">
@@ -108,8 +106,8 @@
       padding-right: 20px;
     }
 
-    .song-time {
-      width: 200px;
+    .duration {
+      font-size: 18px;
     }
 
     .iconfont {

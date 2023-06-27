@@ -4,7 +4,6 @@
   const props = defineProps({
     bannerList: Array as PropType<any[]>
   });
-  
 </script>
 
 <template>

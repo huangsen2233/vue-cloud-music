@@ -36,7 +36,7 @@
     padding: 30px 0;
 
     &-item {
-      flex: 15%;
+      flex-basis: 200px;
       margin: 0 calc(10% / 5) 30px 0;
     }
     

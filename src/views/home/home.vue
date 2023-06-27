@@ -1,9 +1,7 @@
 <script setup lang="ts">
   import { ref, provide, onMounted } from 'vue';
   import { useUserStore } from "@/stores/user";
-  import { useMusicStore } from "@/stores/music";
-  import { storeToRefs } from 'pinia';
-  import { loginStatusApi, logoutApi } from "@/api/login";
+  import { loginStatusApi } from "@/api/login";
   import Header from "@/components/layout/header/Header.vue";
   import Footer from "@/components/layout/footer/Footer.vue";
   import LoginDiaLog from "@/components/dialog/LoginDiaLog.vue";
@@ -14,15 +12,13 @@
   });
 
   const useUser = useUserStore();
-  const useMusic = useMusicStore();
-  const { currentSongInfo } = storeToRefs(useMusic);
-
-  const dialogVisible = ref(false);
+  const dialogVisible = ref<boolean>(false);
+  const footerVisible = ref<boolean>(true);
 
   // 登录框的展示、隐藏
   const changeDialogVisible = () => {
     dialogVisible.value = !dialogVisible.value;
-  }
+  };
 
   // 检查登录状态
   const checkUserStatus = async () => {
@@ -32,6 +28,11 @@
       useUser.account = account;
       useUser.profile = profile;
     }
+  };
+
+  // 切换音乐栏显示、隐藏
+  const switchMusicBar = () => {
+    footerVisible.value = !footerVisible.value
   };
 
   provide('on-login', changeDialogVisible);
@@ -56,8 +57,11 @@
         </router-view>
       </el-card>
     </el-main>
-    <el-footer>
+    <el-footer :class="[footerVisible ? '' : 'hiddle-footer']">
       <Footer />
+      <!-- 隐藏音乐栏 -->
+      <el-icon :class="['icon-left', footerVisible ? '' : 'hidden']" title="隐藏音乐栏" @click="switchMusicBar"><DArrowLeft /></el-icon>
+      <el-icon :class="['icon-right', footerVisible ? 'hidden' : '']" title="显示音乐栏" @click="switchMusicBar"><DArrowRight /></el-icon>
     </el-footer>
   </el-container>
   <!-- 登录框 -->
@@ -95,16 +99,41 @@
   .el-footer {
     position: fixed;
     z-index: 999;
-    // bottom: -90px;
     bottom: 0;
     width: 100%;
     height: 100px;
     background: rgba(250, 250, 250, 0.95);
     box-shadow: -5px 0 8px 3px #ddd;
-    transition: all 0.5s;
+    transition: transform ease 1.2s;
+
+    .icon-left {
+      position: absolute;
+      top: 50%;
+      left: 15%;
+      transform: translateY(-50%);
+      font-size: 50px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .icon-right {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      font-size: 50px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
   }
 
-  .el-footer:hover {
-    bottom: 0;
+  .hiddle-footer {
+    transform: translateX(-96%);
   }
 </style>

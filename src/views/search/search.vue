@@ -13,7 +13,7 @@
 
   const route = useRoute();
   const router = useRouter();
-  const useMusic = useMusicStore();
+  const { getSongUrl, addToPlaylist } = useMusicStore();
 
   onMounted(() => {
     cloudSearch({ ...cloudSearchParams.value });
@@ -81,14 +81,19 @@
 
   // 播放歌曲
   const playSong = (row: any) => {
-    const { dt, al, ar, name, id } = row;
-    const songInfo = { songId: id, songName: name, picUrl: al.picUrl, duration: dt, artists: ar };
-    useMusic.getSongUrl(songInfo);
+    const { dt, al, ar, name, id } = row
+    const songInfo = { songId: id, songName: name, picUrl: al.picUrl, duration: dt, artists: ar }
+    getSongUrl(songInfo)
+  };
+
+  // 添加到播放列表
+  const addPlaylist = (songInfo: any) => {
+    addToPlaylist(songInfo)
   };
 
   // 路由跳转到歌单详情页
   const routerToPlaylistDetail = (id: number) => {
-    router.push({ path: '/playlist-detail', query: { id } });
+    router.push({ path: '/playlist-detail', query: { id } })
   };
 
   // 路由跳转到歌手详情页
@@ -116,7 +121,7 @@
       <template #label><b style="font-size: 16px;">单曲</b></template>
       <template #default>
         <!-- 单曲 -->
-        <SongTable :songs="songs" @play-song="playSong" @router-singer-detail="routerToSingerDetail" />
+        <SongTable :songs="songs" @play-song="playSong" @add-playlist="addPlaylist" @router-singer-detail="routerToSingerDetail" />
       </template>
     </el-tab-pane>
     <el-tab-pane label="歌手" :name="100">
