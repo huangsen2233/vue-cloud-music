@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref } from "vue";
   import type { initialType, offsetType, paginationType } from "../type";
-  import BasePagination from "@/components/common/BasePagination.vue";
+  import BasePagination from "@/components/pagination/BasePagination.vue";
   import ArtistList from "@/components/artistList/ArtistList.vue";
 
   const props = defineProps<{

@@ -1,14 +1,15 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRoute, useRouter } from "vue-router";
-  import { playlistDetailApi, playlistCommentApi, playlistSubscribersApi } from "@/api/playlist";
   import { getSongDetailApi } from "@/api/music";
+  import { playlistDetailApi, playlistCommentApi, playlistSubscribersApi } from "@/api/playlist";
   import type { PlaylistCommentType, PaginationType, PaginationParamsType, PlaylistSubscribersType } from "./type";
   import PlaylistDetailHeader from "./components/PlaylistDetailHeader.vue";
   import PlaylistDetailBody from "./components/PlaylistDetailBody.vue";
 
   onMounted(() => {
     const id = Number(route.query.id);
+    playlistId.value = id
     if (id) {
       getPlaylistDetail(id);
       getPlaylistComment({ ...commentParams.value, id });
@@ -18,7 +19,8 @@
 
   const route = useRoute();
   const router = useRouter();
-  const playlistDetail: any = ref({});
+  const playlistId = ref<number>(0);
+  const playlistDetail = ref<any>({});
   const songs: any = ref([]);
   const activeName = ref('song'); 
   const commentParams = ref({ id: 0, limit: 20, offset: 0 });
@@ -32,12 +34,12 @@
   // 获取歌单详情
   const getPlaylistDetail = async (id: number) => {
     const result: any = await playlistDetailApi({ id });
-    // console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单详情", result);
+    console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单详情", result);
     playlistDetail.value = result.playlist;
     let ids = result.playlist.trackIds.map((i: any) => i.id);
-    const res: any = await getSongDetailApi(ids);
-    console.log("🚀 ~ file: playlist-detail.vue:22 ~ getPlaylistDetail ~ 获取歌曲详情:", res.songs);
-    songs.value = [...res.songs];
+    const { songs: allSong }: any = await getSongDetailApi(ids);
+    // console.log("🚀 ~ file: playlist-detail.vue:22 ~ getPlaylistDetail ~ 歌单中歌曲的详情:", allSong);
+    songs.value = [...allSong];
   };
 
   // 获取歌单评论
@@ -85,7 +87,7 @@
 </script>
 
 <template>
-  <PlaylistDetailHeader :playlist-detail="playlistDetail" />
+  <PlaylistDetailHeader :playlist-id="playlistId" :playlist-detail="playlistDetail" :songs="songs" />
   <PlaylistDetailBody
     :active-name="activeName" 
     :songs="songs"

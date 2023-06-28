@@ -5,7 +5,7 @@
   import Header from "@/components/layout/header/Header.vue";
   import Footer from "@/components/layout/footer/Footer.vue";
   import LoginDiaLog from "@/components/dialog/LoginDiaLog.vue";
-  import BaseBackTop from "@/components/common/BaseBackTop.vue";
+  import BaseBackTop from "@/components/backTop/BaseBackTop.vue";
   
   onMounted(() => {
     !useUser.loginStatus && checkUserStatus();
@@ -23,7 +23,7 @@
   // 检查登录状态
   const checkUserStatus = async () => {
     const { data: { code, account, profile } } = await loginStatusApi();
-    if (code === 200) {
+    if (code === 200 && profile !== null) {
       useUser.loginStatus = true;
       useUser.account = account;
       useUser.profile = profile;

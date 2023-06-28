@@ -5,7 +5,7 @@
   import { useUserStore } from "@/stores/user";
   import type { PaginationType, PaginationParamsType } from "../type";
   import dianzanIcon from "@/assets/imgs/dianzan.png"
-  import BasePagination from '@/components/common/BasePagination.vue';
+  import BasePagination from '@/components/pagination/BasePagination.vue';
   import SongTable from '@/components/songTable/SongTable.vue';
   import Comment from '@/components/comment/Comment.vue';
 

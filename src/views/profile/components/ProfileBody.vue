@@ -4,17 +4,17 @@
   import { useRouter } from 'vue-router';
   import { useUserStore } from "@/stores/user";
   import { useMusicStore } from "@/stores/music";
-  import { getUserPlaylistApi, getUserRecordApi } from "@/api/user";
+  import { getUserPlaylistApi, getRecentSongApi } from "@/api/user";
   import PlaylistItem from '@/components/playlistItem/PlaylistItem.vue';
   import SongTable from '@/components/songTable/SongTable.vue';
 
   onMounted(() => {
     const { id } = account.value 
     getUserPlaylist(id)
-    getUserRecord(id)
+    getRecentSong()
   });
 
-  const { account } = storeToRefs(useUserStore());
+  const { account, collectPlaylists } = storeToRefs(useUserStore());
   const { getSongUrl, addToPlaylist } = useMusicStore();
   const router = useRouter();
   const createPlaylist = ref<any[]>([]); // 创建的歌单
@@ -25,6 +25,7 @@
   const getUserPlaylist = async (id: number) => {
     const { playlist }: any = await getUserPlaylistApi({ uid: id })
     // console.log("🚀 ~ file: Profile.vue:12 ~ onMounted ~ 用户歌单:", playlist)
+    collectPlaylists.value = playlist
     playlist.forEach((i: any) => {
       if (i.subscribed === true) {
         collectPlaylist.value.push(i)
@@ -35,10 +36,9 @@
   };
 
   // 获取用户播放记录
-  const getUserRecord = async (id: number) => {
-    const { weekData }: any = await getUserRecordApi({ uid: id })
-    songs.value = weekData.map((i: any) => i.song)
-    // console.log('播放记录', songs.value)
+  const getRecentSong = async () => {
+    const { data: { list } }: any = await getRecentSongApi()
+    songs.value = list.map((i: any) => i.data)
   };
 
   // 路由跳转到歌单详情
@@ -69,7 +69,7 @@
 <template>
   <div class="profile-body">
     <section class="profile-body-record">
-      <h3>我的听歌记录(最近一周)</h3>
+      <h3>我的听歌记录({{ songs.length }})</h3>
       <SongTable :songs="songs" @play-song="playSong" @add-playlist="addPlaylist" @router-singer-detail="routerToSingerDetail" />
     </section>
     <section class="profile-body-create">
@@ -117,11 +117,11 @@
 
       & > .song {
         max-height: 400px;
-        overflow-y: auto;
+        overflow-y: scroll;
       }
     }
 
-    &-record {
+    &-create {
       padding-bottom: 30px;
 
       & > h3 {

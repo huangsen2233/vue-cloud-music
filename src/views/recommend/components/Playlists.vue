@@ -1,21 +1,39 @@
 <script lang="ts" setup>
+  import { ref, onMounted } from "vue";
+  import { useRouter } from 'vue-router';
   import type { PlayListType } from "../type";
+  import { personalizedApi } from "@/api/recommend";
   import PlaylistItem from "@/components/playlistItem/PlaylistItem.vue";
 
-  const props = defineProps<{
-    playList: PlayListType[]
-  }>();
+  onMounted(() => {
+    getPersonalizedPlaylist()
+  });
 
-  const emits = defineEmits<{
-    (event: 'router-playlist'): void
-  }>();
+  const router = useRouter();
+  const playList = ref<PlayListType[]>([]);
+
+  // 获取推荐歌单
+  const getPersonalizedPlaylist = async () => {
+    const { result } = await personalizedApi();
+    playList.value.length = 0;
+    for (let i of result) {
+      const { id, picUrl, name, playCount } = i;
+      playList.value.push({ id, picUrl, name, playCount });
+    }
+    // console.log("🚀 ~ file: recommend.vue:23 ~ getresourceData ~ res: 歌单", result)
+  };
+
+  // 路由跳转到歌单
+  const routerToPlaylist = () => {
+    router.push('/playlist');
+  };
 </script>
 
 <template>
   <div class="playlist">
     <section class="playlist-title">
       <h2>推荐歌单</h2>
-      <a @click.prvent="emits('router-playlist')">更多<el-icon><DArrowRight /></el-icon></a>
+      <a @click.prvent="routerToPlaylist">更多<el-icon><DArrowRight /></el-icon></a>
     </section>
     <section class="playlist-content">
       <div class="item" v-for="item in playList">
@@ -65,13 +83,11 @@
       justify-content: flex-start;
 
       .item {
-        box-sizing: border-box;
-        flex: 15%;
-        margin: 0 calc(10% / 5) 30px 0;
+        flex-basis: 200px;
       }
 
-      .item:nth-child(6n) {
-        margin-right: 0;
+      .item:not(:nth-child(6n)) {
+        margin: 0 auto 30px 0;
       }
     }
   }

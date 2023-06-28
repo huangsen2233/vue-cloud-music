@@ -7,12 +7,14 @@
   import { useMusicStore } from "@/stores/music";
   import { searchSuggestApi } from "@/api/search";
   import { getSongDetailApi } from "@/api/music";
+  import { logoutApi } from "@/api/login";
+  import localCache from '@/utils/cache';
 
   // 打开登录框
   const openLoginDialog = inject('on-login') as () => void;
   const router = useRouter();
   const { getSongUrl } = useMusicStore();
-  const { profile, loginStatus } = storeToRefs(useUserStore());
+  const { profile, loginStatus, account } = storeToRefs(useUserStore());
   const keywords = ref('');
   const visible = ref(false);
   const suggestlist = ref<any>();
@@ -93,10 +95,17 @@
     visible.value = false
   };
 
-  const handleCommand = (command: string) => {
-    console.log('handleCommand', command);
+  const handleCommand = async (command: string) => {
     if (command === 'profile') {
       router.push({ path: '/profile' })
+    } else if (command === 'logout') {
+      const { code } = await logoutApi()
+      if (code === 200) {
+        localCache.deleteCache('user_cookie')
+        loginStatus.value = false
+        account.value = {}
+        profile.value = {}
+      }
     }
   };
 </script>
@@ -134,7 +143,7 @@
     </el-popover>
     <!-- 个人信息 -->
     <div v-if="!loginStatus" class="profile">
-      <el-icon><Avatar /></el-icon>
+      <el-icon color="#fff" size="20px"><Avatar /></el-icon>
       <span class="text" @click="openLoginDialog">请先登录</span>
     </div>
     <div v-else-if="loginStatus" class="profile">
@@ -164,7 +173,7 @@
 
       .text {
         color: #eee;
-        padding-left: 10px;
+        padding-left: 6px;
         white-space: nowrap;
         cursor: pointer;
       }

@@ -2,7 +2,7 @@
   import { ref, reactive, computed } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
   import type { PaginationPropType, MvType } from "../type";
-  import BasePagination from '@/components/common/BasePagination.vue';
+  import BasePagination from '@/components/pagination/BasePagination.vue';
   import Mvs from '@/components/mvs/Mvs.vue';
 
   const props = defineProps<{

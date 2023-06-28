@@ -62,6 +62,10 @@
         color: red;
         display: none;
       }
+      
+      :deep(.el-slider__runway) {
+        background-color: var(--el-color-primary-light-7);
+      }
     }
   }
 </style>

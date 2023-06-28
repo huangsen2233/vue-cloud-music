@@ -74,8 +74,19 @@ type UserRecordType = {
  * @param {number} type 可选参数，type=1 时只返回 weekData, type=0 时返回 allData
  * @returns Promise
 */
-export const getUserRecordApi = ({ uid, type = 1}: UserRecordType) => {
-  return request.get('/user/record', {
-    params: { uid, type }
+// export const getUserRecordApi = ({ uid, type = 1}: UserRecordType) => {
+//   return request.get('/user/record', {
+//     params: { uid, type }
+//   })
+// }
+
+/**
+ * @description 最近播放歌曲
+ * @param {number} limit 可选参数，返回数量。默认100
+ * @returns Promise
+*/
+export const getRecentSongApi = (limit: number = 100) => {
+  return request.get('/record/recent/song', {
+    params: { limit }
   })
 }

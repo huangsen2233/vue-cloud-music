@@ -1,15 +1,37 @@
 <script lang="ts" setup>
+  import { ref, onMounted } from "vue";
   import type { MvsType } from "../type";
+  import { useRouter } from 'vue-router';
+  import { getNewMvApi } from "@/api/recommend";
   import { count } from "@/utils/count";
 
-  const props = defineProps<{
-    mvs: MvsType[]
-  }>();
+  onMounted(() => {
+    getNewMv();
+  });
 
-  const emits = defineEmits<{
-    (event: 'router-video', mvid: number): void;
-    (event: 'router-singer-detail', id: number): void;
-  }>();
+  const router = useRouter();
+  const mvs = ref<MvsType[]>([]);
+
+  // 获取最新MV
+  const getNewMv = async () => {
+    const { data }: any = await getNewMvApi({});
+    // console.log("🚀 ~ file: recommend.vue:54 ~ getNewMv ~ 最新mv:", data)
+    mvs.value.length = 0;
+    for (let i of data) {
+      const { id, artists, name, cover, playCount } = i;
+      mvs.value.push({ id, artists, name, cover, playCount });
+    }
+  }
+
+  // 路由跳转到MV视频
+  const routerToVideo = (id: number) => {
+    router.push({ path: '/video', query: { id } })
+  };
+
+  // 路由跳转到歌手详情
+  const routerToSingerDetail = (id: number) => {
+    router.push({ path: '/singer-detail', query: { id } })
+  };
 </script>
 
 <template>
@@ -20,19 +42,19 @@
     <section class="mvs-content">
       <div class="mv">
         <section class="mv-item" v-for="i in mvs">
-          <el-image style="width: 300px; height: 180px; border-radius: 20px;" :src="i.cover" fit="cover" @click="emits('router-video', i.id)" />
+          <el-image style="width: 300px; height: 180px; border-radius: 20px;" :src="i.cover" fit="cover" @click="routerToVideo(i.id)" />
           <div class="playcount">
             <div>
               <el-icon><VideoCamera /></el-icon>
               <span style="padding-left: 5px;">{{ count(i.playCount) }}</span>
             </div>
           </div>
-          <div class="playicon" @click="emits('router-video', i.id)">
+          <div class="playicon" @click="routerToVideo(i.id)">
             <el-icon><VideoPlay /></el-icon>
           </div>
           <div>{{ i.name }}</div>
           <div class="author">
-            by <a @click="emits('router-singer-detail', i.artists[0].id)">{{ i.artists[0].name }}</a>
+            by <a @click="routerToSingerDetail(i.artists[0].id)">{{ i.artists[0].name }}</a>
           </div>
         </section>
       </div>

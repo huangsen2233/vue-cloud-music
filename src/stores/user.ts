@@ -7,6 +7,7 @@ export const useUserStore = defineStore('user', {
       loginStatus: false,
       account: {}, // 账号信息
       profile: {}, // 个人信息
+      collectPlaylists: [], // 创建、收藏的歌单
     } as IUser
   },
   // 持久化存储数据，即缓存

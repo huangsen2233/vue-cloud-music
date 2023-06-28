@@ -1,20 +1,51 @@
 <script lang="ts" setup>
-  import { ref, reactive, computed } from 'vue';
+  import { ref, computed } from 'vue';
+  import { storeToRefs } from "pinia"
   import { formatTimestamp } from "@/utils/dateFormat";
+  import { count } from "@/utils/count";
+  import { useUserStore } from "@/stores/user";
+  import { useMusicStore } from "@/stores/music";
+  import { getUserPlaylistApi } from "@/api/user";
+  import { getSongUrlApi } from "@/api/music";
+  import { playlistSubscribeApi } from "@/api/playlist";
 
-  const { playlistDetail } = defineProps<{
+  const props = defineProps<{
+    playlistId: number
     playlistDetail: any
+    songs: any[]
   }>();
 
-  // 歌单播放次数
-  const count = computed(() => {
-    return function(value: number) {
-      if (value) {
-        const str = value.toString();
-        return str.slice(0, str.length - 4);
-      }
-    }
+  const isCollect = computed(() => {
+    const index = collectPlaylists.value.findIndex(i => i.id === props.playlistId)
+    return index === -1 ? false : true
   });
+
+  const { collectPlaylists, account } = storeToRefs(useUserStore());
+  const { getSongUrl, addToPlaylist } = useMusicStore();
+
+  // 获取用户收藏歌单
+  const getUserPlaylist = async () => {
+    const { playlist }: any = await getUserPlaylistApi({ uid: account.value.id })
+    collectPlaylists.value = playlist
+  };
+
+  // 收藏、取消收藏歌单
+  const handleCollect = async () => {
+    const params = {
+      id: props.playlistId,
+      t: isCollect.value ? 2 : 1
+    }
+    const { code }: any = await playlistSubscribeApi(params)
+    code === 200 && getUserPlaylist()
+  };
+
+  // 播放全部歌曲
+  const handlePlayAll = () => {
+    const allSongInfo = props.songs.map(i => ({ songId: i.id, songName: i.name, picUrl: i.al.picUrl, duration: i.dt, artists: i.ar }))
+    addToPlaylist(allSongInfo)
+    ElMessage({ message: '歌单成功添加到播放列表', type: 'success' })
+    getSongUrl(allSongInfo[0])
+  };
 </script>
 
 <template>
@@ -36,20 +67,28 @@
         </span>
       </div>
       <div>
-        <b>歌曲:</b> 
-        {{ playlistDetail.trackIds?.length }} 首
+        <el-button type="primary" size="large" @click="handlePlayAll">
+          <el-icon style="margin-right: 5px;" size="18px"><VideoPlay /></el-icon>播放全部
+        </el-button>
+        <el-button :type="isCollect ? 'danger' : 'primary'" size="large" @click="handleCollect">
+          <el-icon style="margin-right: 5px;" size="18px">
+            <Close v-if="isCollect" />
+            <Plus v-else />
+          </el-icon>
+          {{ isCollect ? '取消收藏' : '收藏歌单' }}
+        </el-button>
       </div>
-      <div>
+      <div v-if="playlistDetail.playCount > 0">
         <b>播放:</b> 
-        {{ count(playlistDetail.playCount) }} 万
+        {{ count(playlistDetail.playCount) }}
       </div>
-      <div>
+      <div v-if="playlistDetail.tags?.length > 0">
         <b>标签:</b>
         <template v-for="i in playlistDetail.tags">
           <el-tag style="margin-right: 20px;">{{ i }}</el-tag>
         </template>
       </div>
-      <div style="width: 80%;">
+      <div v-if="playlistDetail.description?.length > 0" style="width: 90%;">
         <b>介绍:</b>
         {{ playlistDetail.description }} 
       </div>

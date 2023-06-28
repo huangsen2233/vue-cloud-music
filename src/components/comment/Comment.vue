@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
-  import BasePagination from '@/components/common/BasePagination.vue';
+  import BasePagination from '@/components/pagination/BasePagination.vue';
 
   type PaginationType = {
     currentPage: number

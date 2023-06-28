@@ -1,11 +1,7 @@
 <script setup lang="ts">
-  import { ref, reactive, onMounted } from "vue";
+  import { ref, reactive } from "vue";
   import type { ElForm, FormRules } from 'element-plus';
   import { loginPhoneApi } from '@/api/login';
-  
-  onMounted(() => {
-
-  });
 
   const formData = reactive({
     phone: '19162633497',

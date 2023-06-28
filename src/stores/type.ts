@@ -43,6 +43,7 @@ export interface IUser {
   loginStatus: boolean
   account: any
   profile: any
+  collectPlaylists: any[]
 }
 
 export interface IVideo {

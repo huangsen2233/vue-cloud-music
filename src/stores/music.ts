@@ -97,7 +97,8 @@ export const useMusicStore = defineStore('music', {
   actions: {
     // 获取歌曲url
     async getSongUrl (songInfo: CurrentSongInfoType) {
-      const { data }: any = await getSongUrlApi([songInfo.songId]);
+      const { songId } = songInfo
+      const { data }: any = await getSongUrlApi([songId]);
       console.log("🚀 ~ file: music.ts:101 ~ getSongUrl ~ 音乐的url:", data)
       this.currentSongData = data;
       this.currentSongInfo = songInfo;
@@ -109,6 +110,22 @@ export const useMusicStore = defineStore('music', {
         ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000});
       }
     },
+
+    // 获取多首歌曲url
+    // async getAllSongUrl (allSongInfo: CurrentSongInfoType[]) {
+    //   const songIds = allSongInfo.map(i => i.songId)
+    //   const { data }: any = await getSongUrlApi(songIds);
+    //   console.log("🚀 ~ file: music.ts:101 ~ getSongUrl ~ 全部音乐的url:", data)
+    //   this.currentSongData = data;
+    //   this.currentSongInfo = songInfo;
+    //   if (!data[0].url) {
+    //     return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000});
+    //   } else if (data[0].fee === 1) {
+    //     ElNotification({ title: 'Warning', message: `<${songInfo.songName}>歌曲为VIP专享, 正在播放试听部分`, type: 'warning', duration: 2000});
+    //   } else {
+    //     ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000});
+    //   }
+    // },
 
     // 初始化音乐栏
     init () {
@@ -260,14 +277,21 @@ export const useMusicStore = defineStore('music', {
       this.lyric = lyric
     },
 
-    // 添加歌曲列表
-    addToPlaylist (songInfo: CurrentSongInfoType) {
-      const index = this.songList.findIndex(i => i.songId === songInfo.songId)
-      if (index === -1) {
-        ElMessage({ message: `<${songInfo.songName}>成功添加到播放列表`, type: 'success' })
-        this.songList.push(songInfo);
+    // 添加一首或多首歌曲到播放列表
+    addToPlaylist (songInfo: CurrentSongInfoType | CurrentSongInfoType[]) {
+      if (songInfo instanceof Array) {
+        songInfo.forEach(i => {
+          const index = this.songList.findIndex(j => j.songId === i.songId)
+          index === -1 && this.songList.push(i)
+        })
       } else {
-        ElMessage({ message: `播放列表已有<${songInfo.songName}>, 请勿重复添加`, type: 'warning' })
+        const index = this.songList.findIndex(i => i.songId === songInfo.songId)
+        if (index === -1) {
+          ElMessage({ message: `<${songInfo.songName}>成功添加到播放列表`, type: 'success' })
+          this.songList.push(songInfo);
+        } else {
+          ElMessage({ message: `播放列表已有<${songInfo.songName}>, 请勿重复添加`, type: 'warning' })
+        }
       }
     },
   }

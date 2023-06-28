@@ -10,22 +10,6 @@ export const getBannerApi = () => {
 }
 
 /**
- * @description 获取每日推荐歌单(需要登录)
- * @returns Promise
- */
-export const recommendResourceApi = () => {
-  return request.get('/recommend/resource')
-}
-
-/**
- * @description 获取每日推荐歌曲(需要登录)
- * @returns Promise
- */
-export const recommendSongsApi = () => {
-  return request.get('/recommend/songs')
-}
-
-/**
  * @description 推荐歌单
  * @param {Number} limit 可选参数，取出歌单数量 , 默认为 20
  * @returns Promise
@@ -60,6 +44,17 @@ type NewMvType = {
 export const getNewMvApi = ({ area, limit = 12 }: NewMvType) => {
   return request.get('/mv/first', {
     params: { area, limit }
+  })
+}
+
+/**
+ * @description 获取新歌速递
+ * @param {number} type 必选参数，地区类型 id，对应以下:全部:0, 华语:7, 欧美:96, 日本:8, 韩国:16
+ * @returns Promise
+ */
+export const getTopSongApi = (type: number = 7) => {
+  return request.get('/top/song', {
+    params: { type }
   })
 }
 

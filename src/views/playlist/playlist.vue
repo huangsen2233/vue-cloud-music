@@ -4,7 +4,7 @@
   import { playlistApi, playlistCatlistApi } from "@/api/playlist";
   import PlaylistHeader from './components/PlaylistHeader.vue';
   import PlaylistBody from "./components/PlaylistBody.vue";
-  import BasePagination from '@/components/common/BasePagination.vue';
+  import BasePagination from '@/components/pagination/BasePagination.vue';
   import yzIcon from "@/assets/imgs/yuzhong.png";
   import fgIcon from "@/assets/imgs/fengge.png";
   import cjIcon from "@/assets/imgs/changjing.png";
@@ -59,7 +59,7 @@
   // 获取歌单列表
   const getPlaylist = async (params: playlistType) => {
     const result: any = await playlistApi(params);
-    console.log("🚀 ~ file: playlist.vue:45 ~ getPlaylist ~ result: 歌单列表", result)
+    // console.log("🚀 ~ file: playlist.vue:45 ~ getPlaylist ~ result: 歌单列表", result)
     playlists.value = result.playlists; 
     paginationProp.value.total = result.total; 
   };

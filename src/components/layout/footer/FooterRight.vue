@@ -102,7 +102,7 @@
     justify-content: space-around;
     align-items: center;
 
-    & > div {
+    & > div:not(:last-child) {
       padding-right: 20px;
     }
 
