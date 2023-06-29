@@ -45,7 +45,7 @@
   // 获取歌单评论
   const getPlaylistComment = async (params: PlaylistCommentType) => {
     const result: any = await playlistCommentApi({ ...params });
-    // console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", result);
+    console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", result);
     commentPagination.value.total = result.total;
     newComments.value = result.comments;
     if (hotComments.value.length === 0) {
@@ -89,6 +89,7 @@
 <template>
   <PlaylistDetailHeader :playlist-id="playlistId" :playlist-detail="playlistDetail" :songs="songs" />
   <PlaylistDetailBody
+    :playlist-id="playlistId"
     :active-name="activeName" 
     :songs="songs"
     :comment-pagination="commentPagination"

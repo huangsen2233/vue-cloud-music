@@ -111,22 +111,6 @@ export const useMusicStore = defineStore('music', {
       }
     },
 
-    // 获取多首歌曲url
-    // async getAllSongUrl (allSongInfo: CurrentSongInfoType[]) {
-    //   const songIds = allSongInfo.map(i => i.songId)
-    //   const { data }: any = await getSongUrlApi(songIds);
-    //   console.log("🚀 ~ file: music.ts:101 ~ getSongUrl ~ 全部音乐的url:", data)
-    //   this.currentSongData = data;
-    //   this.currentSongInfo = songInfo;
-    //   if (!data[0].url) {
-    //     return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000});
-    //   } else if (data[0].fee === 1) {
-    //     ElNotification({ title: 'Warning', message: `<${songInfo.songName}>歌曲为VIP专享, 正在播放试听部分`, type: 'warning', duration: 2000});
-    //   } else {
-    //     ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000});
-    //   }
-    // },
-
     // 初始化音乐栏
     init () {
       this.currentIndex === -1 && this.songList.push(this.currentSongInfo);
@@ -268,7 +252,7 @@ export const useMusicStore = defineStore('music', {
       this.total = total
       // console.log("🚀 ~ file: music.ts:254 ~  ~ 当前歌曲的最新评论:", comments)
       // console.log("🚀 ~ file: music.ts:254 ~  ~ 当前歌曲的热门评论:", hotComments)
-      // console.log("🚀 ~ file: music.ts:254 ~  ~ 总数:", total)      
+      // console.log("🚀 ~ file: music.ts:254 ~  ~ 评论的总数:", total)      
     },
 
     // 获取音乐歌词

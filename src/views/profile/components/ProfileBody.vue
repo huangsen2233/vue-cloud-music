@@ -74,14 +74,16 @@
     </section>
     <section class="profile-body-create">
       <h3>我创建的歌单({{ createPlaylist.length }})</h3>
-      <template v-for="i in createPlaylist">
-        <PlaylistItem  
-          :id="i.id"
-          :url="i.coverImgUrl" 
-          :name="i.name" 
-          :play-count="i.playCount" 
-        />
-      </template>
+      <div class="profile-body-create_playlist">
+        <template v-for="i in createPlaylist">
+          <PlaylistItem  
+            :id="i.id"
+            :url="i.coverImgUrl" 
+            :name="i.name" 
+            :play-count="i.playCount" 
+          />
+        </template>
+      </div>
     </section>
     <section class="profile-body-collect">
       <h3>我收藏的歌单({{ collectPlaylist.length }})</h3>
@@ -121,29 +123,34 @@
       }
     }
 
-    &-create {
-      padding-bottom: 30px;
-
+    &-create, &-collect {
       & > h3 {
         padding: 20px 0;
         border-bottom: 5px solid var(--el-color-primary);
       }
-    }
-
-    &-collect {
-      & > h3 {
-        padding: 20px 0;
-        border-bottom: 5px solid var(--el-color-primary);
-      }
-
       &_playlist {
         display: flex;
-
+        flex-wrap: wrap;
         .playlist-item {
           flex-basis: 200px;
           margin: 0 30px 30px 0;
         }
       }
     }
+
+    // &-collect {
+    //   & > h3 {
+    //     padding: 20px 0;
+    //     border-bottom: 5px solid var(--el-color-primary);
+    //   }
+    //   &_playlist {
+    //     display: flex;
+    //     flex-wrap: wrap;
+    //     .playlist-item {
+    //       flex-basis: 200px;
+    //       margin: 0 30px 30px 0;
+    //     }
+    //   }
+    // }
   }
 </style>

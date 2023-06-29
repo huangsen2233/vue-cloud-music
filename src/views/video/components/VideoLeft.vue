@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { ref, watch } from 'vue';
   import type { MvDetailType, PaginationPropType, PaginationParamsType } from "../type";
-  import dianzanIcon from "@/assets/imgs/dianzan.png";
   import Comment from '@/components/comment/Comment.vue';
 
   const props = defineProps<{
@@ -61,11 +60,10 @@
       </h2>
     </section>
     <Comment 
-      :profile="profile" 
+      :avatar-url="profile.avatarUrl"
       :current-comment-type="currentCommentType" 
       :current-comment="currentComment" 
       :comment-pagination="commentPagination"
-      :dianzan-icon="dianzanIcon"
       @change-comment-type="changeCommentType"
       @change-comment-pagination="changeCommentPagination"
     />

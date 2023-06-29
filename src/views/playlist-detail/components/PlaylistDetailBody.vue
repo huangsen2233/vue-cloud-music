@@ -1,22 +1,21 @@
 <script lang="ts" setup>
-  import { ref, reactive, watch } from 'vue';
+  import { ref, watch } from 'vue';
   import { storeToRefs } from "pinia";
   import { useMusicStore } from "@/stores/music";
   import { useUserStore } from "@/stores/user";
-  import type { PaginationType, PaginationParamsType } from "../type";
-  import dianzanIcon from "@/assets/imgs/dianzan.png"
+  import { commentLikeApi } from "@/api/comment";
   import BasePagination from '@/components/pagination/BasePagination.vue';
   import SongTable from '@/components/songTable/SongTable.vue';
   import Comment from '@/components/comment/Comment.vue';
+  import type { PaginationType, PaginationParamsType } from "../type";
 
-  watch(() => props.newComments, (newVal, oldVal) => {
-    currentComment.value = newVal;
-  });
 
-  const { getSongUrl, addToPlaylist } = useMusicStore();
+  const { getSongUrl, addToPlaylist, getMusicComment } = useMusicStore();
+  const { currentSongInfo } = storeToRefs(useMusicStore())
   const { profile } = storeToRefs(useUserStore());
 
   const props = defineProps<{
+    playlistId: number
     activeName: string
     songs: any[]
     hotComments: any[]
@@ -35,6 +34,9 @@
 
   const currentComment = ref<any[]>([]);
   const currentCommentType = ref('new');
+  watch(() => props.newComments, (newVal, oldVal) => {
+    currentComment.value = newVal;
+  }, { deep: true });
 
   // 表格的双击事件-播放歌曲
   const playSong = async (row: any) => {
@@ -74,7 +76,28 @@
     emits('subscribers-pagination', params);
   };
 
-  const myComment = ref(''); // 我的评论
+  // 点赞歌曲评论
+  const like = async (commentInfo: any) => {
+    const likeParams = {
+      id: props.playlistId,
+      cid: commentInfo.commentId,
+      t: commentInfo.liked ? 0 : 1,
+      type: 2
+    }
+    const { code }: any = await commentLikeApi(likeParams)
+    if (code === 200) {
+      const paginationParams = { 
+        currentPage: props.commentPagination.currentPage,
+        pageSize: props.commentPagination.pageSize
+      }
+      emits('comment-pagination', paginationParams)
+      if (commentInfo.liked) {
+        ElMessage({ message: '取消点赞', type: 'success' })
+      } else {
+        ElMessage({ message: '点赞成功', type: 'success' })
+      }
+    }
+  };
 </script>
 
 <template>
@@ -91,13 +114,13 @@
       <!-- 评论 -->
       <template #default>
         <Comment 
-          :profile="profile" 
+          :avatar-url="profile.avatarUrl"
           :current-comment-type="currentCommentType" 
           :current-comment="currentComment" 
           :comment-pagination="commentPagination"
-          :dianzan-icon="dianzanIcon"
           @change-comment-type="changeCommentType"
           @change-comment-pagination="changeCommentPagination"
+          @like="like"
         />
       </template>
     </el-tab-pane>
