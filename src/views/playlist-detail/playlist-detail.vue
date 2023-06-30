@@ -3,9 +3,9 @@
   import { useRoute, useRouter } from "vue-router";
   import { getSongDetailApi } from "@/api/music";
   import { playlistDetailApi, playlistCommentApi, playlistSubscribersApi } from "@/api/playlist";
-  import type { PlaylistCommentType, PaginationType, PaginationParamsType, PlaylistSubscribersType } from "./type";
   import PlaylistDetailHeader from "./components/PlaylistDetailHeader.vue";
   import PlaylistDetailBody from "./components/PlaylistDetailBody.vue";
+  import type { PlaylistCommentType, PaginationType, PaginationParamsType, PlaylistSubscribersType } from "./type";
 
   onMounted(() => {
     const id = Number(route.query.id);
@@ -27,14 +27,16 @@
   const subscribersParams = ref({ id: 0, limit: 40, offset: 0 });
   const hotComments: any = ref([]);
   const newComments: any = ref([]);
+  const currentComment = ref<any[]>([]);
+  const currentCommentType = ref('new');
   const commentPagination = ref<PaginationType>({ total: 0, currentPage: 1, pageSize: 20 });
   const subscriberPagination = ref<PaginationType>({ total: 0, currentPage: 1, pageSize: 40 });
   const subscribers = ref([]);
 
-  // 获取歌单详情
+  // 获取歌单详情 
   const getPlaylistDetail = async (id: number) => {
     const result: any = await playlistDetailApi({ id });
-    console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单详情", result);
+    // console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单详情", result);
     playlistDetail.value = result.playlist;
     let ids = result.playlist.trackIds.map((i: any) => i.id);
     const { songs: allSong }: any = await getSongDetailApi(ids);
@@ -45,12 +47,11 @@
   // 获取歌单评论
   const getPlaylistComment = async (params: PlaylistCommentType) => {
     const result: any = await playlistCommentApi({ ...params });
-    console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", result);
+    // console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", result)
     commentPagination.value.total = result.total;
     newComments.value = result.comments;
-    if (hotComments.value.length === 0) {
-      hotComments.value = result.hotComments
-    }
+    hotComments.value = result.hotComments
+    changeCommentType(currentCommentType.value)
   };
 
   // 获取歌单的收藏者
@@ -67,10 +68,20 @@
   };
 
   // 最新评论的分页事件
-  const commentChangePagination = (params: PaginationParamsType)  => {
+  const changeCommentPagination = (params: PaginationParamsType) => {
     commentPagination.value = { ...commentPagination.value, ...params };
     // console.log('当前的分页参数', { ...commentParams.value, limit: params.pageSize, offset: params.currentPage - 1 });
     getPlaylistComment({ ...commentParams.value, id: Number(route.query.id), limit: params.pageSize, offset: (params.currentPage - 1) * params.pageSize });
+  };
+
+  const changeCommentType = (type: string) => {
+    if (type === 'hot') {
+      currentComment.value = [...hotComments.value];
+      currentCommentType.value = type;
+    } else {
+      currentComment.value = [...newComments.value];
+      currentCommentType.value = type;
+    }
   };
 
   // 收藏者的分页事件
@@ -93,12 +104,13 @@
     :active-name="activeName" 
     :songs="songs"
     :comment-pagination="commentPagination"
-    :hot-comments="hotComments" 
-    :new-comments="newComments"
+    :current-comment="currentComment"
+    :current-comment-type="currentCommentType"
     :subscribers="subscribers" 
     :subscriber-pagination="subscriberPagination"
     @tab-click="handleTabClick"
-    @comment-pagination="commentChangePagination"
+    @comment-pagination="changeCommentPagination"
+    @comment-type="changeCommentType"
     @subscribers-pagination="collentChangePagination"
     @router-singer-detail="routerToSingerDetail"
   />

@@ -4,7 +4,7 @@
   import type { PaginationType, PaginationParamsType } from "../type";
   import { useUserStore } from "@/stores/user";
   import { useMusicStore } from "@/stores/music";
-  import { commentLikeApi } from "@/api/comment";
+  import { commentLikeApi, commentApi } from "@/api/comment";
   import Comment from "@/components/comment/Comment.vue";
 
   const { profile } = storeToRefs(useUserStore());
@@ -17,6 +17,7 @@
   const currentCommentType = ref('new');
   const currentComment = ref<any[]>(comments.value);
   const commentPagination = ref<PaginationType>({ total: total.value, currentPage: 1, pageSize: 20 });
+  const commentRef = ref<InstanceType<typeof Comment>>();
 
   // 切换评论类型
   const changeCommentType = (type: string) => {
@@ -62,20 +63,37 @@
   };
 
   // 回复歌曲评论
-  const reply = async (commentInfo: any) => {
-    return
-    const likeParams = {
-      id: currentSongInfo.value.songId,
-      cid: commentInfo.commentId,
-      t: commentInfo.liked ? 0 : 1,
-      type: 0
+  const reply = async (myComment: string) => {
+    const commentParams = {
+      id: currentSongInfo.value.songId, 
+      t: 1, 
+      type: 0, 
+      content: myComment, 
+      commentId: 0
     }
-    const { code }: any = await commentLikeApi(likeParams)
+    const { code }: any = await commentApi(commentParams)
+    if (code === 200) {
+      const params = { 
+        id: currentSongInfo.value.songId, 
+        limit: commentPagination.value.pageSize, 
+        offset: (commentPagination.value.currentPage - 1) * commentPagination.value.pageSize
+      }
+      getMusicComment(params).then(() => {
+        ElMessage({ message: '已发送评论', type: 'success' })
+        if (commentRef.value) {
+          commentRef.value.myComment = ''
+        }
+      })
+      /**
+       * 最新评论没问题、测试热门评论
+       */
+    }
   };
 </script>
 
 <template>
-  <Comment 
+  <Comment
+    ref="commentRef" 
     :avatar-url="profile.avatarUrl" 
     :current-comment-type="currentCommentType" 
     :current-comment="currentComment" 

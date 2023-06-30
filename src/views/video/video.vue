@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue';
-  import type { MvDetailType, MvsType, CommentMvType, CommentVideoType, PaginationParamsType } from "./type"
+  import { ref, onMounted } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useVideoStore } from "@/stores/video";
   import { useUserStore } from "@/stores/user";
@@ -11,23 +10,26 @@
   } from "@/api/video";
   import VideoLeft from "./components/VideoLeft.vue";
   import VideoRight from "./components/VideoRight.vue";
+  import type { MvDetailType, MvsType, CommentMvType, CommentVideoType, PaginationParamsType } from "./type";
 
   onMounted(() => {
     const reg = /\D/;
-    if (reg.test(route.query.id as string)) { // MV
-      const id = String(route.query.id);
-      getVideoDetail(id);
-      getRelatedVideo(id);
-      getVideoDetailInfo(id);
-      getCommentVideo({ ...commentVideoParams.value });
-      useVideo.getVideoUrl(id);
-    } else { // 视频
-      const id = Number(route.query.id);
-      getMvDetail(id);
-      getSimiMv(id);
-      getMvDetailInfo(id);
-      getCommentMv({ ...commentMvParams.value });
-      useVideo.getMvUrl(id);
+    if (reg.test(route.query.id as string)) { // 视频
+      const id = String(route.query.id)
+      videoId.value = id
+      getVideoDetail(id)
+      getRelatedVideo(id)
+      getVideoDetailInfo(id)
+      getCommentVideo({ ...commentVideoParams.value })
+      useVideo.getVideoUrl(id)
+    } else {  // MV
+      const id = Number(route.query.id)
+      videoId.value = id
+      getMvDetail(id)
+      getSimiMv(id)
+      getMvDetailInfo(id)
+      getCommentMv({ ...commentMvParams.value })
+      useVideo.getMvUrl(id)
     }
   });
 
@@ -37,6 +39,7 @@
   const useUser = useUserStore();
   const { profile } = storeToRefs(useUser);
   const { videoUrl, isMv } = storeToRefs(useVideo);
+  const videoId = ref<number | string>(0);
   const commentMvParams = ref<CommentMvType>({ id: Number(route.query.id), limit: 20, offset: 0 });
   const commentVideoParams = ref<CommentVideoType>({ id: String(route.query.id), limit: 20, offset: 0 });
   const commentPagination = ref({ total: 0, currentPage: 1, pageSize: 20 });
@@ -46,6 +49,8 @@
   const mvs = ref<MvsType[]>([]);
   const hotComments = ref<any[]>([]);
   const newComments = ref<any[]>([]);
+  const currentCommentType = ref('new');
+  const currentComment = ref<any[]>([]);
 
   // 获取MV详情
   const getMvDetail = async (id: number) => {
@@ -71,10 +76,9 @@
     const result: any = await getCommentMvApi(params);
     // console.log("🚀 ~ file: video.vue:53 ~ getCommentMv ~ 获取MV评论:", result)
     newComments.value = [...result.comments];
-    if (hotComments.value.length === 0) {
-      hotComments.value = result.hotComments
-    }
+    hotComments.value = [...result.hotComments]
     commentPagination.value.total = result.total;
+    changeCommentType(currentCommentType.value)
   };
 
   // 获取mv的点赞评论分享数
@@ -110,6 +114,7 @@
       hotComments.value = result.hotComments
     }
     commentPagination.value.total = result.total;
+    changeCommentType(currentCommentType.value)
   };
 
   // 获取相关视频
@@ -139,7 +144,7 @@
     router.push({ path: '/singer-detail', query: { id } })
   };
 
-  // 评论的分页改变事件
+  // 评论的分页改变
   const changeCommentPagination = ({ currentPage, pageSize }: PaginationParamsType) => {
     if (isMv.value) {
       commentPagination.value = { ...commentPagination.value, currentPage, pageSize };
@@ -149,18 +154,31 @@
       getCommentVideo({ ...commentVideoParams.value, limit: pageSize, offset: (currentPage - 1) * pageSize });
     }
   };
+
+  // 评论的类型改变
+  const changeCommentType = (type: string) => {
+    if (type === 'hot') {
+      currentComment.value = [...hotComments.value];
+      currentCommentType.value = type;
+    } else {
+      currentComment.value = [...newComments.value];
+      currentCommentType.value = type;
+    }
+  };
 </script>
 
 <template>
   <div class="video">
-    <VideoLeft 
+    <VideoLeft
+      :video-id="videoId"
       :video-url="videoUrl"
       :is-mv="isMv"
       :mv-detail="mvDetail" 
       :profile="profile"
-      :hot-comments="hotComments"
-      :new-comments="newComments"
-      :comment-pagination="commentPagination" 
+      :current-comment="currentComment"
+      :current-comment-type="currentCommentType"
+      :comment-pagination="commentPagination"
+      @change-comment-type="changeCommentType" 
       @change-comment-pagination="changeCommentPagination"
     />
     <VideoRight 

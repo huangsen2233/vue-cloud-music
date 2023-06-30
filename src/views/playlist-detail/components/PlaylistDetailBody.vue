@@ -9,17 +9,15 @@
   import Comment from '@/components/comment/Comment.vue';
   import type { PaginationType, PaginationParamsType } from "../type";
 
-
-  const { getSongUrl, addToPlaylist, getMusicComment } = useMusicStore();
-  const { currentSongInfo } = storeToRefs(useMusicStore())
+  const { getSongUrl, addToPlaylist } = useMusicStore();
   const { profile } = storeToRefs(useUserStore());
 
   const props = defineProps<{
     playlistId: number
     activeName: string
     songs: any[]
-    hotComments: any[]
-    newComments: any[]
+    currentCommentType: string
+    currentComment: any[]
     commentPagination: PaginationType
     subscribers: any[]
     subscriberPagination: PaginationType
@@ -28,15 +26,10 @@
   const emits = defineEmits<{
     (event: 'tab-click', paneName: string): void
     (event: 'comment-pagination', params: PaginationParamsType): void
+    (event: 'comment-type', type: string): void
     (event: 'subscribers-pagination', params: PaginationParamsType): void
     (event: 'router-singer-detail', id: number): void
   }>();
-
-  const currentComment = ref<any[]>([]);
-  const currentCommentType = ref('new');
-  watch(() => props.newComments, (newVal, oldVal) => {
-    currentComment.value = newVal;
-  }, { deep: true });
 
   // 表格的双击事件-播放歌曲
   const playSong = async (row: any) => {
@@ -52,13 +45,7 @@
 
   // 切换评论类型
   const changeCommentType = (type: string) => {
-    if (type === 'hot') {
-      currentComment.value = [...props.hotComments];
-      currentCommentType.value = type;
-    } else {
-      currentComment.value = [...props.newComments];
-      currentCommentType.value = type;
-    }
+    emits('comment-type', type)
   };
 
   // tab的点击事件
@@ -68,15 +55,15 @@
 
   // 最新评论的分页事件
   const changeCommentPagination = (params: PaginationParamsType) => {
-    emits('comment-pagination', params);
+    emits('comment-pagination', params)
   };
 
   // 收藏者的分页事件
   const changSubscribersPagination = (params: PaginationParamsType) => {
-    emits('subscribers-pagination', params);
+    emits('subscribers-pagination', params)
   };
 
-  // 点赞歌曲评论
+  // 点赞歌单评论
   const like = async (commentInfo: any) => {
     const likeParams = {
       id: props.playlistId,

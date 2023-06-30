@@ -137,20 +137,5 @@
         }
       }
     }
-
-    // &-collect {
-    //   & > h3 {
-    //     padding: 20px 0;
-    //     border-bottom: 5px solid var(--el-color-primary);
-    //   }
-    //   &_playlist {
-    //     display: flex;
-    //     flex-wrap: wrap;
-    //     .playlist-item {
-    //       flex-basis: 200px;
-    //       margin: 0 30px 30px 0;
-    //     }
-    //   }
-    // }
   }
 </style>

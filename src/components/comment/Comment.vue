@@ -29,6 +29,8 @@
   }>();
 
   const myComment = ref('');
+
+  defineExpose({ myComment });
 </script>
 
 <template>
@@ -37,7 +39,7 @@
       <el-image class="comment-my-img" :src="avatarUrl" fit="contain" />
       <div class="comment-my-content">
         <el-input type="textarea" :rows="3" placeholder="评论一下~" v-model="myComment"></el-input>
-        <el-button type="primary">评论</el-button>
+        <el-button type="primary" @click="emits('reply', myComment)">评论</el-button>
       </div>
     </section>
     <section class="comment-list">

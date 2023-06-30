@@ -1,43 +1,56 @@
 <script lang="ts" setup>
-  import { ref, watch } from 'vue';
-  import type { MvDetailType, PaginationPropType, PaginationParamsType } from "../type";
+  import { ref } from 'vue';
+  import { commentLikeApi } from "@/api/comment";
   import Comment from '@/components/comment/Comment.vue';
+  import type { MvDetailType, PaginationPropType, PaginationParamsType } from "../type";
 
   const props = defineProps<{
+    videoId: number | string
     videoUrl: string
     isMv: boolean
     mvDetail: MvDetailType
     profile: any
-    hotComments: any[]
-    newComments: any[]
+    currentCommentType: string
+    currentComment: any[]
     commentPagination: PaginationPropType
   }>();
 
   const emits = defineEmits<{
     (event: 'change-comment-pagination', params: PaginationParamsType): void
+    (event: 'change-comment-type', params: string): void
   }>();
-
-  watch(() => props.newComments, (newVal, oldVal) => {
-    currentComment.value = newVal;
-  });
-
-  const currentComment = ref<any[]>([]);
-  const currentCommentType = ref('new');
 
   // 切换评论类型
   const changeCommentType = (type: string) => {
-    if (type === 'hot') {
-      currentComment.value = [...props.hotComments];
-      currentCommentType.value = type;
-    } else {
-      currentComment.value = [...props.newComments];
-      currentCommentType.value = type;
-    }
+    emits('change-comment-type', type)
   };
 
   // 评论的分页事件
   const changeCommentPagination = (params: PaginationParamsType) => {
     emits('change-comment-pagination', params);
+  };
+
+  // 点赞MV的评论
+  const like = async (commentInfo: any) => {
+    const likeParams = {
+      id: props.videoId,
+      cid: commentInfo.commentId,
+      t: commentInfo.liked ? 0 : 1,
+      type: props.isMv ? 1 : 5
+    }
+    const { code }: any = await commentLikeApi(likeParams)
+    if (code === 200) {
+      const commentParams = { 
+        pageSize: props.commentPagination.pageSize, 
+        currentPage: props.commentPagination.currentPage
+      }
+      emits('change-comment-pagination', commentParams)
+      if (commentInfo.liked) {
+        ElMessage({ message: '取消点赞', type: 'success' })
+      } else {
+        ElMessage({ message: '点赞成功', type: 'success' })
+      }
+    }
   };
 </script>
 
@@ -66,6 +79,7 @@
       :comment-pagination="commentPagination"
       @change-comment-type="changeCommentType"
       @change-comment-pagination="changeCommentPagination"
+      @like="like"
     />
   </div>
 </template>
