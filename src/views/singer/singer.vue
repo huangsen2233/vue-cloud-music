@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted, provide, nextTick } from 'vue';
+  import { ref, reactive, onMounted, nextTick } from 'vue';
   import { useRouter } from 'vue-router';
   import { artistApi } from "@/api/singer";
   import type { artistsType, titleType, offsetType, initialType, paginationType } from "./type";
@@ -12,18 +12,25 @@
 
   const router = useRouter();
 
+  /**
+   * 
+   * limit 30 改为 50个歌手
+   * 
+   * 
+   */
+
   // 获取歌手列表的默认参数
-  const artistParams = ref({ limit: 30, offset: 0, initial: '-1', type: -1, area: -1 });
+  const artistParams = ref({ limit: 50, offset: 0, initial: '-1', type: -1, area: -1 });
   const tagTitle = ref('全部');
   const showPagination = ref(true);
   const showTag = ref(true);
   const artists: any[] = reactive([]);
-  const paginationProp = ref<paginationType>({ total: 360, currentPage: 1, pageSize: 30 });
+  const paginationProp = ref<paginationType>({ total: 360, currentPage: 1, pageSize: 50 });
 
   // 获取歌手列表
   const getArtist = async (params: artistsType) => {
     const result: any = await artistApi(params);
-    console.log("🚀 ~ file: singer.vue:12 ~ getArtist ~ result 歌手列表:", result.artists)
+    // console.log("🚀 ~ file: singer.vue:12 ~ getArtist ~ result 歌手列表:", result.artists)
     artists.length = 0;
     artists.push(...result.artists);
   };

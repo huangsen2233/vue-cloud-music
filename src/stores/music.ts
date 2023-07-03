@@ -84,13 +84,15 @@ export const useMusicStore = defineStore('music', {
       }
       return index
     },
-    // 当前歌曲是否喜欢
-    isLike (): boolean {
-      const findItem = this.likeIds.find((id: number) => id === this.currentSongInfo.songId)
-      if (findItem) {
-        return true
-      } else {
-        return false
+    // 歌曲是否喜欢
+    isLike: (state) => {
+      return (id: number) => {
+        const findItem = state.likeIds.find((likeid: number) => likeid === id)
+        if (findItem) {
+          return true
+        } else {
+          return false
+        }
       }
     }
   },
@@ -98,16 +100,16 @@ export const useMusicStore = defineStore('music', {
     // 获取歌曲url
     async getSongUrl (songInfo: CurrentSongInfoType) {
       const { songId } = songInfo
-      const { data }: any = await getSongUrlApi([songId]);
-      console.log("🚀 ~ file: music.ts:101 ~ getSongUrl ~ 音乐的url:", data)
-      this.currentSongData = data;
-      this.currentSongInfo = songInfo;
+      const { data }: any = await getSongUrlApi([songId])
+      // console.log("🚀 ~ file: music.ts:101 ~ getSongUrl ~ 音乐的url:", data)
+      this.currentSongData = data
+      this.currentSongInfo = songInfo
       if (!data[0].url) {
-        return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000});
+        return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000})
       } else if (data[0].fee === 1) {
-        ElNotification({ title: 'Warning', message: `<${songInfo.songName}>歌曲为VIP专享, 正在播放试听部分`, type: 'warning', duration: 2000});
+        ElNotification({ title: 'Warning', message: `<${songInfo.songName}>歌曲为VIP专享, 正在播放试听部分`, type: 'warning', duration: 2000})
       } else {
-        ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000});
+        ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000})
       }
     },
 
@@ -224,31 +226,35 @@ export const useMusicStore = defineStore('music', {
 
     // 获取喜欢的歌曲列表
     async likeList () {
-      const { account } = storeToRefs(useUserStore())
-      const { ids }: any = await likeListApi(account.value.id)
-      this.likeIds = ids
+      const { account, loginStatus } = storeToRefs(useUserStore())
+      if (loginStatus) {
+        const { ids }: any = await likeListApi(account.value.id)
+        this.likeIds = ids
+      }
       // console.log("🚀 ~ file: music.ts:217 ~  ~ 喜欢歌曲列表:", ids)
     },
 
     // 是否喜欢歌曲
-    async likeMusic () {
-      if (!this.currentSongInfo.songId) return
-      if (this.isLike) {
+    async likeMusic (id: number) {
+      if (!id) return
+      if (this.isLike(id)) {
         ElMessage({ message: '取消喜欢!', type: 'success' })
-        const index = this.likeIds.findIndex(id => id === this.currentSongInfo.songId)
+        const index = this.likeIds.findIndex(likeid => likeid === id)
         this.likeIds.splice(index, 1)
       } else {
         ElMessage({ message: '成功添加喜欢!', type: 'success' })
-        this.likeIds.push(this.currentSongInfo.songId)
+        this.likeIds.push(id)
       }
-      likeMusicApi({ id: this.currentSongInfo.songId, like: this.isLike })
+      likeMusicApi({ id, like: this.isLike(id) })
     },
 
     // 获取歌曲的评论
     async getMusicComment (params: PaginationType) {
       const { comments, hotComments, total }: any = await getMusicCommentApi(params)
       this.comments = comments
-      hotComments && this.hotComments.push(...hotComments)
+      if (hotComments) {
+        this.hotComments = hotComments
+      }
       this.total = total
       // console.log("🚀 ~ file: music.ts:254 ~  ~ 当前歌曲的最新评论:", comments)
       // console.log("🚀 ~ file: music.ts:254 ~  ~ 当前歌曲的热门评论:", hotComments)
@@ -268,6 +274,7 @@ export const useMusicStore = defineStore('music', {
           const index = this.songList.findIndex(j => j.songId === i.songId)
           index === -1 && this.songList.push(i)
         })
+        ElMessage({ message: `已全部添加到播放列表`, type: 'success' })
       } else {
         const index = this.songList.findIndex(i => i.songId === songInfo.songId)
         if (index === -1) {

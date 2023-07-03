@@ -75,8 +75,8 @@
   const getCommentMv = async (params: CommentMvType) => {
     const result: any = await getCommentMvApi(params);
     // console.log("🚀 ~ file: video.vue:53 ~ getCommentMv ~ 获取MV评论:", result)
-    newComments.value = [...result.comments];
-    hotComments.value = [...result.hotComments]
+    newComments.value = result.comments
+    hotComments.value = result?.hotComments ?? hotComments.value
     commentPagination.value.total = result.total;
     changeCommentType(currentCommentType.value)
   };
@@ -109,11 +109,9 @@
   const getCommentVideo = async (params: CommentVideoType) => {
     const result: any = await getCommentVideoApi(params);
     // console.log("🚀 ~ file: video.vue:53 ~ getCommentMv ~ 获取视频的评论:", result)
-    newComments.value = [...result.comments];
-    if (hotComments.value.length === 0) {
-      hotComments.value = result.hotComments
-    }
-    commentPagination.value.total = result.total;
+    newComments.value = result.comments
+    hotComments.value = result?.hotComments ?? hotComments.value
+    commentPagination.value.total = result.total
     changeCommentType(currentCommentType.value)
   };
 

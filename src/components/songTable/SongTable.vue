@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
+  import { storeToRefs } from "pinia";
   import { formatTimestamp } from "@/utils/dateFormat";
+  import { useMusicStore } from "@/stores/music";
 
   const props = withDefaults(defineProps<{
     songs: any[]
@@ -15,12 +17,19 @@
     (event: 'add-playlist', params: any): void
   }>();
 
+  const { likeIds } = storeToRefs(useMusicStore());
+  const { likeMusic } = useMusicStore();
+
   // 添加到播放列表
   const addPlaylist = (row: any) => {
     const { dt, al, ar, name, id } = row
     const songInfo = { songId: id, songName: name, picUrl: al.picUrl, duration: dt, artists: ar }
     emits('add-playlist', songInfo)
   };
+
+  const isLike = computed(() => {
+    return (id: number) => likeIds.value.includes(id)
+  });
 </script>
 
 <template>
@@ -41,6 +50,11 @@
             <span class="name">{{ row.name }}</span>
             <span class="icon">
               <el-icon class="icon" title="播放" @click="emits('play-song', row)"><CaretRight /></el-icon>
+              <span 
+                :class="['iconfont', isLike(row.id) ? 'icon-woxihuan-hongsetaoxin likeColor' : 'icon-woxihuan-morentaoxin']" 
+                :title="isLike(row.id) ? '取消喜欢' : '喜欢'"
+                @click="likeMusic(row.id)">
+              </span>
               <el-icon class="icon" title="添加到播放列表" @click="addPlaylist(row)"><FolderAdd /></el-icon>
               <el-icon class="icon" title="下载"><Download /></el-icon>
               <el-icon class="icon" title="分享"><Share /></el-icon>
@@ -96,6 +110,8 @@
       }
 
       .icon {
+        display: flex;
+        align-items: center;
         opacity: 0;
         .el-icon {
           cursor: pointer;
@@ -103,9 +119,14 @@
           padding-left: 10px;
           transition: all 0.2s;
         }
-        .el-icon:hover {
-          transform: scale(1.2);
-          color: var(--el-color-primary);
+        .iconfont {
+          padding: 2px 0 0 5px;
+          &:hover {
+            transform: scale(1.2);
+          }
+        }
+        .likeColor {
+          color: rgba(255,106,106);
         }
       }
     }

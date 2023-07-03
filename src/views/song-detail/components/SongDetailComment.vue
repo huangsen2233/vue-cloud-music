@@ -9,15 +9,12 @@
 
   const { profile } = storeToRefs(useUserStore());
   const { comments, hotComments, total, currentSongInfo } = storeToRefs(useMusicStore());
-  watch(comments, (newVal, oldVal) => {
-    currentComment.value = newVal 
-    commentPagination.value.total = total.value
-  }, { deep: true });
   const { getMusicComment } = useMusicStore();
   const currentCommentType = ref('new');
-  const currentComment = ref<any[]>(comments.value);
-  const commentPagination = ref<PaginationType>({ total: total.value, currentPage: 1, pageSize: 20 });
+  const currentComment = ref<any[]>([]);
+  const commentPagination = ref<PaginationType>({ total: 0, currentPage: 1, pageSize: 20 });
   const commentRef = ref<InstanceType<typeof Comment>>();
+  const loading = ref<boolean>(false);
 
   // 切换评论类型
   const changeCommentType = (type: string) => {
@@ -29,6 +26,11 @@
       currentCommentType.value = type
     }
   };
+
+  watch(comments, (newVal, oldVal) => {
+    changeCommentType(currentCommentType.value)
+    commentPagination.value.total = total.value
+  }, { deep: true, immediate: true });
 
   // 评论的分页改变
   const changeCommentPagination = ({ currentPage, pageSize }: PaginationParamsType) => {
@@ -63,13 +65,16 @@
   };
 
   // 回复歌曲评论
-  const reply = async (myComment: string) => {
+  const reply = async (comment: string, commentId?: number) => {
+    if (!commentId) {
+      loading.value = true
+    }
     const commentParams = {
       id: currentSongInfo.value.songId, 
-      t: 1, 
+      t: commentId ? 2 : 1, 
       type: 0, 
-      content: myComment, 
-      commentId: 0
+      content: comment,
+      commentId: commentId ?? 0
     }
     const { code }: any = await commentApi(commentParams)
     if (code === 200) {
@@ -78,15 +83,18 @@
         limit: commentPagination.value.pageSize, 
         offset: (commentPagination.value.currentPage - 1) * commentPagination.value.pageSize
       }
-      getMusicComment(params).then(() => {
-        ElMessage({ message: '已发送评论', type: 'success' })
-        if (commentRef.value) {
-          commentRef.value.myComment = ''
-        }
-      })
-      /**
-       * 最新评论没问题、测试热门评论
-       */
+      // 定时器: 解决最新的评论没能及时返回的问题
+      setTimeout(() => {
+        getMusicComment(params).then(() => {
+          commentId ? ElMessage({ message: '已回复评论', type: 'success' }) : ElMessage({ message: '已发送评论', type: 'success' }) 
+          if (commentRef.value) {
+            commentRef.value.myComment = ''
+            commentRef.value.replyComment = ''
+          }
+        }).finally(() => {
+          loading.value = false
+        })
+      }, 1500)
     }
   };
 </script>
@@ -98,6 +106,7 @@
     :current-comment-type="currentCommentType" 
     :current-comment="currentComment" 
     :comment-pagination="commentPagination"
+    :loading="loading"
     @change-comment-type="changeCommentType"
     @change-comment-pagination="changeCommentPagination"
     @like="like"

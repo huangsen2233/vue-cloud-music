@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-  import { ref, watch } from 'vue';
+  import { ref } from 'vue';
   import { storeToRefs } from "pinia";
   import { useMusicStore } from "@/stores/music";
   import { useUserStore } from "@/stores/user";
-  import { commentLikeApi } from "@/api/comment";
+  import { commentLikeApi, commentApi } from "@/api/comment";
   import BasePagination from '@/components/pagination/BasePagination.vue';
   import SongTable from '@/components/songTable/SongTable.vue';
   import Comment from '@/components/comment/Comment.vue';
@@ -11,6 +11,8 @@
 
   const { getSongUrl, addToPlaylist } = useMusicStore();
   const { profile } = storeToRefs(useUserStore());
+  const loading = ref<boolean>(false);
+  const commentRef = ref<InstanceType<typeof Comment>>();
 
   const props = defineProps<{
     playlistId: number
@@ -85,6 +87,34 @@
       }
     }
   };
+
+  // 回复歌曲评论
+  const reply = async (myComment: string) => {
+    loading.value = true
+    const commentParams = {
+      id: props.playlistId, 
+      t: 1, 
+      type: 2, 
+      content: myComment
+    }
+    const { code }: any = await commentApi(commentParams)
+    if (code === 200) {
+      const paginationParams = { 
+        currentPage: props.commentPagination.currentPage,
+        pageSize: props.commentPagination.pageSize
+      }
+      setTimeout(() => {
+        emits('comment-pagination', paginationParams)
+        ElMessage({ message: '已发送评论', type: 'success' })
+        if (commentRef.value) {
+          commentRef.value.myComment = ''
+        }
+        loading.value = false
+      }, 1500)
+    } else {
+      loading.value = false
+    }
+  };
 </script>
 
 <template>
@@ -100,14 +130,17 @@
       <template #label>评论 {{ commentPagination.total }}</template>
       <!-- 评论 -->
       <template #default>
-        <Comment 
+        <Comment
+          ref="commentRef" 
           :avatar-url="profile.avatarUrl"
           :current-comment-type="currentCommentType" 
           :current-comment="currentComment" 
           :comment-pagination="commentPagination"
+          :loading="loading"
           @change-comment-type="changeCommentType"
           @change-comment-pagination="changeCommentPagination"
           @like="like"
+          @reply="reply"
         />
       </template>
     </el-tab-pane>

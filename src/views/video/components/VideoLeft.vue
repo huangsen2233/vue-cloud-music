@@ -1,8 +1,11 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { commentLikeApi } from "@/api/comment";
+  import { commentLikeApi, commentApi } from "@/api/comment";
   import Comment from '@/components/comment/Comment.vue';
   import type { MvDetailType, PaginationPropType, PaginationParamsType } from "../type";
+
+  const loading = ref<boolean>(false);
+  const commentRef = ref<InstanceType<typeof Comment>>();
 
   const props = defineProps<{
     videoId: number | string
@@ -52,6 +55,34 @@
       }
     }
   };
+
+  // 回复歌曲评论
+  const reply = async (myComment: string) => {
+    loading.value = true
+    const commentParams = {
+      id: props.videoId, 
+      t: 1, 
+      type: props.isMv ? 1 : 5, 
+      content: myComment
+    }
+    const { code }: any = await commentApi(commentParams)
+    if (code === 200) {
+      const paginationParams = { 
+        currentPage: props.commentPagination.currentPage,
+        pageSize: props.commentPagination.pageSize
+      }
+      setTimeout(() => {
+        emits('change-comment-pagination', paginationParams)
+        ElMessage({ message: '已发送评论', type: 'success' })
+        if (commentRef.value) {
+          commentRef.value.myComment = ''
+        }
+        loading.value = false
+      }, 1500)
+    } else {
+      loading.value = false
+    }
+  };
 </script>
 
 <template>
@@ -73,13 +104,16 @@
       </h2>
     </section>
     <Comment 
+      ref="commentRef"
       :avatar-url="profile.avatarUrl"
       :current-comment-type="currentCommentType" 
       :current-comment="currentComment" 
       :comment-pagination="commentPagination"
+      :loading="loading"
       @change-comment-type="changeCommentType"
       @change-comment-pagination="changeCommentPagination"
       @like="like"
+      @reply="reply"
     />
   </div>
 </template>

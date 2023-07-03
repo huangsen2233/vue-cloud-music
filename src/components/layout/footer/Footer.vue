@@ -12,10 +12,12 @@
     watchMusicInit()
     // 本地缓存的音乐列表
     songList.value = localCache.getCache('songList') || []
+    // 获取喜欢歌曲列表
+    likeList()
   });
 
   const { songList, currentTime, duration } = storeToRefs(useMusicStore());
-  const { changeTime } = useMusicStore();
+  const { changeTime, likeList } = useMusicStore();
 </script>
 
 <template>

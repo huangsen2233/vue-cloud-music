@@ -50,7 +50,7 @@
     // console.log("🚀 ~ file: usePlaylistDetail.ts:6 ~ getPlaylistDetail ~ result: 歌单评论", result)
     commentPagination.value.total = result.total;
     newComments.value = result.comments;
-    hotComments.value = result.hotComments
+    hotComments.value = result?.hotComments ?? hotComments.value
     changeCommentType(currentCommentType.value)
   };
 

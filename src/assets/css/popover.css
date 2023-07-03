@@ -62,3 +62,13 @@
     padding-bottom: 20px;
   }
 }
+
+
+/* 评论 */
+.el-popover.comment-popover {
+  .comment-popover-content_buttons {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+  }
+}

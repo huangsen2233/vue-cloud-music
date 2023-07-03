@@ -21,7 +21,7 @@ export const commentLikeApi = ({ id, cid, t, type }: CommentLikeType) => {
 }
 
 type CommentType = {
-  id: number
+  id: number | string
   t: number
   type: number
   content: string

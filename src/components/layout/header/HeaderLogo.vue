@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue';
-  import logoPng from '@/assets/imgs/音乐logo.png';
+  import { ref } from 'vue';
 
 </script>
 
 <template>
   <div class="header-logo">
-    <el-image :src="logoPng" fit="contain" />
+    <div class="iconfont icon-yinle1"></div>
     <h2>Music</h2>
   </div>
 </template>
@@ -19,9 +18,11 @@
     color: #fff;
     font: 18px bolder;
 
-    .el-image {
+    .icon-yinle1 {
       width: 50px;
       height: 50px;
+      font-size: 50px;
+      color: var(--el-color-primary);
       margin-right: 10px;
     }
   }

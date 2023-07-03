@@ -20,12 +20,12 @@
 
 <template>
   <div class="audio-left">
-    <el-image :src="currentSongInfo.picUrl || yinyueIcon" fit="cover" />
+    <section class="iconfont icon-yinle"></section>
     <section class="audio-left_author">
       <b>{{ currentSongInfo.songName || '暂无歌曲' }}</b>
       <a>{{ currentSongInfo.artists?.[0]?.name }}</a>
       <section class="audio-left_author_icon">
-        <div :class="['iconfont', isLike ? 'icon-woxihuan-hongsetaoxin likeColor' : 'icon-woxihuan-morentaoxin']" :title="isLike ? '取消喜欢' : '喜欢'" @click="likeMusic"></div>
+        <div :class="['iconfont', isLike(currentSongInfo.songId) ? 'icon-woxihuan-hongsetaoxin likeColor' : 'icon-woxihuan-morentaoxin']" :title="isLike(currentSongInfo.songId) ? '取消喜欢' : '喜欢'" @click="likeMusic(currentSongInfo.songId)"></div>
         <div class="iconfont icon-xiazai" title="下载该歌曲"></div>
         <div class="iconfont icon-gengduo" title="更多"></div>
         <el-badge :value="total" :max="999999" :hidden="total === 0 ? true : false" type="primary">
@@ -41,9 +41,11 @@
     display: flex;
     align-items: center;
 
-    .el-image {
+    .icon-yinle {
       width: 70px;
       height: 70px;
+      font-size: 70px;
+      color: var(--el-color-primary);
       border-radius: 8px;
     }
 

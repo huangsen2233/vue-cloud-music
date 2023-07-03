@@ -18,7 +18,7 @@
   const emits = defineEmits<{
     (event: 'play-album', params: any): void;
     (event: 'change-pagination', params: PaginationPropType): void;
-    (event: 'play-mv', mvid: number): void;
+    (event: 'play-mv', mvid: number | string): void;
   }>();
 
   const handleClick = async (id: number) => {
@@ -45,7 +45,7 @@
   };
 
   // 路由跳转到MV视频
-  const routerToVideo = (mvid: number) => {
+  const routerToVideo = (mvid: number | string) => {
     emits('play-mv', mvid)
   };
 </script>
@@ -166,7 +166,7 @@
           }
           .el-icon:hover {
             cursor: pointer;
-            transform: scale(1.5);
+            transform: scale(1.2);
           }
         }
       }

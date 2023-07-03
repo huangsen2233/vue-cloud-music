@@ -62,7 +62,7 @@
   // 获取歌手MV
   const getArtistMv = async (id: number) => {
     const result: any = await getArtistMvApi(id);
-    console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
+    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
     mvs.value.length = 0;
     for (let i of result.mvs) {
       const { imgurl, playCount, duration, id, name, publishTime, artist: { id: artistId, name: artistName } } = i;
@@ -95,7 +95,7 @@
   };
 
   // 获取MV地址
-  const playMv = async (mvid: number) => {
+  const playMv = async (mvid: number | string) => {
     // console.log('mv的id', mvid);
     router.push({ path: '/video', query: { id: mvid } });
   };

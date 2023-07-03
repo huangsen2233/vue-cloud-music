@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { formatTimestamp } from "@/utils/dateFormat";
   import BasePagination from '@/components/pagination/BasePagination.vue';
 
@@ -19,18 +19,49 @@
     currentCommentType: string
     currentComment: any[]
     commentPagination: PaginationType
+    loading: boolean
   }>();
 
   const emits = defineEmits<{
     (event: 'change-comment-type', type: string): void
     (event: 'change-comment-pagination', params: PaginationParamsType): void
     (event: 'like', commentInfo: any): void
-    (event: 'reply', commentInfo: any): void
+    (event: 'reply', replyComment: string, commentId?: number): void
   }>();
 
   const myComment = ref('');
+  const replyComment = ref('');
 
-  defineExpose({ myComment });
+  // 显示el-popover组件 
+  const openPopover = (commentId: number) => {
+  for (let item of props.currentComment) {
+      item.visible = false
+    }
+    const findItem = props.currentComment.find(i => i.commentId === commentId)
+    findItem.visible = true
+  };
+
+  // 隐藏el-popover组件
+  const closePopover = (commentId: number) => {
+    const findItem = props.currentComment.find(i => i.commentId === commentId)
+    findItem.visible = false
+  };
+
+  // 回复
+  const confirm = (replyComment: string, commentId: number) => {
+    if (replyComment.trim().length === 0) {
+      return ElMessage({ message: '回复内容不能为空!', type: 'warning'});
+    }
+    emits('reply', replyComment, commentId)
+    closePopover(commentId)
+
+    /**
+     * 回复功能被限制次数了  
+     * 下次测试
+     */
+  };
+
+  defineExpose({ myComment, replyComment });
 </script>
 
 <template>
@@ -39,7 +70,7 @@
       <el-image class="comment-my-img" :src="avatarUrl" fit="contain" />
       <div class="comment-my-content">
         <el-input type="textarea" :rows="3" placeholder="评论一下~" v-model="myComment"></el-input>
-        <el-button type="primary" @click="emits('reply', myComment)">评论</el-button>
+        <el-button type="primary" :loading="loading" @click="emits('reply', myComment)">评论</el-button>
       </div>
     </section>
     <section class="comment-list">
@@ -65,8 +96,22 @@
             <span class="comments_time_like">
               <span :class="['iconfont', 'icon-dianzan', i.liked ? 'liked-color' : '']" @click="emits('like', i)"></span>
               <a>{{ i.likedCount }}</a>
-              <span class="iconfont icon-pinglun" @click="emits('reply', i)"></span>
-              <a class="reply" @click="emits('reply', i)">回复</a>
+              <span class="iconfont icon-pinglun" @click="openPopover(i.commentId)"></span>
+              <!-- @click="emits('reply', myComment, i.commentId)" -->
+              <el-popover placement="bottom" :width="350" :visible="i.visible" popper-class="comment-popover">
+                <template #reference>
+                  <a class="reply" @click="openPopover(i.commentId)">回复</a>
+                </template>
+                <template #default>
+                  <div class="comment-popover-content">
+                    <el-input v-model="replyComment" :placeholder="'回复' + i.user.nickname" />
+                    <div class="comment-popover-content_buttons">
+                      <el-button @click="closePopover(i.commentId)">取消</el-button>
+                      <el-button type="primary" @click="confirm(replyComment, i.commentId)">确定</el-button>
+                    </div>
+                  </div>
+                </template>
+              </el-popover>
             </span>
           </div>
         </div>

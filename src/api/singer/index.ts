@@ -17,7 +17,7 @@ type artistsType = {
  * @param {Number} area 可选参数，-1:全部，7:华语，96:欧美，8:日本，16韩国，0:其
  * @returns Promise
  */
-export const artistApi = ({ limit = 30, offset = 0, initial = '-1', type = -1, area = -1 }: artistsType) => {
+export const artistApi = ({ limit = 50, offset = 0, initial = '-1', type = -1, area = -1 }: artistsType) => {
   return request.get('/artist/list', {
     params: { limit, offset, initial, type, area }
   })

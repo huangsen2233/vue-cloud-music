@@ -10,44 +10,61 @@
 </script>
 
 <template>
-  <div class="img-list">
-    <div class="img-item" v-for="i in artists">
+  <div class="list">
+    <section class="list-img" v-for="i in artists.slice(0,10)">
       <el-image :src="i.picUrl" style="width: 200px; height: 200px;" fit="cover" loading="lazy"></el-image>
-      <div class="name">
+      <div class="list-img-name">
         <a @click="emits('router-singerdetail', i.id, i.fansCount)">{{ i.name }}</a>
-        <el-avatar :title="`${i.name}的个人主页`" size="small" :src="i.img1v1Url" @click="emits('router-singerdetail', i.id, i.fansCount)" />
+        <el-icon :title="`${i.name}的个人主页`"><Discount /></el-icon>
       </div>
-    </div>
+    </section>
+    <section class="list-profile" v-for="i in artists.slice(10)">
+      <a @click="emits('router-singerdetail', i.id, i.fansCount)">{{ i.name }}</a>
+      <el-icon :title="`${i.name}的个人主页`"><Discount /></el-icon>
+    </section>
   </div>
 </template>
 
 <style lang="less" scoped>
-  .img-list {
+  .list {
     display: flex;
     flex-wrap: wrap;
 
-    .img-item {
-      flex: 0 0 15%;
-      margin: 20px calc(10% / 5) 30px 0;
-
-      .name {
+    &-img {
+      flex-basis: 18%;
+      margin: 20px calc(10% / 4) 30px 0;
+      &:nth-child(5n) {
+        margin-right: 0;
+      }
+      &-name {
         display: flex;
         justify-content: space-between;
         align-items: center;
-
-        a:hover {
+        & > a:hover {
           cursor: pointer;
           text-decoration: underline;
         }
-
-        .el-avatar {
+        .el-icon {
+          color: var(--el-color-primary);
           cursor: pointer;
         }
       }
     }
 
-    .img-item:nth-child(6n) {
-      margin-right: 0;
+    &-profile {
+      width: 120px;
+      margin: 0 20px 20px 0;
+      display: flex;
+      align-items: center;
+      & > a:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      .el-icon {
+        color: var(--el-color-primary);
+        margin-left: 5px;
+        cursor: pointer;
+      }
     }
   }
 </style>

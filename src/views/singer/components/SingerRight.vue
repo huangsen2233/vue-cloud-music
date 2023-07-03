@@ -71,7 +71,7 @@
         :total="paginationProp.total"
         :current-page="paginationProp.currentPage"
         :page-size="paginationProp.pageSize"
-        :page-sizes="[18, 30, 60, 90]"
+        :page-sizes="[50, 100, 150, 200]"
         @on-page="changePagination"
         @on-size="changePagination"
       />
