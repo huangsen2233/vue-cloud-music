@@ -6,7 +6,6 @@
   import { useUserStore } from "@/stores/user";
   import { useMusicStore } from "@/stores/music";
   import { getUserPlaylistApi } from "@/api/user";
-  import { getSongUrlApi } from "@/api/music";
   import { playlistSubscribeApi } from "@/api/playlist";
 
   const props = defineProps<{

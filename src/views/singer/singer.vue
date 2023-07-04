@@ -2,70 +2,73 @@
   import { ref, reactive, onMounted, nextTick } from 'vue';
   import { useRouter } from 'vue-router';
   import { artistApi } from "@/api/singer";
-  import type { artistsType, titleType, offsetType, initialType, paginationType } from "./type";
   import SingerLeft from "./components/SingerLeft.vue";
   import SingerRight from "./components/SingerRight.vue";
+  import type { artistsType, titleType, initialType } from "./type";
 
   onMounted(() => {
-    getArtist({ ...artistParams.value });
+    getArtist({ ...artistParams.value })
+    window.addEventListener("scroll", handleScroll)
   });
 
   const router = useRouter();
-
-  /**
-   * 
-   * limit 30 改为 50个歌手
-   * 
-   * 
-   */
-
-  // 获取歌手列表的默认参数
-  const artistParams = ref({ limit: 50, offset: 0, initial: '-1', type: -1, area: -1 });
+  const artistParams = ref({ limit: 100, offset: 0, initial: '-1', type: -1, area: -1 });
   const tagTitle = ref('全部');
-  const showPagination = ref(true);
   const showTag = ref(true);
-  const artists: any[] = reactive([]);
-  const paginationProp = ref<paginationType>({ total: 360, currentPage: 1, pageSize: 50 });
+  const artists = ref<any[]>([]);
+  const time = ref<number>(1); // 滚动次数
+  const loading = ref<boolean>(false);
+  let timer: NodeJS.Timer; // 控制防抖的定时器
+
+  // 页面滚动事件
+  const handleScroll = () => {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+      const clientHeight = document.documentElement.clientHeight || document.body.clientHeight
+      // 滚动到歌手页面底部
+      if (scrollTop + clientHeight >= scrollHeight - 10) {
+        loading.value = true
+        const params = { ...artistParams.value, limit: 20, offset: artistParams.value.limit + 20 * time.value }
+        getArtist(params).then(() => {
+          time.value++
+          loading.value = false
+        })
+      }
+    }, 1000)
+  };
 
   // 获取歌手列表
   const getArtist = async (params: artistsType) => {
-    const result: any = await artistApi(params);
+    const result: any = await artistApi(params)
     // console.log("🚀 ~ file: singer.vue:12 ~ getArtist ~ result 歌手列表:", result.artists)
-    artists.length = 0;
-    artists.push(...result.artists);
+    if (loading.value) {
+      artists.value.push(...result.artists)
+    } else {
+      artists.value = result.artists
+    }
   };
 
   // 歌手的地区、分类改变
   const switchType = ({ title, area, type }: titleType) => {
-    tagTitle.value = title;
-    artistParams.value = { ...artistParams.value, limit: 30, offset: 0, initial: '0', area, type }; // 重置请求歌手列表的参数
-    paginationProp.value = { total: 360, currentPage: 1, pageSize: 30 };
-    showPagination.value = false;
-    showTag.value = false;
+    tagTitle.value = title
+    artistParams.value = { ...artistParams.value, limit: 100, offset: 0, initial: '0', area, type } // 重置请求歌手列表的参数
+    showTag.value = false
     nextTick(() => {
-      showPagination.value = true;
-      showTag.value = true;
-      getArtist(artistParams.value);
-    });
+      showTag.value = true
+      getArtist(artistParams.value)
+    })
   };
 
   // 歌手的首字母改变
   const switchInitial = (params: initialType) => {
-    paginationProp.value = { total: 360, currentPage: 1, pageSize: 30 };
-    artistParams.value = { ...artistParams.value, limit: 30, offset: 0, ...params }; // 重置请求歌手列表的参数
-    showPagination.value = false;
+    artistParams.value = { ...artistParams.value, limit: 50, offset: 0, ...params }; // 重置请求歌手列表的参数
     nextTick(() => {
-      showPagination.value = true;
       getArtist(artistParams.value);
     });
-  };
-
-  // 歌手的偏移量、个数改变
-  const switchOffset = ({ currentPage, pageSize }: offsetType) => {
-    paginationProp.value.currentPage = currentPage;
-    paginationProp.value.pageSize = pageSize;
-    artistParams.value = { ...artistParams.value , limit: pageSize, offset: (currentPage - 1) * pageSize };
-    getArtist(artistParams.value);
   };
 
   // 跳转到歌手详情页
@@ -82,11 +85,9 @@
     <SingerRight 
       :show-tag="showTag"
       :tag-title="tagTitle" 
-      :artists="artists" 
-      :pagination-prop="paginationProp"
-      :show-pagination="showPagination"
+      :artists="artists"
+      :loading="loading" 
       @switch-initial="switchInitial"
-      @switch-offset="switchOffset"
       @router-singerdetail="routerToSingerDetail"
     />
   </div>

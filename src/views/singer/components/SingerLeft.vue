@@ -21,7 +21,7 @@
     { title: '组合/乐队', name: 3 }
   ];
 
-  const activeNameArr = reactive([-1, 7, 96, 8, 16, 0]);
+  const activeNameArr = reactive([-1]);
 
   const isActive1 = ref();
   const isActive2 = ref();

@@ -29,13 +29,12 @@
     pageSize: number
   }
 
-  const router = useRouter();
-
   onMounted(() => {
     getTags();
     getPlaylist(playlistParams.value);
   });
 
+  const router = useRouter();
   const paginationProp = ref<paginationPropType>({ total: 0, currentPage: 1, pageSize: 30 }); // 分页的数据
   const playlists = ref([]);
   const categoriesTags: any = ref([]);

@@ -54,11 +54,6 @@
     }
     emits('reply', replyComment, commentId)
     closePopover(commentId)
-
-    /**
-     * 回复功能被限制次数了  
-     * 下次测试
-     */
   };
 
   defineExpose({ myComment, replyComment });
@@ -81,24 +76,33 @@
       <div class="comment-list-item" v-for="i in currentComment">
         <el-avatar fit="scale-down" :src="i.user.avatarUrl" />
         <div class="comments">
-          <div class="comments_user">
-            <a class="comments_user_nickname">{{ i.user.nickname }}:</a>
-            <span class="comments_user_content">{{ i.content }}</span>
-          </div>
-          <div class="comments_reply" v-if="i.beReplied.length > 0">
-            <div class="comments_reply_content" v-for="j in i.beReplied">
-              <a class="comments_reply_content_nickname">{{ j.user.nickname }}:</a>
-              <span>{{ j.content }}</span>
+          <!-- 有回复评论 -->
+          <template v-if="i.beReplied.length > 0">
+            <div class="comments_user" v-for="j in i.beReplied">
+              <a class="comments_user_nickname">{{ j.user.nickname }}:</a>
+              <span class="comments_user_content">{{ j.content }}</span>
             </div>
-          </div>
+            <div class="comments_reply">
+              <div class="comments_reply_content" >
+                <a class="comments_reply_content_nickname">{{ i.user.nickname }}:</a>
+                <span>{{ i.content }}</span>
+              </div>
+            </div>
+          </template>
+          <!-- 无回复评论 -->
+          <template v-else>
+            <div class="comments_user">
+              <a class="comments_user_nickname">{{ i.user.nickname }}:</a>
+              <span class="comments_user_content">{{ i.content }}</span>
+            </div>
+          </template>
           <div class="comments_time">
             <span>{{ formatTimestamp(i.time, 'YYYY-MM-DD') }}</span>  
             <span class="comments_time_like">
               <span :class="['iconfont', 'icon-dianzan', i.liked ? 'liked-color' : '']" @click="emits('like', i)"></span>
               <a>{{ i.likedCount }}</a>
               <span class="iconfont icon-pinglun" @click="openPopover(i.commentId)"></span>
-              <!-- @click="emits('reply', myComment, i.commentId)" -->
-              <el-popover placement="bottom" :width="350" :visible="i.visible" popper-class="comment-popover">
+              <el-popover placement="bottom" :width="350" :visible="i.visible" trigger="click" popper-class="comment-popover">
                 <template #reference>
                   <a class="reply" @click="openPopover(i.commentId)">回复</a>
                 </template>
@@ -107,7 +111,7 @@
                     <el-input v-model="replyComment" :placeholder="'回复' + i.user.nickname" />
                     <div class="comment-popover-content_buttons">
                       <el-button @click="closePopover(i.commentId)">取消</el-button>
-                      <el-button type="primary" @click="confirm(replyComment, i.commentId)">确定</el-button>
+                      <el-button type="primary" @click="confirm(replyComment, i.commentId)">回复</el-button>
                     </div>
                   </div>
                 </template>

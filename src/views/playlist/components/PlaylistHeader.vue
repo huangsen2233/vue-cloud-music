@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, computed } from 'vue';
+  import { ref } from 'vue';
   import type { playlistType } from "../playlist.vue";
 
   const props = defineProps<{
@@ -13,7 +13,7 @@
     (event: 'update:showPopover', params: boolean): void
   }>();
 
-  const tagTypeArr = ['primary', 'success', 'warning', 'danger', 'info'];
+  const tagType = ['', 'success', 'warning', 'danger', 'info'];
 
   let cat = ref('全部');
 
@@ -44,7 +44,7 @@
         <template v-for="(value,key,index) in tagsList">
           <div class="playlist-popover-content">
             <el-image :src="tagsIcons[key]" style="width: 28px; height: 28px;"></el-image>
-            <el-tag size="large" type="success"  style="margin: 0 10px; font-size: 16px;">{{ key }}</el-tag>
+            <el-tag size="large" :type="tagType[index]" style="margin: 0 10px; font-size: 16px;">{{ key }}</el-tag>
             <div class="tag">
               <template v-for="item in value">
                 <a @click="switchPlaylist(item.name)">{{ item.name }}</a>

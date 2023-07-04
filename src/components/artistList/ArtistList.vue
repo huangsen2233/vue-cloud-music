@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive} from 'vue';
+  import { ref } from 'vue';
 
   const props = defineProps<{
     artists: any[]
@@ -52,10 +52,14 @@
     }
 
     &-profile {
-      width: 120px;
-      margin: 0 20px 20px 0;
       display: flex;
       align-items: center;
+      justify-content: flex-start;
+      width: 18%;
+      margin: 0 calc(10% / 4) 30px 0;
+      &:nth-child(5n) {
+        margin-right: 0;
+      }
       & > a:hover {
         cursor: pointer;
         text-decoration: underline;

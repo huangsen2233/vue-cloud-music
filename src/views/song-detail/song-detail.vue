@@ -15,7 +15,7 @@
 
   const route = useRoute();
   const commentRef = ref<InstanceType<typeof SongDetailComment>>();
-  const songDetailRef = ref()
+  const songDetailRef = ref();
 </script>
 
 <template>

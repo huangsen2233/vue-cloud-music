@@ -44,6 +44,7 @@ export interface IUser {
   account: any
   profile: any
   collectPlaylists: any[]
+  followslist: any[]
 }
 
 export interface IVideo {

@@ -9,13 +9,15 @@
     small?: boolean
     disabled?: boolean
     background?: boolean
+    layout?: string
   }>(), {
     currentPage: 1,
     pageSize: 30,
     total: 0,
     small: false,
     disabled: false,
-    background: true
+    background: true,
+    layout: 'total, sizes, prev, pager, next, jumper'
   });
 
   const emits = defineEmits<{
@@ -48,7 +50,7 @@
     :small="small"
     :disabled="disabled"
     :background="background"
-    layout="total, sizes, prev, pager, next, jumper"
+    :layout="layout"
     @current-change="handleCurrentChange"
     @size-change="handleSizeChange"
   />

@@ -90,3 +90,37 @@ export const getRecentSongApi = (limit: number = 100) => {
     params: { limit }
   })
 }
+
+type UserFollowsType = {
+  uid: number
+  limit?: number
+  offset?: number
+}
+/**
+ * @description 获取用户关注列表
+ * @param {number} uid 必选参数,用户id
+ * @param {number} limit 可选参数，取出的数量 , 默认为 30
+ * @param {number} offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*30, 其中 30 为 limit 的值，默认0
+ * @returns Promise
+*/
+export const getUserFollowsApi = ({ uid, limit = 30, offset = 0 }: UserFollowsType) => {
+  return request.get('/user/follows', {
+    params: { uid, limit, offset }
+  })
+}
+
+type FollowType = {
+  id: number
+  t: number
+}
+/**
+ * @description 关注、取消关注
+ * @param {number} id 必选参数,用户id
+ * @param {number} t 必选参数，1关注，其它取消关注
+ * @returns Promise
+*/
+export const followApi = ({ id, t }: FollowType) => {
+  return request.get('/follow', {
+    params: { id, t }
+  })
+}

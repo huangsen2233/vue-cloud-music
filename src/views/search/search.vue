@@ -46,33 +46,37 @@
     console.log("🚀 ~ file: HeaderProfile.vue:31 ~ searchSuggestApi ~ 搜索结果:", result)
     switch (activeName.value) {
       case 1: 
-        songs.value = [...result.songs]; 
+        songs.value = result?.songs ?? []; 
         activeLable.value = '单曲';
         break;
       case 100: 
-        artists.value = [...result.artists];
+        artists.value = result?.artists ?? [];
         activeLable.value = '歌手';
         break;
       case 1000: 
-        playlists.value = [...result.playlists]; 
+        playlists.value = result?.playlists ?? []; 
         activeLable.value = '歌单';
         break;
       case 1004: 
         mvs.value.length = 0;
-        for (let i of result.mvs) {
-          const { cover, playCount, duration, id, name, artistId, artistName, publishTime } = i;
-          mvs.value.push({ cover, playCount, duration, id, name, artistId, artistName, publishTime })
+        if (result?.mvs) {
+          for (let i of result?.mvs) {
+            const { cover, playCount, duration, id, name, artistId, artistName, publishTime } = i;
+            mvs.value.push({ cover, playCount, duration, id, name, artistId, artistName, publishTime })
+          }
         }
         activeLable.value = 'MV';
         break;
       case 1014: 
         mvs.value.length = 0;
-        for (let i of result.videos) {
-          const { coverUrl, playTime, durationms, vid, title, creator } = i;
-          mvs.value.push({ 
-            cover: coverUrl, playCount: playTime, duration: durationms, id: vid, 
-            name: title, artistId: creator[0].userId, artistName: creator[0].userName
-          });
+        if (result?.videos) {
+          for (let i of result?.videos) {
+            const { coverUrl, playTime, durationms, vid, title, creator } = i;
+            mvs.value.push({ 
+              cover: coverUrl, playCount: playTime, duration: durationms, id: vid, 
+              name: title, artistId: creator[0].userId, artistName: creator[0].userName
+            });
+          }
         }
         activeLable.value = '视频';
         break;

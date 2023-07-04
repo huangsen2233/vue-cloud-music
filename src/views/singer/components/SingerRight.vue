@@ -1,20 +1,17 @@
 <script lang="ts" setup>
   import { ref } from "vue";
-  import type { initialType, offsetType, paginationType } from "../type";
-  import BasePagination from "@/components/pagination/BasePagination.vue";
   import ArtistList from "@/components/artistList/ArtistList.vue";
+  import type { initialType } from "../type";
 
   const props = defineProps<{
     showTag: boolean
     tagTitle: string
     artists: any[]
-    paginationProp: paginationType
-    showPagination: boolean
+    loading: boolean
   }>();
 
   const emits = defineEmits<{
     (event: 'switch-initial', params: initialType): void
-    (event: 'switch-offset', params: offsetType): void
     (event: 'router-singerdetail', id: number, fansCount?: number): void
   }>();
 
@@ -40,11 +37,6 @@
     }
     emits('switch-initial', { initial });
   }
-
-  // 分页改变
-  const changePagination = (params: offsetType) => {
-    emits('switch-offset', params)
-  };
 </script>
 
 <template>
@@ -66,23 +58,25 @@
     <section class="body">
       <!-- 歌手列表 -->
       <ArtistList :artists="artists" @router-singerdetail="(id, fansCount) => emits('router-singerdetail', id, fansCount)" />
-      <BasePagination
+      <!-- <BasePagination
         v-if="showPagination"
         :total="paginationProp.total"
+        :layout="layout"
         :current-page="paginationProp.currentPage"
         :page-size="paginationProp.pageSize"
         :page-sizes="[50, 100, 150, 200]"
         @on-page="changePagination"
         @on-size="changePagination"
-      />
+      /> -->
     </section>
+    <section class="footer">{{ loading ? '正在加载。。。' : '向下滚动获取更多歌手' }}</section>
   </div>
 </template>
 
 <style lang="less" scoped>
   .singer-list {
     flex: 1;
-    padding: 0 30px;
+    padding: 0 30px 30px;
 
     .header {
       h2 {
@@ -150,6 +144,14 @@
       .el-pagination {
         margin: 40px 0 30px;
       }
+    }
+
+    .footer {
+      background-color: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
+      text-align: center;
+      padding: 20px 0;
+      font-size: 20px;
     }
   }
 </style>

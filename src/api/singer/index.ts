@@ -1,23 +1,22 @@
 import request from '@/utils/request';
 
-type artistsType = {
+type ArtistsType = {
   limit: number
   offset: number
   initial: string
   type: number
   area: number
 };
-
 /**
  * @description 歌手分类列表
- * @param {Number} limit 可选参数，返回数量 , 默认为 30
+ * @param {Number} limit 可选参数，返回数量 , 默认为 30, 最大100
  * @param {Number} offset 可选参数，偏移数量，用于分页 , 默认为 0
  * @param {String} initial 可选参数，按首字母索引查找参数, 返回内容将以 name 字段开头为 b 或者拼音开头为 b 为顺序排列; 热门传-1; #传0
  * @param {Number} type 可选参数，-1:全部，1:男歌手，2:女歌手，3:乐队
  * @param {Number} area 可选参数，-1:全部，7:华语，96:欧美，8:日本，16韩国，0:其
  * @returns Promise
  */
-export const artistApi = ({ limit = 50, offset = 0, initial = '-1', type = -1, area = -1 }: artistsType) => {
+export const artistApi = ({ limit = 100, offset = 0, initial = '-1', type = -1, area = -1 }: ArtistsType) => {
   return request.get('/artist/list', {
     params: { limit, offset, initial, type, area }
   })

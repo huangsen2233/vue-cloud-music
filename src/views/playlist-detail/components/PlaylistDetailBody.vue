@@ -89,13 +89,16 @@
   };
 
   // 回复歌曲评论
-  const reply = async (myComment: string) => {
-    loading.value = true
+  const reply = async (myComment: string, commentId?: number) => {
+    if (!commentId) {
+      loading.value = true
+    }
     const commentParams = {
       id: props.playlistId, 
-      t: 1, 
+      t: commentId ? 2 : 1, 
       type: 2, 
-      content: myComment
+      content: myComment,
+      commentId: commentId ?? 0
     }
     const { code }: any = await commentApi(commentParams)
     if (code === 200) {
@@ -105,9 +108,10 @@
       }
       setTimeout(() => {
         emits('comment-pagination', paginationParams)
-        ElMessage({ message: '已发送评论', type: 'success' })
+        commentId ? ElMessage({ message: '已回复评论', type: 'success' }) : ElMessage({ message: '已发送评论', type: 'success' }) 
         if (commentRef.value) {
           commentRef.value.myComment = ''
+          commentRef.value.replyComment = ''
         }
         loading.value = false
       }, 1500)

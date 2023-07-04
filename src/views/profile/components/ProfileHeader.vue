@@ -3,20 +3,21 @@
   import { storeToRefs } from "pinia";
   import { useUserStore } from "@/stores/user";
   import { getAreaByIdCard } from "@/utils/areaByCard";
-  import { getUserDetailApi, getUserFollowedsApi } from "@/api/user";
+  import { getUserDetailApi, getUserFollowedsApi, getUserFollowsApi } from "@/api/user";
 
   onMounted(() => {
     const { id } = account.value 
-    getUserPlaylist(id)
+    getUserDetail(id)
     getUserFolloweds(id)
+    getUserFollows(id)
   });
 
-  const { account, profile } = storeToRefs(useUserStore());
+  const { account, profile, followslist } = storeToRefs(useUserStore());
   const userDetail = ref<any>({});
   const fanSize = ref<number>(0); // 粉丝数量
 
   // 获取用户详情
-  const getUserPlaylist = async (id: number) => {
+  const getUserDetail = async (id: number) => {
     const result = await getUserDetailApi(id)
     userDetail.value = result
     // console.log('用户详情', result)
@@ -28,6 +29,12 @@
     fanSize.value = size
   };
 
+  // 获取用户关注列表
+  const getUserFollows = async (id: number) => {
+    const params = { uid: id, limit: 100, offset: 0 }
+    const { follow }: any = await getUserFollowsApi(params)
+    followslist.value = follow
+  };
 </script>
 
 <template>
@@ -43,8 +50,8 @@
       </div>
       <div class="signature">签名：{{ profile.signature || '暂无签名' }} </div>
       <div class="size">
-        <span>粉丝: {{ fanSize }}</span>
-        <span>关注：{{ userDetail.bindings?.length }}</span>
+        <span>粉丝: {{ userDetail.profile?.followeds }}</span>
+        <span>关注：{{ userDetail.profile?.follows }}</span>
       </div>
       <div>所在地区: {{ getAreaByIdCard(profile.city) }}</div>
     </section>

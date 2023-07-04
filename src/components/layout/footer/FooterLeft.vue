@@ -20,7 +20,8 @@
 
 <template>
   <div class="audio-left">
-    <section class="iconfont icon-yinle"></section>
+    <el-image v-if="currentSongInfo.picUrl" :src="currentSongInfo.picUrl" fit="cover" />
+    <section v-else class="iconfont icon-yinle"></section>
     <section class="audio-left_author">
       <b>{{ currentSongInfo.songName || '暂无歌曲' }}</b>
       <a>{{ currentSongInfo.artists?.[0]?.name }}</a>
@@ -46,6 +47,12 @@
       height: 70px;
       font-size: 70px;
       color: var(--el-color-primary);
+      border-radius: 8px;
+    }
+
+    .el-image {
+      width: 70px;
+      height: 70px;
       border-radius: 8px;
     }
 
