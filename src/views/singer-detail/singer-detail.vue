@@ -18,12 +18,13 @@
       getArtistMv(id)
       getArtistDesc(id)
     }
+    window.addEventListener('scroll', handleScroll)
   });
 
   const route = useRoute();
   const router = useRouter();
   const useMusic = useMusicStore();
-  const artistAlbumParams = ref<ArtistAlbumType>({ id: 0, limit: 10, offset: 0 });
+  const artistAlbumParams = ref<ArtistAlbumType>({ id: 0, limit: 200, offset: 0 });
   const artist = ref<any>({});
   const user = ref<any>({});
   const identify = ref<any>({});
@@ -31,10 +32,31 @@
   const activeName  = ref(1);
   const activeCollapse = ref(0);
   const hotAlbums = ref<any[]>([]);
-  const paginationProp = ref<PaginationPropType>({ total: 0, currentPage: 1, pageSize: 10 });
+  const albums = ref<any[]>([]);
+  const albumSize = ref<number>(0);
+  const loading = ref<boolean>(false);
   const mvs = ref<MvType[]>([]);
   const briefDesc = ref('');
   const introduction = ref<any[]>([]);
+  let timer: NodeJS.Timer;
+
+  // 页面滚动事件
+  const handleScroll = () => {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+      const clientHeight = document.documentElement.clientHeight || document.body.clientHeight
+      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        loading.value = true
+        getAlbumsDetail().then(() => {
+          loading.value = false
+        })
+      }
+    }, 1000)
+  };
 
   // 获取歌手详情
   const getArtistDetail = async (id: number) => {
@@ -47,20 +69,42 @@
 
   // 获取歌手专辑
   const getArtistAlbum = async (params: ArtistAlbumType) => {
-    const result: any = await getArtistAlbumApi(params)
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", result)
-    for(let i = 0; i < result.hotAlbums.length; i++) {
-      const albumData: any = await getAlbumApi(result.hotAlbums[i].id)
-      result.hotAlbums[i].songs = [...albumData.songs]
+    const { hotAlbums: album, artist }: any = await getArtistAlbumApi(params)
+    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手专辑", album.length)
+    const count = album.length >= 4 ? 4 : album.length
+    for(let i = 0; i < count; i++) {
+      const albumData: any = await getAlbumApi(album[i].id)
+      album[i].songs = [...albumData.songs]
     }
-    hotAlbums.value = result.hotAlbums
-    paginationProp.value.total = result.artist.albumSize
+    albums.value = album
+    hotAlbums.value = album.slice(0, count)
+    albumSize.value = artist.albumSize
+  };
+
+  // 再次获取歌手专辑详情 (先获取四个专辑，后续请求每次再获取四个)
+  const getAlbumsDetail = async () => {
+    const albumsLength = albums.value.length
+    const hotAlbumsLength = hotAlbums.value.length
+    if (albumsLength - hotAlbumsLength === 0) {
+      return 
+    } else if (albumsLength - hotAlbumsLength > 4) {
+      for(let i = hotAlbumsLength; i < hotAlbumsLength + 4; i++) {
+        const albumData: any = await getAlbumApi(albums.value[i].id)
+        albums.value[i].songs = [...albumData.songs]
+      }
+      hotAlbums.value.push(...albums.value.slice(hotAlbumsLength, hotAlbumsLength + 4))
+    } else if (albums.value.length - hotAlbums.value.length < 4) {
+      for(let i = hotAlbumsLength; i < albumsLength; i++) {
+        const albumData: any = await getAlbumApi(albums.value[i].id)
+        albums.value[i].songs = [...albumData.songs]
+      }
+      hotAlbums.value.push(...albums.value.slice(hotAlbumsLength))
+    }
   };
 
   // 获取歌手MV
   const getArtistMv = async (id: number) => {
     const result: any = await getArtistMvApi(id)
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手MV", result)
     mvs.value.length = 0
     for (let i of result.mvs) {
       const { imgurl, playCount, duration, id, name, publishTime, artist: { id: artistId, name: artistName } } = i
@@ -71,30 +115,19 @@
   // 获取歌手描述
   const getArtistDesc = async (id: number) => {
     const result: any = await getArtistDescApi(id)
-    // console.log(" ~ file: ranking.vue:12 ~ getToplist ~ result: 歌手描述", result)
-    briefDesc.value = result.briefDesc
+    briefDesc.value = result.briefDesc || ''
     introduction.value = result.introduction
   };
 
   // 播放专辑歌曲
   const playAlbum = (row: any) => {
-    // console.log('当前的歌曲信息', row);
     const { dt, al, ar, name, id } = row
     const songInfo = { songId: id, songName: name, picUrl: al.picUrl, duration: dt, artists: ar }
     useMusic.getSongUrl(songInfo)
   };
 
-  // 专辑的分页改变
-  const changePagination = ({ currentPage, pageSize }: any) => {
-    paginationProp.value = { ...paginationProp.value, currentPage, pageSize }
-    getArtistAlbum({ 
-      ...artistAlbumParams.value, id: Number(route.query.id), limit: pageSize, offset: (currentPage - 1) * pageSize
-    })
-  };
-
   // 获取MV地址
   const playMv = async (mvid: number | string) => {
-    // console.log('mv的id', mvid);
     router.push({ path: '/video', query: { id: mvid } })
   };
 </script>
@@ -105,14 +138,14 @@
     <SingerDetailBody 
       :active-name="activeName" 
       :active-collapse="activeCollapse"
-      :hot-albums="hotAlbums" 
-      :pagination-prop="paginationProp"
+      :hot-albums="hotAlbums"
+      :album-size="albumSize"
+      :loading="loading"
       :mvs="mvs"
       :brief-desc="briefDesc"
       :introduction="introduction"
       @play-album="playAlbum"
       @play-mv="playMv"
-      @change-pagination="changePagination"
     />
   </div>
 </template>

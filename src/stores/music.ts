@@ -101,9 +101,7 @@ export const useMusicStore = defineStore('music', {
     async getSongUrl (songInfo: CurrentSongInfoType) {
       const { songId } = songInfo
       const { data }: any = await getSongUrlApi([songId])
-      // console.log("🚀 ~ file: music.ts:101 ~ getSongUrl ~ 音乐的url:", data)
-      this.currentSongData = data
-      this.currentSongInfo = songInfo
+      console.log("🚀 ~ file: music.ts:101 ~ getSongUrl ~ 音乐的url:", data)
       if (!data[0].url) {
         return ElNotification({ title: 'Warning', message: `<${songInfo.songName}>暂无音源.`, type: 'warning', duration: 2000})
       } else if (data[0].fee === 1) {
@@ -111,6 +109,8 @@ export const useMusicStore = defineStore('music', {
       } else {
         ElNotification({ title: 'Success', message: `正在播放<${songInfo.songName}>`, type: 'success', duration: 2000})
       }
+      this.currentSongData = data
+      this.currentSongInfo = songInfo
     },
 
     // 初始化音乐栏
@@ -290,11 +290,11 @@ export const useMusicStore = defineStore('music', {
 
 export const watchMusicInit = () => {
   const { init, likeList, getMusicComment, getLyric } = useMusicStore()
-  const { currentSongInfo, likeIds, songList } = storeToRefs(useMusicStore())
+  const { currentSongInfo, currentSongData, likeIds, songList } = storeToRefs(useMusicStore())
   
   // 音乐切换后的初始化相关数据
   watch(currentSongInfo, (newSongInfo, oldSongInfo) => {
-    if (newSongInfo.songId === 0) return
+    if (newSongInfo.songId === 0 || !currentSongData.value[0].url) return
     init()
     likeIds.value.length === 0 && likeList()
     getMusicComment({ id: newSongInfo.songId, limit: 20, offset: 0})

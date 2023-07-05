@@ -35,7 +35,7 @@
   // 搜索建议
   const searchSuggest = async () => {
     const { result }: any = await searchSuggestApi(keywords.value)
-    console.log("🚀 ~ file: HeaderProfile.vue:36 ~ searchSuggest ~ 搜索建议:", result)
+    // console.log("🚀 ~ file: HeaderProfile.vue:36 ~ searchSuggest ~ 搜索建议:", result)
     if (Object.keys(result).length === 0) {
       return false;
     } else {

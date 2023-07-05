@@ -58,18 +58,8 @@
     <section class="body">
       <!-- 歌手列表 -->
       <ArtistList :artists="artists" @router-singerdetail="(id, fansCount) => emits('router-singerdetail', id, fansCount)" />
-      <!-- <BasePagination
-        v-if="showPagination"
-        :total="paginationProp.total"
-        :layout="layout"
-        :current-page="paginationProp.currentPage"
-        :page-size="paginationProp.pageSize"
-        :page-sizes="[50, 100, 150, 200]"
-        @on-page="changePagination"
-        @on-size="changePagination"
-      /> -->
     </section>
-    <section class="footer">{{ loading ? '正在加载。。。' : '向下滚动获取更多歌手' }}</section>
+    <section class="footer">{{ loading ? '正在加载......' : '向下滚动获取更多歌手' }}</section>
   </div>
 </template>
 

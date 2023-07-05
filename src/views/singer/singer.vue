@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted, nextTick } from 'vue';
+  import { ref, onMounted, nextTick } from 'vue';
   import { useRouter } from 'vue-router';
   import { artistApi } from "@/api/singer";
   import SingerLeft from "./components/SingerLeft.vue";
@@ -27,12 +27,12 @@
     }
     timer = setTimeout(() => {
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
       const clientHeight = document.documentElement.clientHeight || document.body.clientHeight
+      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
       // 滚动到歌手页面底部
       if (scrollTop + clientHeight >= scrollHeight - 10) {
         loading.value = true
-        const params = { ...artistParams.value, limit: 20, offset: artistParams.value.limit + 20 * time.value }
+        const params = { ...artistParams.value, limit: 30, offset: artistParams.value.limit + 30 * time.value }
         getArtist(params).then(() => {
           time.value++
           loading.value = false

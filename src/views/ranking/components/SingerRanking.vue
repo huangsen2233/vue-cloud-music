@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import { ref, reactive, toRef, watch, onMounted } from 'vue';
-  import type { TabsPaneContext } from 'element-plus'
+  import { ref } from 'vue';
+  import type { TabsPaneContext } from 'element-plus';
 
   const props = defineProps<{
     activeName: number
@@ -31,7 +31,7 @@
           <b style="font-size: 18px;">{{ i.label }}</b>
         </template>
         <template #default>
-          <div class="singer" v-for="(j, index) in (i.list as any[])">
+          <div class="singer" v-for="(j, index) in i.list.slice(0, 9)">
             <el-image style="width: 180px; height: 180px" :src="j.img1v1Url" fit="cover" />
             <div class="singer-info">
               <h1>{{ index + 1 }}</h1>
@@ -39,6 +39,10 @@
               <span>热度: {{ j.score }}</span>
               <a @click="routerToSingerDetail(j.id)">查看更多<el-icon><DArrowRight /></el-icon></a>
             </div>
+          </div>
+          <div class="singer singer-content" v-for="(j, index) in i.list.slice(9)">
+            <h1>{{ index + 10 }}</h1>
+            <a @click="routerToSingerDetail(j.id)">{{ j.name }}</a>
           </div>
         </template>
       </el-tab-pane>
@@ -50,26 +54,24 @@
   .el-tab-pane {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: flex-start;
     padding: 30px 0;
 
     .singer {
-      flex: 0 1 30%;
       display: flex;
-      justify-content: space-around;
-      margin: 0 30px 30px 0;
+      justify-content: flex-start;
+      width: 30%;
+      margin: 0 auto 30px 0;
 
       &-info {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding-left: 10px;
-
         h1 {
           color: rgba(221,22,29);
           margin: 5px 0;
         }
-
         a {
           display: flex;
           align-items: center;
@@ -79,13 +81,25 @@
           text-decoration: underline;
         }
       }
-    }
 
-    .singer:nth-child(3n) {
-      margin-right: 0;
+      &-content {
+        position: relative;
+        & > h1 {
+          color: rgba(221,22,29);
+          margin: 5px 0;
+        }
+        & > a {
+          position: absolute;
+          left: 65px;
+          bottom: 10px;
+          font-weight: bolder;
+          font-size: 16px;
+        }
+        & > a:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
     }
-  }
-  .singer:last-child {
-    flex-grow: 0;
   }
 </style>
