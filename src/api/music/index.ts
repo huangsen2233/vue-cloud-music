@@ -79,12 +79,36 @@ export const likeListApi = (uid: number) => {
 }
 
 /**
- * @description 获取音乐歌词
+ * @description 获取音乐歌词 
  * @param {number} id 必选参数,音乐id 
  * @returns Promise
  */
 export const getLyricApi = (id: number) => {
   return request.get('/lyric', {
+    params: { id }
+  })
+}
+
+/**
+ * @description 获取歌曲相关视频  
+ * @param {number} songid 必选参数，歌曲id 
+ * @param {number} mvid 可选参数，如果定义，此 mvid 对应的 MV 将会作为第一个返回。 limit : 取出的 Mlog 数量, 不包含第一个 mvid 
+ * @returns Promise
+ */
+export const mlogMusicRcmdApi = (songid: number) => {
+  return request.get('/mlog/music/rcmd', {
+    params: { songid }
+  })
+}
+
+/**
+ * @description 获取客户端歌曲下载 url  
+ * @param {number} id 必选参数，歌曲id，仅支持单首歌曲
+ * @param {number} br 可选参数，码率, 默认设置了 999000 即最大码率, 如果要 320k 则可设置为 320000, 其他类推
+ * @returns Promise
+ */
+export const songDownloadUrlApi = (id: number) => {
+  return request.get('/song/download/url', {
     params: { id }
   })
 }
