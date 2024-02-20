@@ -20,6 +20,7 @@
     currentComment: any[]
     commentPagination: PaginationType
     loading: boolean
+    loginStatus: boolean
   }>();
 
   const emits = defineEmits<{
@@ -64,8 +65,8 @@
     <section class="comment-my">
       <el-image class="comment-my-img" :src="avatarUrl" fit="contain" />
       <div class="comment-my-content">
-        <el-input type="textarea" :rows="3" placeholder="评论一下~" v-model="myComment"></el-input>
-        <el-button type="primary" :loading="loading" @click="emits('reply', myComment)">评论</el-button>
+        <el-input type="textarea" :rows="3" :placeholder="loginStatus ? '评论一下~' : '请先登录再评论'" v-model="myComment"></el-input>
+        <el-button type="primary" :loading="loading" :disabled="loginStatus ? false : true" @click="emits('reply', myComment)">评论</el-button>
       </div>
     </section>
     <section class="comment-list">

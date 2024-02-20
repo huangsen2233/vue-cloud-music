@@ -29,6 +29,13 @@
     });
   });
 
+  const text = computed(() => {
+    if (props.hotAlbums.length === props.albumSize) {
+      return '没有更多专辑啦！'
+    }
+    return '向下滚动获取更多专辑'
+  })
+
   // 播放专辑
   const playAlbum = (row: any) => {
     emits('play-album', row);
@@ -94,7 +101,7 @@
               </div>
             </section>
           </div>
-          <div class="loading">{{ loading ? '正在加载......' : '向下滚动获取更多专辑' }}</div>
+          <div class="loading">{{ loading ? '正在加载......' : text }}</div>
         </template>
       </el-tab-pane>
       <el-tab-pane label="MV" :name="2">

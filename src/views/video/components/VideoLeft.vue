@@ -1,11 +1,14 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
+  import { storeToRefs } from 'pinia';
   import { commentLikeApi, commentApi } from "@/api/comment";
+  import { useUserStore } from '@/stores/user';
   import Comment from '@/components/comment/Comment.vue';
   import type { MvDetailType, PaginationPropType, PaginationParamsType } from "../type";
 
   const loading = ref<boolean>(false);
   const commentRef = ref<InstanceType<typeof Comment>>();
+  const { loginStatus } = storeToRefs(useUserStore())
 
   const props = defineProps<{
     videoId: number | string
@@ -109,6 +112,7 @@
     </section>
     <Comment 
       ref="commentRef"
+      :login-status="loginStatus"
       :avatar-url="profile.avatarUrl"
       :current-comment-type="currentCommentType" 
       :current-comment="currentComment" 

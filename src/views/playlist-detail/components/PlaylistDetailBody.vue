@@ -10,7 +10,7 @@
   import type { PaginationType, PaginationParamsType } from "../type";
 
   const { getSongUrl, addToPlaylist } = useMusicStore();
-  const { profile } = storeToRefs(useUserStore());
+  const { profile, loginStatus } = storeToRefs(useUserStore());
   const loading = ref<boolean>(false);
   const commentRef = ref<InstanceType<typeof Comment>>();
 
@@ -136,6 +136,7 @@
       <template #default>
         <Comment
           ref="commentRef" 
+          :login-status="loginStatus"
           :avatar-url="profile.avatarUrl"
           :current-comment-type="currentCommentType" 
           :current-comment="currentComment" 
@@ -188,8 +189,10 @@
 
     &-item {
       flex: 20%;
+      min-width: 220px;
       display: flex;
       align-items: center;
+      box-sizing: border-box;
       padding: 10px;
       margin-bottom: 20px;
     }

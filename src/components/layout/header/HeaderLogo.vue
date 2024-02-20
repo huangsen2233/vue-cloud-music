@@ -6,7 +6,7 @@
 <template>
   <div class="header-logo">
     <div class="iconfont icon-yinle1"></div>
-    <h2>Music</h2>
+    <h2>Listen Music</h2>
   </div>
 </template>
 

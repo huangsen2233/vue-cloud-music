@@ -104,4 +104,10 @@ router.beforeEach((to, from) => {
   return true
 })
 
+// 使用全局后置路由将页面滚动到顶部，未测试
+// router.afterEach((to, from) => {
+//   // 跳转之后滚动条回到顶部
+//   window.scrollTo(0,0);
+// });
+
 export default router

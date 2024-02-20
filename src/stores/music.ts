@@ -227,7 +227,7 @@ export const useMusicStore = defineStore('music', {
     // 获取喜欢的歌曲列表
     async likeList () {
       const { account, loginStatus } = storeToRefs(useUserStore())
-      if (loginStatus) {
+      if (loginStatus.value) {
         const { ids }: any = await likeListApi(account.value.id)
         this.likeIds = ids
       }

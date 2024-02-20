@@ -10,17 +10,6 @@
   import SingerDetailBody from "./components/SingerDetailBody.vue";
   import type { ArtistAlbumType, PaginationPropType, MvType } from "./type";
 
-  onMounted(() => {
-    const id = Number(route.query.id)
-    if (id) {
-      getArtistDetail(id)
-      getArtistAlbum({ ...artistAlbumParams.value, id })
-      getArtistMv(id)
-      getArtistDesc(id)
-    }
-    window.addEventListener('scroll', handleScroll)
-  });
-
   const route = useRoute();
   const router = useRouter();
   const useMusic = useMusicStore();
@@ -42,6 +31,9 @@
 
   // 页面滚动事件
   const handleScroll = () => {
+    if (hotAlbums.value.length === albums.value.length) {
+      window.removeEventListener('scroll', handleScroll)
+    }
     if (timer) {
       clearTimeout(timer)
     }
@@ -49,14 +41,26 @@
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
       const clientHeight = document.documentElement.clientHeight || document.body.clientHeight
       const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
-      if (scrollTop + clientHeight >= scrollHeight - 5) {
+      if (scrollHeight - scrollTop - clientHeight < 1) {
         loading.value = true
         getAlbumsDetail().then(() => {
           loading.value = false
         })
       }
-    }, 1000)
+    }, 600)
   };
+
+  onMounted(() => {
+    const id = Number(route.query.id)
+    if (id) {
+      getArtistDetail(id)
+      getArtistAlbum({ ...artistAlbumParams.value, id }).then(() => {
+        window.addEventListener('scroll', handleScroll)
+      })
+      getArtistMv(id)
+      getArtistDesc(id)
+    }
+  });
 
   // 获取歌手详情
   const getArtistDetail = async (id: number) => {

@@ -104,7 +104,7 @@
     height: 100px;
     background: rgba(250, 250, 250, 0.95);
     box-shadow: -5px 0 8px 3px #ddd;
-    transition: transform ease 1.2s;
+    transition: transform ease .8s;
 
     .icon-left {
       position: absolute;
