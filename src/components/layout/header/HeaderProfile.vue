@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, inject, computed } from 'vue';
+  import { ref, inject, computed, onMounted } from 'vue';
   import { storeToRefs } from "pinia";
   import { useRouter } from "vue-router";
   import type { ElInput } from 'element-plus';
@@ -21,6 +21,7 @@
   const inputRef = ref<InstanceType<typeof ElInput>>();
   const popoverRef = ref();
   let timer: NodeJS.Timer;
+  let theme = ref<string>('string')
 
   const _title = computed(() => (value: string) => {
     let _value;
@@ -106,6 +107,14 @@
         account.value = {}
         profile.value = {}
       }
+    } else if (command === 'theme') {
+      const el = document.querySelector('html')
+      theme.value = el!.getAttribute('class') as string
+      if (el!.getAttribute('class') === 'dark') {
+        el!.className = 'light'
+      } else {
+        el!.className = 'dark'
+      }
     }
   };
 </script>
@@ -154,6 +163,7 @@
           <el-dropdown-menu>
             <el-dropdown-item icon="User" command="profile">个人主页</el-dropdown-item>
             <el-dropdown-item icon="SwitchButton" command="logout">退出登录</el-dropdown-item>
+            <el-dropdown-item :icon="theme === 'dark' ? 'Moon' : 'Sunny'" command="theme">{{ theme === 'dark' ? '黑色主题' : '白色主题' }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -172,13 +182,13 @@
       padding-left: 30px;
 
       .text {
-        color: #eee;
+        color: var(--theme-font-color);
         padding-left: 6px;
         white-space: nowrap;
         cursor: pointer;
       }
       .text:hover {
-        color: #fff;
+        color: var(--theme-font-hover-color);
       }
     }
   }

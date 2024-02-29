@@ -13,7 +13,6 @@ declare module '@vue/runtime-core' {
     BaseBackTop: typeof import('./src/components/backTop/BaseBackTop.vue')['default']
     BasePagination: typeof import('./src/components/pagination/BasePagination.vue')['default']
     Comment: typeof import('./src/components/comment/Comment.vue')['default']
-    ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElBadge: typeof import('element-plus/es')['ElBadge']

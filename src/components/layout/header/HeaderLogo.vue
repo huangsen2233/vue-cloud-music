@@ -13,9 +13,8 @@
 <style lang="less" scoped>
   .header-logo {
     display: flex;
-    /* justify-content: center; */
     align-items: center;
-    color: #fff;
+    color: var(--theme-font-color);
     font: 18px bolder;
 
     .icon-yinle1 {

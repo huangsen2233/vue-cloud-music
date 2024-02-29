@@ -35,12 +35,12 @@
       <h3>相关推荐</h3>
       <section class="mvs">
         <div class="mvs-item" v-for="i in mvs">
-          <el-image style="width: 180px; height: 120px" :src="i.cover" fit="cover" @click="emits('switch-mv', i.id)" />
+          <img style="width: 180px; height: 120px" v-lazy="i.cover" @click="emits('switch-mv', i.id)" />
           <div class="duration">
             <el-icon><Clock /></el-icon>
             <span style="padding-left: 5px;">{{ formatTimestamp(i.duration, 'mm:ss') }}</span>
           </div>
-          <section style="padding-left: 15px;">
+          <section style="padding-left: 15px; font-size: 12px;">
             <div>{{ i.name }}</div>
             <div class="author" style="color: #999; padding-top: 10px;">
               <span>by</span> 
@@ -72,10 +72,6 @@
           display: flex;
           padding-bottom: 30px;
           position: relative;
-
-          .el-image {
-            flex: 0 0 auto;
-          }
 
           .duration {
             box-sizing: border-box;

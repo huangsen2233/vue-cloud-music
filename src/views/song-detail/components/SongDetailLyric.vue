@@ -26,7 +26,7 @@
     // 去除空白歌词
     return newArr.filter(j => j.word !== '')
   });
-
+  
   // 当前歌词的索引值
   const activeIndex = computed(() => {
     for (let i = 0; i < lyricArr.value.length; i++) {

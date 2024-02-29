@@ -7,7 +7,7 @@
   import { commentLikeApi, commentApi } from "@/api/comment";
   import Comment from "@/components/comment/Comment.vue";
 
-  const { profile } = storeToRefs(useUserStore());
+  const { profile, loginStatus } = storeToRefs(useUserStore());
   const { comments, hotComments, total, currentSongInfo } = storeToRefs(useMusicStore());
   const { getMusicComment } = useMusicStore();
   const currentCommentType = ref('new');
@@ -102,6 +102,7 @@
 <template>
   <Comment
     ref="commentRef" 
+    :login-status="loginStatus"
     :avatar-url="profile.avatarUrl" 
     :current-comment-type="currentCommentType" 
     :current-comment="currentComment" 
@@ -115,5 +116,7 @@
 </template>
 
 <style lang="less" scoped>
-
+  .comment {
+    padding-top: 10px;
+  }
 </style>

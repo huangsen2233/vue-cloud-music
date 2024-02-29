@@ -14,7 +14,7 @@
 
   // 获取推荐歌单
   const getPersonalizedPlaylist = async () => {
-    const { result } = await personalizedApi();
+    const { result }: any = await personalizedApi();
     playList.value.length = 0;
     for (let i of result) {
       const { id, picUrl, name, playCount } = i;

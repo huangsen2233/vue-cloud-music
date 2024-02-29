@@ -6,10 +6,9 @@
 
   onMounted(() => {
     const { isScroll } = route.query
-    const songDetailOffsetTop = songDetailRef.value?.offsetTop
-    const commentOffsetTop = commentRef.value?.$el.offsetTop
+    const el = commentRef.value?.$el
     if (isScroll === 'true') {
-      document.documentElement.scrollTop = songDetailOffsetTop + commentOffsetTop - 20
+      el.scrollIntoView({ behavior: 'smooth' });
     }
   });
 

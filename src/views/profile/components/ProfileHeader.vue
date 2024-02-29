@@ -1,9 +1,12 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
+  import fs from 'fs'
+  import path from 'path'
   import { storeToRefs } from "pinia";
   import { useUserStore } from "@/stores/user";
   import { getAreaByIdCard } from "@/utils/areaByCard";
-  import { getUserDetailApi, getUserFollowedsApi, getUserFollowsApi } from "@/api/user";
+  import cache from '@/utils/cache';
+  import { getUserDetailApi, getUserFollowedsApi, getUserFollowsApi, uploadAavatarApi } from "@/api/user";
 
   onMounted(() => {
     const { id } = account.value 
@@ -12,9 +15,20 @@
     getUserFollows(id)
   });
 
-  const { account, profile, followslist } = storeToRefs(useUserStore());
+  // const fs = import ('fs')
+  // const path = require('path')
+  const { account, profile, followslist, loginStatus } = storeToRefs(useUserStore());
+  const avatarUrl = ref<string>();
+  const formData = ref<FormData>();
+  // const params = ref({
+  //   imgFile: {
+  //     name: '',
+  //     data: '',
+  //   },
+  // })
   const userDetail = ref<any>({});
   const fanSize = ref<number>(0); // 粉丝数量
+  const inputRef = ref<HTMLInputElement>();
 
   // 获取用户详情
   const getUserDetail = async (id: number) => {
@@ -35,12 +49,66 @@
     const { follow }: any = await getUserFollowsApi(params)
     followslist.value = follow
   };
+
+  // 更换头像
+  const handleClick = () => {
+    if (!loginStatus.value) {
+      return ElMessage.warning('请先登录!')
+    }
+    inputRef.value && inputRef.value.click()
+  }
+
+  const uploadFile = (event: Event) => {
+    const target = event.target as HTMLInputElement | null
+    const file = target?.files?.[0]
+    console.log('file', file);
+    formData.value = new FormData()
+    formData.value.append('imgFile', file!)
+    const reader: FileReader = new FileReader()
+    if (file) {
+      reader.onload = (e) => {
+        avatarUrl.value = e.target?.result as string
+        // params.value.imgFile.name = file?.name
+        // params.value.imgFile.data = e.target?.result as string
+        
+        // // canvas处理后的图片比例不正确
+        // const img = new Image();
+        // img.src = e.target?.result as string
+        // img.onload = () => {
+        //   const canvas = document.createElement('canvas');
+        //   const ctx = canvas.getContext('2d');
+        //   // 设置目标尺寸
+        //   canvas.width = 250; // 目标宽度
+        //   canvas.height = 250; // 目标高度
+        //   ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+        //   avatarUrl.value = canvas.toDataURL('image/jpeg');
+        // }
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  // 保存头像
+  const saveAavatar = async () => {
+    if (!avatarUrl.value) return ElMessage.warning('请先选择头像!')
+    // const cookie = cache.getCache('user_cookie')
+    const params = {
+      // cookie, 
+      formData: formData.value
+    }
+    // statusCode：500 ???
+    const res = await uploadAavatarApi(params)
+    console.log('res', res);
+  }
 </script>
 
 <template>
   <div class="profile-header">
     <section class="profile-header-left">
-      <el-image style="width: 250px; height: 250px" :src="profile.avatarUrl" fit="contain" />
+      <el-avatar :size="250" :src="avatarUrl || profile.avatarUrl" fit="scale-down" />
+      <el-button class="change-btn" @click="handleClick">上传头像</el-button>
+      <el-button class="save-btn" @click="saveAavatar">保存头像</el-button>
+      <input class="ipt" ref="inputRef" type="file" accept="image/jpeg,image/png,image/jpg" @change="uploadFile" />
     </section>
     <section class="profile-header-right">
       <div class="nickname">
@@ -61,6 +129,28 @@
 <style lang="less" scoped>
   .profile-header {
     display: flex;
+
+    &-left {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      justify-items: center;
+      row-gap: 10px;
+      .el-avatar {
+        grid-column: 1 / 3;
+      }
+      .change-btn {
+        width: 100px;
+      }
+
+      .save-btn {
+        width: 100px;
+        margin-left: 0;
+      }
+    }
+
+    .ipt {
+      display: none;
+    }
 
     &-right {
       flex: 1;

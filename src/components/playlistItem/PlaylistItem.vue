@@ -21,8 +21,8 @@
 
 <template>
   <div class="playlist-item">
-    <div class="img">
-      <el-image :src="url" :title="name" fit="cover" @click="routeToPlaylistDetail(id)" />
+    <div class="pic">
+      <img v-lazy="url" :title="name" fit="cover" @click="routeToPlaylistDetail(id)" />
       <div class="count">
         <el-icon><Headset /></el-icon>
         <span>{{ count(playCount, 'W') }}</span>
@@ -57,12 +57,12 @@
 <style lang="less" scoped>
   .playlist-item {
 
-    .img {
+    .pic {
       position: relative;
       width: 200px;
       height: 200px;
 
-      .el-image {
+      & > img {
         border-radius: 10px;
         width: 100%;
         height: 100%;

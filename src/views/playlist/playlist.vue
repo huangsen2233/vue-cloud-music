@@ -47,7 +47,7 @@
   
   // 获取歌单标签
   const getTags = async () => {
-    const result: any = await playlistCatlistApi();
+    const result = await playlistCatlistApi();
     categoriesTags.value = result.categories;
     subTags.value = result.sub;
     for(let i = 0; i < Object.keys(categoriesTags.value).length; i++) {
@@ -57,7 +57,7 @@
 
   // 获取歌单列表
   const getPlaylist = async (params: playlistType) => {
-    const result: any = await playlistApi(params);
+    const result = await playlistApi(params);
     // console.log("🚀 ~ file: playlist.vue:45 ~ getPlaylist ~ result: 歌单列表", result)
     playlists.value = result.playlists; 
     paginationProp.value.total = result.total; 

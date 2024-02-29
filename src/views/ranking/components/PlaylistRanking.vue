@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref } from 'vue';
 
   const props = defineProps<{
     rankinglist: any[]
@@ -32,10 +32,10 @@
           v-for="(j, index2) in (i.list as any[])" 
           @click="switchRanking(index1, index2, j)"
         >
-          <el-image style="width: 120px; height: 120px" :src="j.coverImgUrl" fit="cover" />
+          <img style="width: 120px; height: 120px" v-lazy="j.coverImgUrl" />
           <div class="item-name">
             <span>{{ j.name }}</span>
-              <div :title="j.description">简介: {{ j.description }}</div>
+              <div :title="j.description">简介: {{ j.description || '~' }}</div>
             <span style="color: #999">{{ j.updateFrequency }}</span>
           </div>
         </div>

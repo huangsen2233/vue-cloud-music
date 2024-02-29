@@ -72,7 +72,9 @@
 
 <style lang="less" scoped>
   .el-container {
-    background-color: rgba(240,240,240);
+    // background-color: rgba(240,240,240);
+    background-color: var(--theme-bg-color);
+    color: var(--theme-font-color);
     // height: 100vw;
     position: relative;
   }
@@ -82,7 +84,9 @@
   }
   .el-header {
     height: 80px;
-    background: rgba(36,36,36,0.9);
+    // background: rgba(36,36,36,0.9);
+    background-color: var(--theme-bg-header-color);
+    color: var(--theme-font-color);
   }
 
   .el-main {
@@ -93,6 +97,7 @@
 
     .el-card {
       margin-bottom: 30px;
+      // background-color: var(--theme-bg-color);
     }
   }
 

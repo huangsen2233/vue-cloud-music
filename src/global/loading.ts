@@ -5,7 +5,7 @@ type loadingType = {
 
 let loadingInstance: any = null;
 
-export function startLoading ({ text = '加载中......', background = 'rgba(0, 0, 0, 0.5)' }: loadingType) {
+export function startLoading ({ text = 'Loading......', background = 'rgba(255, 255, 255, 0.9)' }: loadingType) {
   loadingInstance = ElLoading.service({
     text,
     background,

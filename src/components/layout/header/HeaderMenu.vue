@@ -46,10 +46,11 @@
       :default-active="defaultActive"
       mode="horizontal"
       :ellipsis="false"
-      background-color="rbg(0,0,0)"
-      text-color="#ccc"
-      active-text-color="#fff"
+
     >
+    <!-- background-color="rbg(0,0,0)"
+      text-color="#ccc"
+      active-text-color="#fff" -->
       <template v-for="i in menuList">
         <el-menu-item :index="i.index">{{ i.item }}</el-menu-item>
       </template>  
@@ -66,7 +67,7 @@
     font-size: 18px;
     
     &-router {
-      color: #ccc;
+      color: var(--theme-font-color);
       font-size: 20px;
       padding-right: 2em;
 
@@ -75,27 +76,30 @@
       }
 
       .el-icon:hover {
-        color: #fff;
+        color: var(--theme-font-hover-color);
         cursor: pointer;
         padding-right: 1em;
       }
     }
 
     .el-menu {
+      background-color: var(--theme-bg-header-color);
+      color: var(--theme-font-color);
       height: 80px;
       border: none; // 清除自带的border
 
       &-item {
         width: 80px;
         box-sizing: border-box;
-        color: #ccc;
+        color: var(--theme-font-color);
         font-size: 18px;
       }
       &-item:not(.is-disabled):hover {
-        color: #fff;
+        color: var(--theme-font-hover-color);
         background-color: rgba(0, 0, 0);
       }
       &-item.is-active {
+        color: var(--theme-font-color) !important;
         border-bottom: 6px solid var(--el-color-primary);
       }
     }

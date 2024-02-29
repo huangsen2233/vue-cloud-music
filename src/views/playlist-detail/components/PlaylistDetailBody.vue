@@ -100,7 +100,7 @@
       content: myComment,
       commentId: commentId ?? 0
     }
-    const { code }: any = await commentApi(commentParams)
+    const { code } = await commentApi(commentParams)
     if (code === 200) {
       const paginationParams = { 
         currentPage: props.commentPagination.currentPage,

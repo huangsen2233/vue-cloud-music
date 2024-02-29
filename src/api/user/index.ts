@@ -124,3 +124,20 @@ export const followApi = ({ id, t }: FollowType) => {
     params: { id, t }
   })
 }
+
+type avatarType = {
+  formData: FormData
+  imgSize?: number
+  imgX?: number
+  imgY?: number
+}
+/**
+ * @description 上传头像
+ * @param {number} imgSize 可选参数,图片尺寸,默认为 300
+ * @param {number} imgX 可选参数,水平裁剪偏移,方形图片可不传,默认为 0 
+ * @param {number} imgY 可选参数,垂直裁剪偏移,方形图片可不传,默认为 0
+ * @returns Promise
+*/
+export const uploadAavatarApi = (params: any) => {
+  return request.post('/avatar/upload', params, { 'Content-Type': 'multipart/form-data' })
+}

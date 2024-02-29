@@ -63,7 +63,8 @@
     </section>
     <section class="newsong-content">
       <div class="item" v-for="i in newSonglist">
-        <el-image style="width: 200px; height: 200px;" :src="i.picUrl" fit="cover" @click="playMusic(i)"/>
+        <img style="width: 200px; height: 200px;" v-lazy="i.picUrl" @click="playMusic(i)"/>
+        <!-- <el-image style="width: 200px; height: 200px;" :src="i.picUrl" fit="cover" @click="playMusic(i)"/> -->
         <div class="item-duration">
           <el-icon><Clock /></el-icon>
           <span style="padding-left: 5px;">{{ formatTimestamp(i.song.duration, 'mm:ss') }}</span>

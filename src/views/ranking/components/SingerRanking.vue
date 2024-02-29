@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue';
   import type { TabsPaneContext } from 'element-plus';
 
   const props = defineProps<{
@@ -31,18 +31,14 @@
           <b style="font-size: 18px;">{{ i.label }}</b>
         </template>
         <template #default>
-          <div class="singer" v-for="(j, index) in i.list.slice(0, 9)">
-            <el-image style="width: 180px; height: 180px" :src="j.img1v1Url" fit="cover" />
+          <div class="singer" v-for="(j, index) in i.list">
+            <img style="width: 180px; height: 180px" v-lazy="j.img1v1Url" alt="" >
             <div class="singer-info">
               <h1>{{ index + 1 }}</h1>
               <b>{{ j.name }}</b>
               <span>热度: {{ j.score }}</span>
               <a @click="routerToSingerDetail(j.id)">查看更多<el-icon><DArrowRight /></el-icon></a>
             </div>
-          </div>
-          <div class="singer singer-content" v-for="(j, index) in i.list.slice(9)">
-            <h1>{{ index + 10 }}</h1>
-            <a @click="routerToSingerDetail(j.id)">{{ j.name }}</a>
           </div>
         </template>
       </el-tab-pane>
@@ -77,25 +73,6 @@
           align-items: center;
         }
         a:hover {
-          cursor: pointer;
-          text-decoration: underline;
-        }
-      }
-
-      &-content {
-        position: relative;
-        & > h1 {
-          color: rgba(221,22,29);
-          margin: 5px 0;
-        }
-        & > a {
-          position: absolute;
-          left: 65px;
-          bottom: 10px;
-          font-weight: bolder;
-          font-size: 16px;
-        }
-        & > a:hover {
           cursor: pointer;
           text-decoration: underline;
         }

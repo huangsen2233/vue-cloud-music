@@ -98,16 +98,10 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from) => {
-  // 解决路由跳转后会滚动到上一页面的位置
-  document.documentElement.scrollTop = 0
-  return true
-})
-
-// 使用全局后置路由将页面滚动到顶部，未测试
-// router.afterEach((to, from) => {
-//   // 跳转之后滚动条回到顶部
-//   window.scrollTo(0,0);
-// });
+// 使用全局后置路由将页面滚动到顶部
+router.afterEach((to, from) => {
+  // document.documentElement.scrollTop = 0
+  window.scrollTo(0,0);
+});
 
 export default router
