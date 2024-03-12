@@ -14,7 +14,7 @@
   .header-logo {
     display: flex;
     align-items: center;
-    color: var(--theme-font-color);
+    color: var(--theme-header-font-color);
     font: 18px bolder;
 
     .icon-yinle1 {

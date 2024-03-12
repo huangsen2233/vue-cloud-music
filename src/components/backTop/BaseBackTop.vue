@@ -14,9 +14,9 @@
 
 <template>
   <el-backtop :right="right" :bottom="bottom" :visibility-height="visibilityHeight">
-    <div style="height: 100%; width: 100%; background-color: var(--el-bg-color-overlay); box-shadow: var(--el-box-shadow-lighter); text-align: center; line-height: 40px; color: #1989fa;">
+    <div class="box">
       <el-icon><ArrowUpBold /></el-icon>
-      TOP
+      <span>TOP</span>
     </div>
   </el-backtop>
 </template>
@@ -24,9 +24,10 @@
 <style lang="less" scoped>
   .el-backtop {
     width: 60px;
-    height: 70px;
+    height: 60px;
+    background-color: var(--theme-backTop-bg-color);
 
-    div {
+    .box {
       display: flex;
       flex-direction: column;
       justify-content: center;

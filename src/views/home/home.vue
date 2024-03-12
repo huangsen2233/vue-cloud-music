@@ -72,9 +72,8 @@
 
 <style lang="less" scoped>
   .el-container {
-    // background-color: rgba(240,240,240);
-    background-color: var(--theme-bg-color);
-    color: var(--theme-font-color);
+    background-color: var(--theme-container-bg-color);
+    color: var(--theme-header-font-color);
     // height: 100vw;
     position: relative;
   }
@@ -84,9 +83,8 @@
   }
   .el-header {
     height: 80px;
-    // background: rgba(36,36,36,0.9);
-    background-color: var(--theme-bg-header-color);
-    color: var(--theme-font-color);
+    background-color: var(--theme-menu-bg-color);
+    color: var(--theme-header-font-color);
   }
 
   .el-main {
@@ -97,7 +95,9 @@
 
     .el-card {
       margin-bottom: 30px;
-      // background-color: var(--theme-bg-color);
+      background-color: var(--theme-card-bg-color);
+      border: 1px solid var(--theme-card-bg-color);
+      color: var(--theme-card-font-color-1);
     }
   }
 
@@ -115,6 +115,7 @@
       position: absolute;
       top: 50%;
       left: 15%;
+      color: var(--theme-bg-color);
       transform: translateY(-50%);
       font-size: 50px;
       &:hover {
@@ -126,6 +127,7 @@
       position: absolute;
       top: 50%;
       right: 15px;
+      color: var(--theme-bg-color);
       transform: translateY(-50%);
       font-size: 50px;
       &:hover {

@@ -2,36 +2,26 @@
   --el-color-primary:#201dba;
 } */
 
-/* html.dark (
-  --el-color-primary: #800868;
-  -el-color-white: #1212+2;
-  -el-color-black: 口#8e8808;
-  -el-color-primary-light-3: #333333:
-  el-color-primary-light-5: 口#54545;
-  -el-color-primary-light-7: 四#545454;
-  el-color-primary-light-8: 口#646464;
-  -el-color-primary-light-g: 四#747474;
-  el-color-primary-dark-2: 四#45454545;
-  -el-bg=color: m#ffffff;
-  el-bg-color-page: 口#333333;
-  -el-bg-color-overlay: 口#808808:
-  -el-text-color-primary: 口#000800;
-  -el-text-color-regular: 国#880880;
-  background-color: 四#454545:
-} */
-
 html.light {
-  --theme-color: #f2f2f2;
-  --theme-bg-color: rgba(245,245,245);
-  --theme-bg-header-color: rgba(36,36,36,0.9);  
-  --theme-font-color: #f2f2f2;
-  --theme-font-hover-color: #f2f2f2ba;
+  /* --theme-color: #f2f2f2; */
+  --theme-container-bg-color: rgba(240,240,240);
+  --theme-menu-bg-color: rgba(56,56,56); 
+  --theme-card-bg-color: rgba(232,232,235);
+  --theme-card-font-color-1: rgba(37,37,41);
+  --theme-card-font-color-2: rgba(120,120,120,0.8);
+  --theme-header-font-color: #f2f2f2;
+  --theme-header-font-hover-color: #f2f2f2ba;
+  --theme-backTop-bg-color: rgba(255,255,255); 
 }
 
 html.dark {
-  --theme-color: #000800;
-  --theme-bg-color: rgba(0,0,0);
-  --theme-bg-header-color: rgba(247,248,252);
-  --theme-font-color: #000800;
-  --theme-font-hover-color: #788;
+  /* --theme-color: #1E1E20; */
+  --theme-container-bg-color: rgba(30,30,30);
+  --theme-menu-bg-color: rgba(240,240,240);
+  --theme-card-bg-color: rgba(37,37,41);
+  --theme-card-font-color-1: rgba(232,232,235);
+  --theme-card-font-color-2: rgba(200,200,200,0.8);
+  --theme-header-font-color: #1E1E20;
+  --theme-header-font-hover-color: #788;
+  --theme-backTop-bg-color: rgba(80,80,80); 
 }

@@ -182,13 +182,13 @@
       padding-left: 30px;
 
       .text {
-        color: var(--theme-font-color);
+        color: var(--theme-header-font-color);
         padding-left: 6px;
         white-space: nowrap;
         cursor: pointer;
       }
       .text:hover {
-        color: var(--theme-font-hover-color);
+        color: var(--theme-header-font-hover-color);
       }
     }
   }

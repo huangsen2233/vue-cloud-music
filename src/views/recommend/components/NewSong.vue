@@ -104,7 +104,7 @@
         .area:not(:last-child)::after {
           content: '|';
           padding: 0 10px;
-          color: #d8d8d8;
+          color: var(--theme-card-font-color-1);
         }
 
         .area:hover {
@@ -128,7 +128,6 @@
         display: flex;
         flex-direction: column;
         position: relative;
-        // padding-bottom: 30px;
 
         .el-image:hover {
           cursor: pointer;
@@ -140,10 +139,10 @@
           }
           .author {
             font-size: 14px;
-            color: #aaa;
+            color: var(--theme-card-font-color-2);
 
             & > a {
-              color: #000;
+              color: var(--theme-card-font-color-1);
             }
 
             & > a:hover {

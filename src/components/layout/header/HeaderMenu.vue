@@ -46,7 +46,8 @@
       :default-active="defaultActive"
       mode="horizontal"
       :ellipsis="false"
-
+      background-color="rbg(0,0,0)"
+      text-color="#ccc"
     >
     <!-- background-color="rbg(0,0,0)"
       text-color="#ccc"
@@ -67,7 +68,7 @@
     font-size: 18px;
     
     &-router {
-      color: var(--theme-font-color);
+      color: var(--theme-header-font-color);
       font-size: 20px;
       padding-right: 2em;
 
@@ -76,30 +77,29 @@
       }
 
       .el-icon:hover {
-        color: var(--theme-font-hover-color);
+        color: var(--theme-header-font-hover-color);
         cursor: pointer;
         padding-right: 1em;
       }
     }
 
     .el-menu {
-      background-color: var(--theme-bg-header-color);
-      color: var(--theme-font-color);
+      background-color: var(--theme-menu-bg-color);
+      color: var(--theme-header-font-color);
       height: 80px;
       border: none; // 清除自带的border
 
       &-item {
         width: 80px;
         box-sizing: border-box;
-        color: var(--theme-font-color);
+        color: var(--theme-header-font-color);
         font-size: 18px;
       }
       &-item:not(.is-disabled):hover {
-        color: var(--theme-font-hover-color);
+        color: var(--theme-header-font-hover-color);
         background-color: rgba(0, 0, 0);
       }
       &-item.is-active {
-        color: var(--theme-font-color) !important;
         border-bottom: 6px solid var(--el-color-primary);
       }
     }

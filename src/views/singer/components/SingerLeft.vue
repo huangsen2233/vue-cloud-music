@@ -50,9 +50,14 @@
   .type {
     width: 200px;
     border-right: 1px solid rgb(230, 230, 230);
+    // border-right: 1px solid rgb(230, 230, 230);
+    padding-left: 10px;
+    background-color: var(--theme-card-bg-color);
   }
 
   :deep(.el-collapse) {
+    background-color: red;
+    
     &-item {
       &__header {
         font-size: 16px;
@@ -78,7 +83,7 @@
           width: 5px;
           height: 5px;
           border-radius: 50%;
-          background-color: rgb(175,175,175);
+          background-color: var(--theme-card-bg-color);
         }
 
         & > div:hover a {

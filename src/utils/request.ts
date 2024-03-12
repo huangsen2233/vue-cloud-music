@@ -62,10 +62,10 @@ class HttpRequest {
   }
 
   get<T = any>(url: string, query?: object): Promise<T> {
-    startLoading({ text: 'loading......' })
-    this.loadingTimer = setTimeout(() => {
-      endLoading()
-    }, 1000)
+    // startLoading({ text: 'loading......' })
+    // this.loadingTimer = setTimeout(() => {
+    //   endLoading()
+    // }, 1000)
     return this.request.get<T>(url, query).then((response: AxiosResponse<T>) => {
       return response.data
     })

@@ -141,12 +141,12 @@
           }
 
           .author {
-            color: #aaa;
+            color: var(--theme-card-font-color-2);
             font-size: 14px;
             padding-top: 5px;
 
             & > a {
-              color: #000;
+              color: var(--theme-card-font-color-1);
             }
           }
           .author:hover a {
