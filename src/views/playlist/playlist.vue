@@ -106,7 +106,6 @@
     @on-page="changePagination"
     @on-size="changePagination"
   />
-  <button @click="router.push({ path: '/playlist/detail'})">点击</button>
 
   <router-view ></router-view>
 </template>
