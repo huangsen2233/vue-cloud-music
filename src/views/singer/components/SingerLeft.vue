@@ -50,13 +50,12 @@
   .type {
     width: 200px;
     border-right: 1px solid rgb(230, 230, 230);
-    // border-right: 1px solid rgb(230, 230, 230);
     padding-left: 10px;
-    background-color: var(--theme-card-bg-color);
+    // background-color: var(--theme-card-bg-color);
   }
 
   :deep(.el-collapse) {
-    background-color: red;
+    // background-color: red;
     
     &-item {
       &__header {

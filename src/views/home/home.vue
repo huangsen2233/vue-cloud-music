@@ -95,7 +95,7 @@
 
     .el-card {
       margin-bottom: 30px;
-      background-color: var(--theme-card-bg-color);
+      // background-color: var(--theme-card-bg-color);
       border: 1px solid var(--theme-card-bg-color);
       color: var(--theme-card-font-color-1);
     }
@@ -115,7 +115,8 @@
       position: absolute;
       top: 50%;
       left: 15%;
-      color: var(--theme-bg-color);
+      // color: var(--theme-bg-color);
+      color: #aaa;
       transform: translateY(-50%);
       font-size: 50px;
       &:hover {
@@ -127,7 +128,8 @@
       position: absolute;
       top: 50%;
       right: 15px;
-      color: var(--theme-bg-color);
+      // color: var(--theme-bg-color);
+      color: #aaa;
       transform: translateY(-50%);
       font-size: 50px;
       &:hover {

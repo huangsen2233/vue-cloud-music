@@ -4,11 +4,13 @@ import { ElMessage } from 'element-plus';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 import { startLoading, endLoading } from '@/global/loading';
 
+const baseURL = import.meta.env.VITE_APP_BASE_API;
+
 // 映射关系: url -> axios.CancelToken.source()
 const urlMap: { [key: string]: CancelTokenSource } = {}
 
 const config = {
-  baseURL: 'http://127.0.0.1:3000/',
+  baseURL,
   timeout: 20 * 1000,
   withCredentials: true
 }

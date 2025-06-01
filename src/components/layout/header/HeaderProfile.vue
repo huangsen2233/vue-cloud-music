@@ -163,7 +163,7 @@
           <el-dropdown-menu>
             <el-dropdown-item icon="User" command="profile">个人主页</el-dropdown-item>
             <el-dropdown-item icon="SwitchButton" command="logout">退出登录</el-dropdown-item>
-            <el-dropdown-item :icon="theme === 'dark' ? 'Moon' : 'Sunny'" command="theme">{{ theme === 'dark' ? '黑色主题' : '白色主题' }}</el-dropdown-item>
+            <!-- <el-dropdown-item :icon="theme === 'dark' ? 'Moon' : 'Sunny'" command="theme">{{ theme === 'dark' ? '黑色主题' : '白色主题' }}</el-dropdown-item> -->
           </el-dropdown-menu>
         </template>
       </el-dropdown>

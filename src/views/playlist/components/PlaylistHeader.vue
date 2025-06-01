@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import type { playlistType } from "../playlist.vue";
+  import router from '@/router';
 
   const props = defineProps<{
     showPopover: boolean

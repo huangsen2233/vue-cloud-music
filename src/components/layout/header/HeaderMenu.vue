@@ -49,9 +49,6 @@
       background-color="rbg(0,0,0)"
       text-color="#ccc"
     >
-    <!-- background-color="rbg(0,0,0)"
-      text-color="#ccc"
-      active-text-color="#fff" -->
       <template v-for="i in menuList">
         <el-menu-item :index="i.index">{{ i.item }}</el-menu-item>
       </template>  
