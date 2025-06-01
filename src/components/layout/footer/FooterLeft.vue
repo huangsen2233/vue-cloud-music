@@ -2,7 +2,6 @@
   import { storeToRefs } from 'pinia';
   import { useRouter } from "vue-router";
   import { useMusicStore } from "@/stores/music";
-  import yinyueIcon from "@/assets/imgs/音乐封面.png";
 
   const router = useRouter()
   const { likeMusic } = useMusicStore();
