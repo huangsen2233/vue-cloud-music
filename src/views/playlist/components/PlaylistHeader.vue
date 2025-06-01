@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import type { playlistType } from "../playlist.vue";
-  import router from '@/router';
 
   const props = defineProps<{
     showPopover: boolean
@@ -42,12 +41,12 @@
             选择分类<el-icon style="padding-left: 5px;"><ArrowDown /></el-icon>
           </el-button>
         </template>
-        <template v-for="(value,key,index) in tagsList">
+        <template v-for="(value,key,index) in tagsList as object" :key="key">
           <div class="playlist-popover-content">
             <el-image :src="tagsIcons[key]" style="width: 28px; height: 28px;"></el-image>
             <el-tag size="large" :type="tagType[index]" style="margin: 0 10px; font-size: 16px;">{{ key }}</el-tag>
             <div class="tag">
-              <template v-for="item in value">
+              <template v-for="item in value as any">
                 <a @click="switchPlaylist(item.name)">{{ item.name }}</a>
               </template>
             </div>

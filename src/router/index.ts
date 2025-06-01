@@ -29,13 +29,6 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       keepAlive: true
     },
-    children: [
-      {
-        name: 'detail',
-        path: 'detail',
-        component: () => import('@/views/playlist/detail.vue'),
-      }
-    ]
   },
   {
     name: 'playlist-detail',

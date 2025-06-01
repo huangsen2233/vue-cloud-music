@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 import { startLoading, endLoading } from '@/global/loading';
 
-const baseURL = import.meta.env.VITE_APP_BASE_API;
+const baseURL = import.meta.env.VITE_API_BASEURL;
 
 // 映射关系: url -> axios.CancelToken.source()
 const urlMap: { [key: string]: CancelTokenSource } = {}

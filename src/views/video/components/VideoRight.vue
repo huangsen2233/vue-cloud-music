@@ -44,8 +44,8 @@
             <div>{{ i.name }}</div>
             <div class="author" style="color: #999; padding-top: 10px;">
               <span>by</span> 
-              <a v-if="i.artistId" @click="emits('router-singer-detail', i.artistId)">{{ i.artistName }}</a>
-              <a v-else>{{ i.userName }}</a>
+              <!-- <a v-if="i.artistId" @click="emits('router-singer-detail', i.artistId)">{{ i.artistName }}</a> -->
+              <a>{{ i.userName }}</a>
             </div>
           </section>
         </div>

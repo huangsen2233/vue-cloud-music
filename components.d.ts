@@ -9,10 +9,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    ArtistList: typeof import('./src/components/artistList/ArtistList.vue')['default']
-    BaseBackTop: typeof import('./src/components/backTop/BaseBackTop.vue')['default']
-    BasePagination: typeof import('./src/components/pagination/BasePagination.vue')['default']
-    Comment: typeof import('./src/components/comment/Comment.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElBadge: typeof import('element-plus/es')['ElBadge']
@@ -51,20 +47,7 @@ declare module '@vue/runtime-core' {
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
-    Footer: typeof import('./src/components/layout/footer/Footer.vue')['default']
-    FooterCenter: typeof import('./src/components/layout/footer/FooterCenter.vue')['default']
-    FooterLeft: typeof import('./src/components/layout/footer/FooterLeft.vue')['default']
-    FooterRight: typeof import('./src/components/layout/footer/FooterRight.vue')['default']
-    Header: typeof import('./src/components/layout/header/Header.vue')['default']
-    HeaderLogo: typeof import('./src/components/layout/header/HeaderLogo.vue')['default']
-    HeaderMenu: typeof import('./src/components/layout/header/HeaderMenu.vue')['default']
-    HeaderProfile: typeof import('./src/components/layout/header/HeaderProfile.vue')['default']
-    LoginDiaLog: typeof import('./src/components/dialog/LoginDiaLog.vue')['default']
-    Mvs: typeof import('./src/components/mvs/Mvs.vue')['default']
-    PlaylistItem: typeof import('./src/components/playlistItem/PlaylistItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SongTable: typeof import('./src/components/songTable/SongTable.vue')['default']
-    Videos: typeof import('./src/components/videos/Videos.vue')['default']
   }
 }

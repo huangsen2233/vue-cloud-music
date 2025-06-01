@@ -53,6 +53,8 @@
     for(let i = 0; i < Object.keys(categoriesTags.value).length; i++) {
       tagsList.value[categoriesTags.value[i]] = subTags.value.filter((sub: any) => sub.category === i);
     }
+    console.log('[tagsList]', tagsList.value);
+    
   };
 
   // 获取歌单列表
